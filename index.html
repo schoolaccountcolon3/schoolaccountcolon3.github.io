@@ -1,47 +1,40 @@
 <!DOCTYPE html>
 <html>
-<body>
+   <body>
+      <h1>HTML Links</h1>
+      <p><a href="/eaglercraft.html">Minecraft (1.8)</a></p>
+      <p><a href="/eaglercraft12.html">Minecraft (1.12)</a></p>
+      <p><a href="/eaglerforge.html">Minecraft (Modded)</a></p>
+      <p><a href="https://qwasm.m-h.org.uk/">Quake</a></p>
+      <p><a href="https://dwasm.m-h.org.uk/">Doom</a></p>
+      <p><a href="/hl/index.html">Half-Life</a></p>
+      <p><a href="/cc3d/index.html">Crazy Cattle 3d</a></p>
+      <p><a href="/fnaf/index.html">FNAF Games</a></p>
+      <p><a href="https://nealmm.github.io/web-gba-emu/">GBA Emulator</a></p>
+      <p><a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a></p>
+      <p><a href="/Helios/index.html">Unblocker (test)</a></p>
+      <button class="button-16" onclick="myFunction()">Open in about:blank</button>
 
-<h1>HTML Links</h1>
-
-<p><a href="/eaglercraft.html">Minecraft (1.8)</a></p>
-<p><a href="/eaglercraft12.html">Minecraft (1.12)</a></p>
-<p><a href="/eaglerforge.html">Minecraft (Modded)</a></p>
-<p><a href="https://qwasm.m-h.org.uk/">Quake</a></p>
-<p><a href="https://dwasm.m-h.org.uk/">Doom</a></p>
-<p><a href="/hl/index.html">Half-Life</a></p>
-<p><a href="/cc3d/index.html">Crazy Cattle 3d</a></p>
-<p><a href="/fnaf/index.html">FNAF Games</a></p>
-<p><a href="https://nealmm.github.io/web-gba-emu/">GBA Emulator</a></p>
-<p><a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a></p>
-
-<p><a href="/Helios/index.html">Unblocker (test)</a></p>
-
-<button class="button-16" onclick="myFunction()">Open in about:blank</button>
-
-<script>
-function myFunction() {
-    var url = document.URL;
-    var urlObj = new window.URL(window.location.href);
-    win = window.open();
-    win.document.body.style.margin = "0";
-    win.document.body.style.height = "100vh";
-    var iframe = win.document.createElement("iframe");
-    iframe.style.border = "none";
-    iframe.style.width = "100%";
-    iframe.style.height = "100%";
-    iframe.style.margin = "0";
-    iframe.referrerpolicy = "no-referrer";
-    iframe.allow = "fullscreen";
-    iframe.src = url.toString();
-    win.document.body.appendChild(iframe);
-    var script = win.document.createElement("script");
-    script.src = "";
-    win.document.body.appendChild(script);
-}
-</script>
-<style>
-
-</body>
+      <script>
+         function myFunction() {
+             var url = document.URL;
+             var urlObj = new window.URL(window.location.href);
+             win = window.open();
+             win.document.body.style.margin = "0";
+             win.document.body.style.height = "100vh";
+             var iframe = win.document.createElement("iframe");
+             iframe.style.border = "none";
+             iframe.style.width = "100%";
+             iframe.style.height = "100%";
+             iframe.style.margin = "0";
+             iframe.referrerpolicy = "no-referrer";
+             iframe.allow = "fullscreen";
+             iframe.src = url.toString();
+             win.document.body.appendChild(iframe);
+             var script = win.document.createElement("script");
+             script.src = "";
+             win.document.body.appendChild(script);
+         }
+      </script>
+   </body>
 </html>
-
