@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>def google classroom</title>
+<style>
+
+  body {
+    margin: 0;
+    font-family: 'Source Sans 3', Helvetica, Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    line-height: 1.6;
+  }
+
+  /* Container styling */
+  .container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 2em;
+    color: #ffffff;
+  }
+
+  /* Link styles with pastel blue color */
+  a {
+    color: #89CFF0; /* Pastel blue */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s, transform 0.2s;
+  }
+
+  a:hover {
+    color: #a3d2ca; /* Slightly darker pastel blue on hover */
+    transform: translateY(-2px);
+  }
+
+  /* Paragraph spacing */
+  p {
+    margin: 12px 0;
+  }
+
+  /* Style for the button */
+  .button-16 {
+    display: block;
+    width: 200px;
+    margin: 30px auto 0 auto;
+    padding: 12px 24px;
+    font-size: 1em;
+    font-weight: 600;
+    color: #fff;
+    background-color: #A8DADC; /* Soft pastel teal */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .button-16:hover {
+    background-color: #76c893; /* Slightly darker pastel teal on hover */
+    transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>FNAF Games</h1>
+    <p><a href="https://irv77.github.io/hd_fnaf/1/">FNAF 1</a></p>
+    <p><a href="https://irv77.github.io/hd_fnaf/2/">FNAF 2</a></p>
+    <p><a href="https://irv77.github.io/hd_fnaf/3/">FNAF 3</a></p>
+    <p><a href="https://irv77.github.io/hd_fnaf/4/">FNAF 4</a></p>
+    <p><a href="https://irv77.github.io/hd_fnaf/sl/">FNAF SL</a></p>
+    <p><a href="https://irv77.github.io/hd_fnaf/ps/">FNAF PS</a></p>
+    <p><a href="https://irv77.github.io/hd_fnaf/ucn/">FNAF UCN</a></p>
+    <button class="button-16" onclick="myFunction()">Open in about:blank</button>
+  </div>
+
+  <script>
+    function myFunction() {
+      var url = document.URL;
+      var win = window.open();
+      win.document.body.style.margin = "0";
+      win.document.body.style.height = "100vh";
+      var iframe = win.document.createElement("iframe");
+      iframe.style.border = "none";
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+      iframe.style.margin = "0";
+      iframe.referrerPolicy = "no-referrer";
+      iframe.allow = "fullscreen";
+      iframe.src = url.toString();
+      win.document.body.appendChild(iframe);
+    }
+  </script>
+</body>
+</html>
