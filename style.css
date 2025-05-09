@@ -41,6 +41,30 @@ p {
     margin: 12px 0;
 }
 
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: left;
+  padding: 5px 0;
+  background-color: transparent;
+}
+
+.back-link {
+  color: #89CFF0; /* Pastel blue */
+  font-weight: bold;
+  font-size: 1.2em;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-link:hover {
+  background-color: rgba(137, 207, 240, 0.2);
+  transform: translateY(-2px);
+}
+
 /* Style for the button */
 .button-16 {
     display: block;
