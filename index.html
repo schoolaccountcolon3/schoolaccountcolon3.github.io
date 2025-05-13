@@ -1,155 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>def google classroom</title>
-  <link rel="icon" type="image/png" href="./favicon.png" />
-  <link rel="stylesheet" href="./styles/style.css" />
-  <link rel="stylesheet" id="styleSheet" />
-</head>
-<body>
-  <!-- Theme Switcher -->
-  <div id="styleSwitcher">
-    <label for="themeSelect">Theme:</label>
-    <select id="themeSelect">
-      <option value="dark">Dark</option>
-      <option value="light">Light</option>
-      <option value="pastel">Pastel</option>
-      <option value="purple">Purple</option>
-      <option value="blue">Blue</option>
-      <option value="orange">Orange</option>
-      <option value="green">Green</option>
-    </select>
-  </div>
-
-  <!-- Main Content -->
-  <div class="container">
-    <h1>Games</h1>
-
-    <!-- Minecraft Section -->
-
-    <div class="dropdown">
-      <div class="dropdown-header">
-        Minecraft <span class="arrow">&#9660;</span>
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>def google classroom</title>
+      <link rel="icon" type="image/png" href="./favicon.png" />
+      <link rel="stylesheet" href="./styles/style.css" />
+      <link rel="stylesheet" id="styleSheet" />
+   </head>
+   <body>
+      <!-- Theme Switcher -->
+      <div id="styleSwitcher">
+         <label for="themeSelect">Theme:</label>
+         <select id="themeSelect">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="pastel">Pastel</option>
+            <option value="purple">Purple</option>
+            <option value="blue">Blue</option>
+            <option value="orange">Orange</option>
+            <option value="green">Green</option>
+         </select>
       </div>
-      <div class="dropdown-content">
-        <p><a href="https://irv77.github.io/AmplerLauncher/">Minecraft Launcher (USE THIS)</a></p>
-        <hr class="rounded" />
-        <p><a href="minecraft/eaglercraft.html">Minecraft (1.8)</a></p>
-        <p><a href="minecraft/eaglercraft12.html">Minecraft (1.12)</a></p>
-        <p><a href="minecraft/eaglerforge.html">Minecraft (Modded)</a></p>
+      <!-- Main Content -->
+      <div class="container">
+         <h1>Games</h1>
+         <!-- Minecraft Section -->
+         <div class="dropdown">
+            <div class="dropdown-header">
+               Minecraft <span class="arrow">&#9660;</span>
+            </div>
+            <div class="dropdown-content">
+               <p><a href="https://irv77.github.io/AmplerLauncher/">Minecraft Launcher (USE THIS)</a></p>
+               <hr class="rounded" />
+               <p><a href="minecraft/eaglercraft.html">Minecraft (1.8)</a></p>
+               <p><a href="minecraft/eaglercraft12.html">Minecraft (1.12)</a></p>
+               <p><a href="minecraft/eaglerforge.html">Minecraft (Modded)</a></p>
+            </div>
+         </div>
+         <!-- FNAF Games Section -->
+         <div class="dropdown">
+            <div class="dropdown-header">
+               FNAF Games <span class="arrow">&#9660;</span>
+            </div>
+            <div class="dropdown-content">
+               <p><a href="https://irv77.github.io/hd_fnaf/1/">FNAF 1</a></p>
+               <p><a href="https://irv77.github.io/hd_fnaf/2/">FNAF 2</a></p>
+               <p><a href="https://irv77.github.io/hd_fnaf/3/">FNAF 3</a></p>
+               <p><a href="https://irv77.github.io/hd_fnaf/4/">FNAF 4</a></p>
+               <p><a href="https://irv77.github.io/hd_fnaf/sl/">FNAF SL</a></p>
+               <p><a href="https://irv77.github.io/hd_fnaf/ps/">FNAF PS</a></p>
+               <p><a href="https://irv77.github.io/hd_fnaf/ucn/">FNAF UCN</a></p>
+            </div>
+         </div>
+         <!-- Other Games -->
+         <p><a href="https://qwasm.m-h.org.uk/">Quake</a></p>
+         <p><a href="https://dwasm.m-h.org.uk/">Doom</a></p>
+         <p><a href="/hl/index.html">Half-Life</a></p>
+         <p><a href="/cc3d/index.html">Crazy Cattle 3D</a></p>
+         <p><a href="https://nealmm.github.io/web-gba-emu/">GBA Emulator</a></p>
+         <p><a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a></p>
+         <p><a href="https://app.nextchat.dev/">Generative AI</a></p>
+         <!-- Open in about:blank -->
+         <button class="button-16" onclick="openInBlank()">Open in about:blank</button>
       </div>
-    </div>
 
-    <!-- FNAF Games Section -->
-
-        <div class="dropdown">
-      <div class="dropdown-header">
-        FNAF Games <span class="arrow">&#9660;</span>
-      </div>
-      <div class="dropdown-content">
-        <p><a href="https://irv77.github.io/hd_fnaf/1/">FNAF 1</a></p>
-        <p><a href="https://irv77.github.io/hd_fnaf/2/">FNAF 2</a></p>
-        <p><a href="https://irv77.github.io/hd_fnaf/3/">FNAF 3</a></p>
-        <p><a href="https://irv77.github.io/hd_fnaf/4/">FNAF 4</a></p>
-        <p><a href="https://irv77.github.io/hd_fnaf/sl/">FNAF SL</a></p>
-        <p><a href="https://irv77.github.io/hd_fnaf/ps/">FNAF PS</a></p>
-        <p><a href="https://irv77.github.io/hd_fnaf/ucn/">FNAF UCN</a></p>
-      </div>
-    </div>
-
-    <!-- Other Games -->
-    <p><a href="https://qwasm.m-h.org.uk/">Quake</a></p>
-    <p><a href="https://dwasm.m-h.org.uk/">Doom</a></p>
-    <p><a href="/hl/index.html">Half-Life</a></p>
-    <p><a href="/cc3d/index.html">Crazy Cattle 3D</a></p>
-    <p><a href="https://nealmm.github.io/web-gba-emu/">GBA Emulator</a></p>
-    <p><a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a></p>
-    <p><a href="https://app.nextchat.dev/">Generative AI</a></p>
-
-    <!-- Open in about:blank -->
-    <button class="button-16" onclick="openInBlank()">Open in about:blank</button>
-  </div>
-
-  <!-- JavaScript -->
-  <script>
-    const themeSelect = document.getElementById('themeSelect');
-    const styleSheet = document.getElementById('styleSheet');
-
-    const themes = {
-      dark: './styles/style-dark.css',
-      light: './styles/style-light.css',
-      pastel: './styles/style-pastel.css',
-      purple: './styles/style-purple.css',
-      blue: './styles/style-blue.css',
-      orange: './styles/style-orange.css',
-      green: './styles/style-green.css'
-    };
-
-    function applyTheme(theme) {
-      styleSheet.href = themes[theme] || './styles/style.css';
-    }
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme && themes[savedTheme]) {
-      themeSelect.value = savedTheme;
-      applyTheme(savedTheme);
-    }
-
-    themeSelect.addEventListener('change', () => {
-      const selectedTheme = themeSelect.value;
-      localStorage.setItem('theme', selectedTheme);
-      applyTheme(selectedTheme);
-    });
-
-    function openInBlank() {
-      const win = window.open();
-      const iframe = win.document.createElement('iframe');
-      Object.assign(iframe.style, {
-        border: 'none',
-        width: '100%',
-        height: '100%',
-        margin: '0'
-      });
-      iframe.referrerPolicy = 'no-referrer';
-      iframe.allow = 'fullscreen';
-      iframe.src = document.URL;
-
-      win.document.body.style.margin = '0';
-      win.document.body.style.height = '100vh';
-      win.document.body.appendChild(iframe);
-    }
-    document.querySelectorAll('.dropdown').forEach(dropdown => {
-      const header = dropdown.querySelector('.dropdown-header');
-      const content = dropdown.querySelector('.dropdown-content');
-
-      header.addEventListener('click', () => {
-        const isOpen = dropdown.classList.contains('open');
-
-        if (isOpen) {
-          // Set fixed height for transition
-          content.style.maxHeight = content.scrollHeight + 'px';
-
-          // Force reflow
-          content.offsetHeight;
-
-          // Animate closed
-          content.style.maxHeight = '0px';
-          dropdown.classList.remove('open');
-        } else {
-          // Animate open
-          content.style.maxHeight = content.scrollHeight + 'px';
-          dropdown.classList.add('open');
-
-          // Remove max-height after transition so internal content can grow
-          content.addEventListener('transitionend', function handler() {
-            content.style.maxHeight = 'none';
-            content.removeEventListener('transitionend', handler);
-          });
-        }
-      });
-    });
-  </script>
-</body>
+      <!-- JavaScript -->
+      <script>
+         const themeSelect = document.getElementById('themeSelect');
+         const styleSheet = document.getElementById('styleSheet');
+         
+         const themes = {
+           dark: './styles/style-dark.css',
+           light: './styles/style-light.css',
+           pastel: './styles/style-pastel.css',
+           purple: './styles/style-purple.css',
+           blue: './styles/style-blue.css',
+           orange: './styles/style-orange.css',
+           green: './styles/style-green.css'
+         };
+         
+         function applyTheme(theme) {
+           styleSheet.href = themes[theme] || './styles/style.css';
+         }
+         
+         const savedTheme = localStorage.getItem('theme');
+         if (savedTheme && themes[savedTheme]) {
+           themeSelect.value = savedTheme;
+           applyTheme(savedTheme);
+         }
+         
+         themeSelect.addEventListener('change', () => {
+           const selectedTheme = themeSelect.value;
+           localStorage.setItem('theme', selectedTheme);
+           applyTheme(selectedTheme);
+         });
+         
+         function openInBlank() {
+           const win = window.open();
+           const iframe = win.document.createElement('iframe');
+           Object.assign(iframe.style, {
+             border: 'none',
+             width: '100%',
+             height: '100%',
+             margin: '0'
+           });
+           iframe.referrerPolicy = 'no-referrer';
+           iframe.allow = 'fullscreen';
+           iframe.src = document.URL;
+         
+           win.document.body.style.margin = '0';
+           win.document.body.style.height = '100vh';
+           win.document.body.appendChild(iframe);
+         }
+         document.querySelectorAll('.dropdown').forEach(dropdown => {
+           const header = dropdown.querySelector('.dropdown-header');
+           const content = dropdown.querySelector('.dropdown-content');
+         
+           header.addEventListener('click', () => {
+             const isOpen = dropdown.classList.contains('open');
+         
+             if (isOpen) {
+               content.style.maxHeight = content.scrollHeight + 'px';
+         
+               content.offsetHeight;
+         
+               content.style.maxHeight = '0px';
+               dropdown.classList.remove('open');
+             } else {
+               content.style.maxHeight = content.scrollHeight + 'px';
+               dropdown.classList.add('open');
+         
+               content.addEventListener('transitionend', function handler() {
+                 content.style.maxHeight = 'none';
+                 content.removeEventListener('transitionend', handler);
+               });
+             }
+           });
+         });
+      </script>
+   </body>
 </html>
