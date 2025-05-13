@@ -1,4 +1,4 @@
-# webretro
+# webretro 
 [RetroArch](https://github.com/libretro) ported to WebAssembly with [emscripten](https://emscripten.org/)!
 
 [**Official Instance**](https://binbashbanana.github.io/webretro/)
@@ -37,7 +37,7 @@ These cores are included pre-built with the repository (ROMs **NOT** included):
 * [Features](#features)
 * [How to use](#how-to-use)
 * [Embedding](#embedding)
-* [Todo / Planned features](#todo---Planned-features)
+* [Todo / Planned features](#todo-planned-features)
 * [Building from source](#building-from-source)
 * [Notes](#notes)
 * [Acknowledgements](#acknowledgements)
@@ -97,7 +97,7 @@ Mostly long-term:
 
 ## Building from source
 
-[Instructions](./tree/master/source#readme)
+[Instructions](./source#readme)
 
 ## Notes
 
