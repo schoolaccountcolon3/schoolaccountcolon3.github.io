@@ -63,6 +63,9 @@
               <p><a href="https://qwasm.m-h.org.uk/">Quake</a></p>
               <p><a href="https://dwasm.m-h.org.uk/">Doom</a></p>
               <p><a href="./webretro/index.html">Retroarch</a></p>
+              <p>
+                <a id="combinedLink" href="#">Flash Emulator <strong>(Games)</strong></a>
+              </p>
             </div>
          </div>
          <!-- Other Games -->
@@ -142,6 +145,16 @@
               });
             }
           });
+        });
+        const combinedLink = document.getElementById('combinedLink');
+        combinedLink.addEventListener('click', (event) => {
+          event.preventDefault(); // Prevent default link behavior
+          const flashLink = "https://flash.fsh.plus/";
+          const gamesLink = "https://github.com/BinBashBanana/gstore/tree/master";
+
+          // Decide which link to open based on click location (simplified example)
+          const linkToOpen = event.offsetX < combinedLink.offsetWidth / 7 ? flashLink : gamesLink;
+          window.open(linkToOpen, '_blank'); // Open in a new tab
         });
       </script>
    </body>
