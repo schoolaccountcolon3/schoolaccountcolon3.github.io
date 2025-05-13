@@ -114,30 +114,33 @@
            win.document.body.appendChild(iframe);
          }
          document.querySelectorAll('.dropdown').forEach(dropdown => {
-           const header = dropdown.querySelector('.dropdown-header');
-           const content = dropdown.querySelector('.dropdown-content');
-         
-           header.addEventListener('click', () => {
-             const isOpen = dropdown.classList.contains('open');
-         
-             if (isOpen) {
-               content.style.maxHeight = content.scrollHeight + 'px';
-         
-               content.offsetHeight;
-         
-               content.style.maxHeight = '0px';
-               dropdown.classList.remove('open');
-             } else {
-               content.style.maxHeight = content.scrollHeight + 'px';
-               dropdown.classList.add('open');
-         
-               content.addEventListener('transitionend', function handler() {
-                 content.style.maxHeight = 'none';
-                 content.removeEventListener('transitionend', handler);
-               });
-             }
-           });
-         });
+          const header = dropdown.querySelector('.dropdown-header');
+          const content = dropdown.querySelector('.dropdown-content');
+
+          header.addEventListener('click', () => {
+            const isOpen = dropdown.classList.contains('open');
+
+            if (isOpen) {
+              // COLLAPSING
+              content.style.maxHeight = content.scrollHeight + 'px'; // set current height
+              requestAnimationFrame(() => {
+                content.style.maxHeight = '0';
+                dropdown.classList.remove('open');
+              });
+            } else {
+              // EXPANDING
+              content.style.maxHeight = content.scrollHeight + 'px';
+              dropdown.classList.add('open');
+
+              content.addEventListener('transitionend', function handler(e) {
+                if (e.propertyName === 'max-height') {
+                  content.style.maxHeight = 'none'; // allow full auto height
+                  content.removeEventListener('transitionend', handler);
+                }
+              });
+            }
+          });
+        });
       </script>
    </body>
 </html>
