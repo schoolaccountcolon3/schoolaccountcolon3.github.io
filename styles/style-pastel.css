@@ -1,0 +1,52 @@
+#styleSwitcher select,
+body {
+    background-color: #2d2b34; /* deep charcoal with slight blue undertone */
+    color: #e5e3f5; /* light pastel lavender-gray text */
+}
+
+#styleSwitcher,
+.container {
+    background-color: #3c3a44; /* muted grayish dark greenish tone */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+    color: #f3f3f3; /* soft light gray-white for readability */
+}
+
+#styleSwitcher label,
+a {
+    color: #70c1b3; /* pastel greenish-blue */
+}
+
+a:hover {
+    color: #f7c1a6; /* soft peach-orange for hover */
+}
+
+.button-16 {
+    color: #231f2b;
+    background-color: #70c1b3; /* pastel greenish-blue */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+}
+
+.button-16:hover {
+    background-color: #f7c1a6; /* soft peach-orange */
+    color: #231f2b;
+}
+
+details summary {
+    color: #70c1b3; /* pastel greenish-blue */
+}
+
+details summary:hover {
+    color: #f7c1a6;
+}
+
+details > div a {
+    color: #70c1b3;
+}
+
+details > div a:hover {
+    color: #f7c1a6;
+}

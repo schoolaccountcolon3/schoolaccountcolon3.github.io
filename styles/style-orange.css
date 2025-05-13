@@ -1,0 +1,50 @@
+#styleSwitcher select,
+body {
+    background-color: #302922;
+    color: #333;
+}
+
+#styleSwitcher,
+.container {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+h1 {
+    color: #ffffff;
+}
+
+#styleSwitcher label,
+a {
+    color: #f39c12;
+}
+
+a:hover {
+    color: #d2b7a3;
+}
+
+.button-16 {
+    color: #fff;
+    background-color: #f39c12;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.button-16:hover {
+    background-color: #d2b7a3;
+}
+
+details summary {
+    color: #f39c12;
+}
+
+details summary:hover {
+    color: #d2b7a3;
+}
+
+details > div a {
+    color: #f39c12;
+}
+
+details > div a:hover {
+    color: #d2b7a3;
+}

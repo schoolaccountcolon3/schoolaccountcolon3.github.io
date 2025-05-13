@@ -3,40 +3,134 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./styles/style.css" />
+  <link rel="stylesheet" id="styleSheet" />
   <title>def google classroom</title>
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="icon" type="image/png" href="./favicon.png" />
 </head>
 <body>
+  <!-- Theme Switcher -->
+  <div id="styleSwitcher">
+    <label for="themeSelect">Theme:</label>
+    <select id="themeSelect">
+      <option value="dark">Dark</option>
+      <option value="light">Light</option>
+      <option value="pastel">Pastel</option>
+      <option value="purple">Purple</option>
+      <option value="blue">Blue</option>
+      <option value="orange">Orange</option>
+      <option value="green">Green</option>
+    </select>
+  </div>
+
+  <!-- Main Content -->
   <div class="container">
     <h1>Games</h1>
-    <p><a href="/minecraft.html">Minecraft</a></p>
+
+    <!-- Minecraft Section -->
+    <details>
+      <summary>Minecraft <span class="arrow">&#9660;</span></summary>
+      <div>
+        <p><a href="https://irv77.github.io/AmplerLauncher/">Minecraft Launcher (USE THIS)</a></p>
+        <hr class="rounded" />
+        <p><a href="minecraft/eaglercraft.html">Minecraft (1.8)</a></p>
+        <p><a href="minecraft/eaglercraft12.html">Minecraft (1.12)</a></p>
+        <p><a href="minecraft/eaglerforge.html">Minecraft (Modded)</a></p>
+      </div>
+    </details>
+    
+    <!-- FNAF Games Section -->
+    <details>
+      <summary>FNAF Games <span class="arrow">&#9660;</span></summary>
+      <div>
+        <p><a href="https://irv77.github.io/hd_fnaf/1/">FNAF 1</a></p>
+        <p><a href="https://irv77.github.io/hd_fnaf/2/">FNAF 2</a></p>
+        <p><a href="https://irv77.github.io/hd_fnaf/3/">FNAF 3</a></p>
+        <p><a href="https://irv77.github.io/hd_fnaf/4/">FNAF 4</a></p>
+        <p><a href="https://irv77.github.io/hd_fnaf/sl/">FNAF SL</a></p>
+        <p><a href="https://irv77.github.io/hd_fnaf/ps/">FNAF PS</a></p>
+        <p><a href="https://irv77.github.io/hd_fnaf/ucn/">FNAF UCN</a></p>
+      </div>
+    </details>
+
+    <!-- Other Games -->
     <p><a href="https://qwasm.m-h.org.uk/">Quake</a></p>
     <p><a href="https://dwasm.m-h.org.uk/">Doom</a></p>
     <p><a href="/hl/index.html">Half-Life</a></p>
-    <p><a href="/cc3d/index.html">Crazy Cattle 3d</a></p>
-    <p><a href="/fnaf.html">FNAF Games</a></p>
+    <p><a href="/cc3d/index.html">Crazy Cattle 3D</a></p>
     <p><a href="https://nealmm.github.io/web-gba-emu/">GBA Emulator</a></p>
     <p><a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a></p>
     <p><a href="https://app.nextchat.dev/">Generative AI</a></p>
-    <button class="button-16" onclick="myFunction()">Open in about:blank</button>
+
+    <!-- Button to Open in about:blank -->
+    <button class="button-16" onclick="openInBlank()">Open in about:blank</button>
   </div>
 
+  <!-- JavaScript for Theme and Button Actions -->
   <script>
-    function myFunction() {
-      var url = document.URL;
-      var win = window.open();
+    function openInBlank() {
+      const url = document.URL;
+      const win = window.open();
       win.document.body.style.margin = "0";
       win.document.body.style.height = "100vh";
-      var iframe = win.document.createElement("iframe");
+
+      const iframe = win.document.createElement("iframe");
       iframe.style.border = "none";
       iframe.style.width = "100%";
       iframe.style.height = "100%";
       iframe.style.margin = "0";
       iframe.referrerPolicy = "no-referrer";
       iframe.allow = "fullscreen";
-      iframe.src = url.toString();
+      iframe.src = url;
       win.document.body.appendChild(iframe);
+    }
+
+    const themeSelect = document.getElementById('themeSelect');
+    const styleSheet = document.getElementById('styleSheet');
+
+    // Load saved theme from local storage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      themeSelect.value = savedTheme;
+      applyTheme(savedTheme);
+    }
+
+    // Event listener for theme change
+    themeSelect.addEventListener('change', () => {
+      const selectedTheme = themeSelect.value;
+      localStorage.setItem('theme', selectedTheme);
+      applyTheme(selectedTheme);
+    });
+
+    // Function to apply the selected theme
+    function applyTheme(theme) {
+      let stylesheetPath;
+      switch (theme) {
+        case 'dark':
+          stylesheetPath = './styles/style-dark.css';
+          break;
+        case 'light':
+          stylesheetPath = './styles/style-light.css';
+          break;
+        case 'pastel':
+          stylesheetPath = './styles/style-pastel.css';
+          break;
+        case 'purple':
+          stylesheetPath = './styles/style-purple.css';
+          break;
+        case 'blue':
+          stylesheetPath = './styles/style-blue.css';
+          break;
+        case 'orange':
+          stylesheetPath = './styles/style-orange.css';
+          break;
+        case 'green':
+          stylesheetPath = './styles/style-green.css';
+          break;
+        default:
+          stylesheetPath = './styles/style.css';
+      }
+      styleSheet.href = stylesheetPath;
     }
   </script>
 </body>
