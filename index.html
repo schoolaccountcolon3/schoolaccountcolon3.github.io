@@ -121,30 +121,24 @@
            win.document.body.style.height = '100vh';
            win.document.body.appendChild(iframe);
          }
-         document.querySelectorAll('.dropdown').forEach(dropdown => {
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
           const header = dropdown.querySelector('.dropdown-header');
           const content = dropdown.querySelector('.dropdown-content');
+          let isOpen = false; // Track the dropdown state
 
           header.addEventListener('click', () => {
-            const isOpen = dropdown.classList.contains('open');
+            isOpen = !isOpen; // Toggle the state
 
             if (isOpen) {
-              // COLLAPSING
-              content.style.maxHeight = content.scrollHeight + 'px'; // set current height
-              requestAnimationFrame(() => {
-                content.style.maxHeight = '0';
-                dropdown.classList.remove('open');
-              });
-            } else {
               // EXPANDING
               content.style.maxHeight = content.scrollHeight + 'px';
               dropdown.classList.add('open');
-
-              content.addEventListener('transitionend', function handler(e) {
-                if (e.propertyName === 'max-height') {
-                  content.style.maxHeight = 'none'; // allow full auto height
-                  content.removeEventListener('transitionend', handler);
-                }
+            } else {
+              // COLLAPSING
+              content.style.maxHeight = content.scrollHeight + 'px'; // Get current height before collapsing
+              requestAnimationFrame(() => {
+                content.style.maxHeight = '0';
+                dropdown.classList.remove('open');
               });
             }
           });
