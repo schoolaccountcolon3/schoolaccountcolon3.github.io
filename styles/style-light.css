@@ -1,3 +1,4 @@
+details > div,
 #styleSwitcher select,
 body {
     background-color: #b4b4b4;
@@ -14,6 +15,7 @@ h1 {
     color: #121212;
 }
 
+details > div a,
 #styleSwitcher label,
 a {
     color: #3b3b3b;
@@ -47,4 +49,8 @@ details > div a {
 
 details > div a:hover {
     color: #6e6e6e;
+}
+
+hr.rounded {
+  border: 2px solid #ffffff;
 }

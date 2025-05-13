@@ -1,42 +1,44 @@
+details > div,
 #styleSwitcher select,
 body {
-    background-color: #2d2b34; /* deep charcoal with slight blue undertone */
-    color: #e5e3f5; /* light pastel lavender-gray text */
+    background-color: #2d2b34;
+    color: #e5e3f5;
 }
 
 #styleSwitcher,
 .container {
-    background-color: #3c3a44; /* muted grayish dark greenish tone */
+    background-color: #3c3a44;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 h1 {
-    color: #f3f3f3; /* soft light gray-white for readability */
+    color: #f3f3f3;
 }
 
+details > div a,
 #styleSwitcher label,
 a {
-    color: #70c1b3; /* pastel greenish-blue */
+    color: #70c1b3;
 }
 
 a:hover {
-    color: #f7c1a6; /* soft peach-orange for hover */
+    color: #f7c1a6;
 }
 
 .button-16 {
     color: #231f2b;
-    background-color: #70c1b3; /* pastel greenish-blue */
+    background-color: #70c1b3;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     font-weight: bold;
 }
 
 .button-16:hover {
-    background-color: #f7c1a6; /* soft peach-orange */
+    background-color: #f7c1a6;
     color: #231f2b;
 }
 
 details summary {
-    color: #70c1b3; /* pastel greenish-blue */
+    color: #70c1b3;
 }
 
 details summary:hover {
@@ -49,4 +51,8 @@ details > div a {
 
 details > div a:hover {
     color: #f7c1a6;
+}
+
+hr.rounded {
+  border: 2px solid #3c3a44;
 }
