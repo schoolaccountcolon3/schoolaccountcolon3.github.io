@@ -1,4 +1,4 @@
-details > div,
+.dropdown-content,
 #styleSwitcher select,
 body {
     background-color: #302922;
@@ -15,12 +15,15 @@ h1 {
     color: #ffffff;
 }
 
-details > div a,
+.dropdown-header,
+.dropdown-content a,
 #styleSwitcher label,
 a {
     color: #f39c12;
 }
 
+.dropdown-header:hover,
+.dropdown-content a:hover,
 a:hover {
     color: #d2b7a3;
 }
@@ -33,22 +36,6 @@ a:hover {
 
 .button-16:hover {
     background-color: #d2b7a3;
-}
-
-details summary {
-    color: #f39c12;
-}
-
-details summary:hover {
-    color: #d2b7a3;
-}
-
-details > div a {
-    color: #f39c12;
-}
-
-details > div a:hover {
-    color: #d2b7a3;
 }
 
 hr.rounded {
