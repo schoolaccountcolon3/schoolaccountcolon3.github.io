@@ -4,6 +4,7 @@ body {
     background-color: #121212;
     color: #e0e0e0;
     line-height: 1.6;
+    user-select: none;
 }
 
 body::-webkit-scrollbar {
