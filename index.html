@@ -7,6 +7,7 @@
       <link rel="icon" type="image/png" href="./favicon.png" />
       <link rel="stylesheet" href="./styles/style.css" />
       <link rel="stylesheet" id="styleSheet" />
+      <script src="./theme.js"></script>
    </head>
    <body>
       <!-- Theme Switcher -->
@@ -72,40 +73,13 @@
          <p><a href="/cc3d/index.html">Crazy Cattle 3D</a></p>
          <p><a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a></p>
          <p><a href="https://app.nextchat.dev/">Generative AI</a></p>
+          <p><a href="./chatroom/index.html">Chatroom</a></p>
          <!-- Open in about:blank -->
          <button class="button-16" onclick="openInBlank()">Open in about:blank</button>
       </div>
 
       <!-- JavaScript -->
       <script>
-         const themeSelect = document.getElementById('themeSelect');
-         const styleSheet = document.getElementById('styleSheet');
-         
-         const themes = {
-           dark: './styles/style-dark.css',
-           light: './styles/style-light.css',
-           pastel: './styles/style-pastel.css',
-           purple: './styles/style-purple.css',
-           blue: './styles/style-blue.css',
-           orange: './styles/style-orange.css',
-           green: './styles/style-green.css'
-         };
-         
-         function applyTheme(theme) {
-           styleSheet.href = themes[theme] || './styles/style.css';
-         }
-         
-         const savedTheme = localStorage.getItem('theme');
-         if (savedTheme && themes[savedTheme]) {
-           themeSelect.value = savedTheme;
-           applyTheme(savedTheme);
-         }
-         
-         themeSelect.addEventListener('change', () => {
-           const selectedTheme = themeSelect.value;
-           localStorage.setItem('theme', selectedTheme);
-           applyTheme(selectedTheme);
-         });
          
          function openInBlank() {
            const win = window.open();

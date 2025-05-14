@@ -1,43 +1,18 @@
-.dropdown-content,
-#styleSwitcher select,
-body {
-    background-color: #121212;
-    color: #e0e0e0;
-}
-
-#styleSwitcher,
-.container {
-    background-color: #1e1e1e;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-h1 {
-    color: #ffffff;
-}
-
-.dropdown-header,
-.dropdown-content a,
-#styleSwitcher label,
-a {
-    color: #f1f1f1;
-}
-
-.dropdown-header:hover,
-.dropdown-content a:hover,
-a:hover {
-    color: #c0c0c0;
-}
-
-.button-16 {
-    color: #fff;
-    background-color: #5e5e5e;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.button-16:hover {
-    background-color: #2c2c2c;
-}
-
-hr.rounded {
-  border: 2px solid #1e1e1e;
+:root {
+    /* Base Colors */
+    --color-bg: #121212;
+    --color-fg: #e0e0e0;
+    --color-primary: #f1f1f1;
+    --color-primary-hover: #c0c0c0;
+    --color-button-bg: #5e5e5e;
+    --color-button-hover: #2c2c2c;
+    --color-button-text-hover: #ffffff;
+    --color-card-bg: #1e1e1e;
+    --color-link: #f1f1f1;
+    --color-link-hover: #c0c0c0;
+    --color-header: #ffffff;
+    --color-border: #1e1e1e;
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-inset-shadow: rgba(0, 0, 0, 0.2);
+    --font-main: 'Source Sans 3', Helvetica, Arial, sans-serif;
 }

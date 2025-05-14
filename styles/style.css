@@ -1,12 +1,32 @@
+:root {
+    --color-bg: #121212;
+    --color-fg: #e0e0e0;
+    --color-primary: #f1f1f1;
+    --color-primary-hover: #c0c0c0;
+    --color-card-bg: #1e1e1e;
+    --color-link: #f1f1f1;
+    --color-link-hover: #c0c0c0;
+    --color-button-bg: #5e5e5e;
+    --color-button-hover: #2c2c2c;
+    --color-button-text-hover: #e0e0e0;
+    --color-border: #333;
+    --color-input-bg: #121212;
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-inset-shadow: rgba(0, 0, 0, 0.2);
+    --color-focus: rgba(92, 184, 92, 0.4);
+    --font-main: 'Source Sans 3', Helvetica, Arial, sans-serif;
+}
+
 body {
     margin: 0;
-    font-family: 'Source Sans 3', Helvetica, Arial, sans-serif;
-    background-color: #121212;
-    color: #e0e0e0;
+    font-family: var(--font-main);
+    background-color: var(--color-bg);
+    color: var(--color-fg);
     line-height: 1.6;
     user-select: none;
 }
 
+#chatbox::-webkit-scrollbar,
 body::-webkit-scrollbar {
     display: none;
 }
@@ -15,9 +35,9 @@ body::-webkit-scrollbar {
     max-width: 800px;
     margin: 40px auto;
     padding: 20px;
-    background-color: #1e1e1e;
+    background-color: var(--color-card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 h1 {
@@ -28,9 +48,9 @@ h1 {
 }
 
 a,
-.dropdown-content a{
+.dropdown-content a {
     display: block;
-    color: #f1f1f1;
+    color: var(--color-link);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s, transform 0.2s;
@@ -39,7 +59,7 @@ a,
 a:hover,
 .dropdown-header:hover,
 .dropdown-content a:hover {
-    color: #c0c0c0;
+    color: var(--color-link-hover);
     transform: translateY(-2px);
 }
 
@@ -51,66 +71,53 @@ a:hover,
     font-size: 1em;
     font-weight: 600;
     color: #fff;
-    background-color: #5e5e5e;
+    background-color: var(--color-button-bg);
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--color-inset-shadow);
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.button-16:hover {
-    background-color: #2c2c2c;
-    transform: translateY(-2px);
-}
-
 hr.rounded {
-    border: 2px solid #1e1e1e;
+    border: 2px solid var(--color-card-bg);
     border-radius: 2px;
 }
 
 .dropdown {
-  margin-bottom: 10px;
-  border-radius: 6px;
+    margin-bottom: 10px;
+    border-radius: 6px;
 }
 
 .dropdown-header {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  color: #f1f1f1;
-  font-size: 1em;
-  transition: color 0.3s, transform 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: var(--color-link);
+    font-size: 1em;
+    transition: color 0.3s, transform 0.2s;
 }
 
 .dropdown-header .arrow {
-  margin-left: 0.5em;
-  font-size: 1.2em;
-  transition: transform 0.3s ease;
+    margin-left: 0.5em;
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
 }
 
 .dropdown.open .arrow {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .dropdown-content {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.4s ease;
-  padding: 0 20px;
-  background-color: #121212;
-  border-radius: 8px;
-  margin-bottom: 1em;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.dropdown-content a {
-  display: block;
-  color: #f1f1f1;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s, transform 0.2s;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease;
+    padding: 0 20px;
+    background-color: var(--color-bg);
+    border-radius: 8px;
+    margin-bottom: 1em;
+    box-shadow: inset 0 2px 4px var(--color-inset-shadow);
 }
 
 /* Theme Switcher */
@@ -120,30 +127,109 @@ hr.rounded {
     right: 10px;
     z-index: 1000;
     padding: 10px;
-    background-color: #1e1e1e;
+    background-color: var(--color-card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 #styleSwitcher label {
-    color: #e0e0e0;
+    color: var(--color-fg);
     margin-right: 5px;
     font-weight: 500;
 }
 
 #styleSwitcher select {
-    background-color: #333;
-    color: #e0e0e0;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
     border: none;
     border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 4px var(--color-inset-shadow);
 }
 
 #styleSwitcher select:focus {
     outline: none;
-    box-shadow:
-        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    box-shadow: 
+        inset 0 2px 4px var(--color-inset-shadow),
         0 0 5px rgba(137, 207, 240, 0.5);
+}
+
+/* Input Sections */
+#name-input,
+#message-input {
+    margin-bottom: 20px;
+    padding: 0 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+#name-input input[type="text"],
+#message-input input[type="text"] {
+    flex-grow: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-card-bg);
+    color: var(--color-fg);
+    font-family: var(--font-main);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.2s ease;
+}
+
+#name-input input[type="text"]:focus,
+#message-input input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px var(--color-focus);
+}
+
+#name-input button,
+#message-input button {
+    padding: 10px 18px;
+    background-color: var(--color-button-bg);
+    color: white;
+    font-weight: 600;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px var(--color-inset-shadow);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-16:hover,
+#name-input button:hover,
+#message-input button:hover {
+    background-color: var(--color-button-hover);
+    color: var(--color-button-text-hover);
+    transform: translateY(-1px);
+}
+
+#chatbox {
+    padding: 15px 20px;
+    height: 600px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    color: var(--color-fg);
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    box-shadow: inset 0 2px 6px var(--color-inset-shadow);
+    font-family: var(--font-main);
+    margin: 20px;
+}
+
+#chatbox p {
+    margin: 6px 0;
+    padding: 10px 12px;
+    background-color: var(--color-bg);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#chatbox p:last-child {
+    border-left: 4px solid var(--color-primary-hover);
 }
