@@ -42,6 +42,7 @@ try {
       userName = enteredName;
       localStorage.setItem(localStorageNameKey, userName);
       setNameButton.textContent = "Change Name";
+      window.location.reload();
     } else {
       alert("Please enter a valid name.");
       localStorage.removeItem(localStorageNameKey);
@@ -71,7 +72,7 @@ try {
     }
 
     messageParagraph.innerHTML = `
-      <span class="message-text">${message.name}: ${message.text}</span>
+      <span class="message-text"><strong>${message.name}:</strong> ${message.text}</span>
       <span class="timestamp">${formattedTime}</span>
     `;
 
