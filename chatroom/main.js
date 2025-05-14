@@ -50,18 +50,35 @@ try {
     }
   });
 
+  let previousMessageTimestamp = null;
+
   const displayMessage = (message) => {
-  const messageElement = document.createElement('p');
-  messageElement.textContent = `${message.name}: ${message.text}`;
+    const messageElement = document.createElement('div'); // Changed to a div
+    const messageParagraph = document.createElement('p'); // Create a paragraph for the message
+    const timestamp = new Date(message.timestamp);
+    const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  if (message.name === savedName) {
-    messageElement.classList.add('same-sender');
-  }
+    if (message.name === savedName) {
+      messageParagraph.classList.add('same-sender'); // Add class to the paragraph
+    }
 
-  chatbox.appendChild(messageElement);
+    const timeDifference = previousMessageTimestamp ? (timestamp - previousMessageTimestamp) / (1000 * 60) : 0;
+
+    const extraSpace = timeDifference > 10 ? document.createElement('hr') : null;
+    if (extraSpace) {
+      extraSpace.classList.add('message-spacer');
+      messageElement.appendChild(extraSpace);
+    }
+
+    messageParagraph.innerHTML = `
+      <span class="message-text">${message.name}: ${message.text}</span>
+      <span class="timestamp">${formattedTime}</span>
+    `;
+
+    messageElement.appendChild(messageParagraph);
+    chatbox.appendChild(messageElement);
+    previousMessageTimestamp = timestamp;
   };
-
-  
 
   const displayedMessageKeys = new Set(); // To track shown messages
 
@@ -98,7 +115,7 @@ try {
   const sendMessage = () => {
     const messageText = messageInput.value.trim();
     if (userName !== "Anonymous" && messageText) {
-      push(messagesRef, { name: userName, text: messageText })
+      push(messagesRef, { name: userName, text: messageText, timestamp: new Date().toISOString() })
         .then(() => {
           messageInput.value = '';
           chatbox.scrollTop = chatbox.scrollHeight;
