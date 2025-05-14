@@ -42,7 +42,6 @@ try {
       userName = enteredName;
       localStorage.setItem(localStorageNameKey, userName);
       setNameButton.textContent = "Change Name";
-      alert(`Your name is set to ${userName}`);
     } else {
       alert("Please enter a valid name.");
       localStorage.removeItem(localStorageNameKey);
@@ -52,10 +51,17 @@ try {
   });
 
   const displayMessage = (message) => {
-    const messageElement = document.createElement('p');
-    messageElement.textContent = `${message.name}: ${message.text}`;
-    chatbox.appendChild(messageElement);
+  const messageElement = document.createElement('p');
+  messageElement.textContent = `${message.name}: ${message.text}`;
+
+  if (message.name === savedName) {
+    messageElement.classList.add('same-sender');
+  }
+
+  chatbox.appendChild(messageElement);
   };
+
+  
 
   const displayedMessageKeys = new Set(); // To track shown messages
 
