@@ -209,7 +209,7 @@ hr.rounded {
 
 #chatbox {
     padding: 15px 20px;
-    height: 70vh;
+    height: 55vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
