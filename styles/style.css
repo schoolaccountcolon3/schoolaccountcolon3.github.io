@@ -257,3 +257,18 @@ hr.rounded {
   margin: 1em 0; /* Adjust margin as needed */
   border-radius: 5px; /* Adjust radius for roundness */
 }
+
+.delete-button {
+  float: right;
+  margin-left: 10px;
+  background-color: var(--color-card-bg);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: right;
+  font-size: 14px;
+  cursor: pointer;
+}

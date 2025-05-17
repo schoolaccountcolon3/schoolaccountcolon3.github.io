@@ -12,7 +12,9 @@ import {
   limitToLast,
   startAt,
   endBefore,
-  get
+  get,
+  remove,
+  onChildRemoved
 } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -72,41 +74,65 @@ try {
 
   // Main display function; allow prepend for older messages
   const displayMessage = (msg, { prepend = false } = {}) => {
-    if (displayedKeys.has(msg.key)) return;
-    displayedKeys.add(msg.key);
+      if (displayedKeys.has(msg.key)) return;
+      displayedKeys.add(msg.key);
+      
+      const wrapper = document.createElement('div');
+      const p = document.createElement('p');
 
-    const wrapper = document.createElement('div');
-    const p = document.createElement('p');
+      wrapper.setAttribute('data-message-key', msg.key);
 
-    const ts = new Date(msg.timestamp);
-    const formatted = ts.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+      const ts = new Date(msg.timestamp);
+      const formatted = ts.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
 
-    if (msg.name === localStorage.getItem(localStorageNameKey)) {
-      p.classList.add('same-sender');
-    }
-
-    // Spacer if more than 10 minutes since last
-    if (window._lastTs) {
-      const diffMin = (ts - window._lastTs) / 60000;
-      if (diffMin > 10) {
-        const hr = document.createElement('hr');
-        hr.classList.add('message-spacer');
-        wrapper.appendChild(hr);
+      if (msg.name === localStorage.getItem(localStorageNameKey)) {
+        p.classList.add('same-sender');
       }
-    }
-    window._lastTs = ts;
 
-    p.innerHTML = `
-      <span class="message-text"><strong>${msg.name}:</strong> ${msg.text}</span>
-      <span class="timestamp">${formatted}</span>
-    `;
-    wrapper.appendChild(p);
+      // Spacer if more than 10 minutes since last
+      if (window._lastTs) {
+        const diffMin = (ts - window._lastTs) / 60000;
+        if (diffMin > 10) {
+          const hr = document.createElement('hr');
+          hr.classList.add('message-spacer');
+          wrapper.appendChild(hr);
+        }
+      }
+      window._lastTs = ts;
 
-    if (prepend) {
-      chatbox.insertBefore(wrapper, chatbox.firstChild);
-    } else {
-      chatbox.appendChild(wrapper);
-    }
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.classList.add('delete-button');
+      deleteButton.style.display = msg.name === localStorage.getItem(localStorageNameKey) ? 'inline' : 'none'; //only show if same user
+
+      deleteButton.addEventListener('click', () => {
+          if (confirm(`Are you sure you want to delete this message?`)) {
+              remove(ref(database, `messages/${msg.key}`))
+                  .then(() => {
+                      console.log('Message deleted successfully!');
+                      displayedKeys.delete(msg.key);
+                      wrapper.remove();
+                  })
+                  .catch(error => {
+                      console.error('Error deleting message:', error);
+                      alert('Error deleting message. Please try again.');
+                  });
+          }
+      });
+
+
+      p.innerHTML = `
+        <span class="message-text"><strong>${msg.name}:</strong> ${msg.text}</span>
+        <span class="timestamp">${formatted}</span>
+      `;
+      p.appendChild(deleteButton); // Add the button to the paragraph
+      wrapper.appendChild(p);
+
+      if (prepend) {
+        chatbox.insertBefore(wrapper, chatbox.firstChild);
+      } else {
+        chatbox.appendChild(wrapper);
+      }
   };
 
   // Load the most recent 30 messages
@@ -134,19 +160,32 @@ try {
 
   // Listen for brand-new messages (timestamp ≥ now)
   const startLiveListener = () => {
-    const nowISO = new Date().toISOString();
-    const liveQ = query(
-      messagesRef,
-      orderByChild('timestamp'),
-      startAt(nowISO)
-    );
-    onChildAdded(liveQ, snap => {
-      const msg = snapToMsg(snap);
-      displayMessage(msg);
-      chatbox.scrollTop = chatbox.scrollHeight;
-    }, err => {
-      console.error("Live listener error:", err);
-    });
+      const messagesRef = ref(database, 'messages'); // Get the reference here
+
+      // Listen for new messages
+      const nowISO = new Date().toISOString();
+      const liveQ = query(
+          messagesRef,
+          orderByChild('timestamp'),
+          startAt(nowISO)
+      );
+      onChildAdded(liveQ, snap => {
+          const msg = snapToMsg(snap);
+          displayMessage(msg);
+          chatbox.scrollTop = chatbox.scrollHeight;
+      }, err => {
+          console.error("Live listener error:", err);
+      });
+
+      // Listen for deleted messages
+      onChildRemoved(messagesRef, snap => {
+          displayedKeys.delete(snap.key);
+          // Find and remove the message element from the chatbox
+          const messageElement = document.querySelector(`div[data-message-key="${snap.key}"]`);
+          if (messageElement) {
+              messageElement.remove();
+          }
+      });
   };
 
   // Infinite scroll—load older when scrolled to top
