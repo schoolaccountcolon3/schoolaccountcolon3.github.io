@@ -1,6 +1,19 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-import { getDatabase, ref, push, onChildAdded, get } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
+import {
+  getAuth
+} from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded,
+  query,
+  orderByChild,
+  limitToLast,
+  startAt,
+  endBefore,
+  get
+} from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvQ8uDrpWsRkpnba2khTuIBZeFWB0fHEw",
@@ -18,28 +31,27 @@ try {
   const database = getDatabase(app);
   const messagesRef = ref(database, 'messages');
 
-  let userName = "Anonymous";
-  const localStorageNameKey = 'chatUserName';
-
-  const nameInput = document.getElementById('name');
+  // DOM elements
+  const nameInput     = document.getElementById('name');
   const setNameButton = document.getElementById('set-name');
-  const chatbox = document.getElementById('chatbox');
-  const messageInput = document.getElementById('message');
-  const sendButton = document.getElementById('send');
+  const chatbox       = document.getElementById('chatbox');
+  const messageInput  = document.getElementById('message');
+  const sendButton    = document.getElementById('send');
 
-  const savedName = localStorage.getItem(localStorageNameKey);
-  if (savedName) {
-    userName = savedName;
-    nameInput.value = savedName;
+  // User name / persistence
+  const localStorageNameKey = 'chatUserName';
+  let userName = localStorage.getItem(localStorageNameKey) || "Anonymous";
+  if (userName !== "Anonymous") {
+    nameInput.value = userName;
     setNameButton.textContent = "Change Name";
   } else {
     setNameButton.textContent = "Set Name";
   }
 
   setNameButton.addEventListener('click', () => {
-    const enteredName = nameInput.value.trim();
-    if (enteredName) {
-      userName = enteredName;
+    const entered = nameInput.value.trim();
+    if (entered) {
+      userName = entered;
       localStorage.setItem(localStorageNameKey, userName);
       setNameButton.textContent = "Change Name";
       window.location.reload();
@@ -51,96 +63,155 @@ try {
     }
   });
 
-  let previousMessageTimestamp = null;
+  // Helpers
+  let oldestTimestamp = null;
+  const displayedKeys = new Set();
 
-  const displayMessage = (message) => {
-    const messageElement = document.createElement('div'); // Changed to a div
-    const messageParagraph = document.createElement('p'); // Create a paragraph for the message
-    const timestamp = new Date(message.timestamp);
-    const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  // Convert snapshot to object
+  const snapToMsg = snap => ({ key: snap.key, ...snap.val() });
 
-    if (message.name === savedName) {
-      messageParagraph.classList.add('same-sender'); // Add class to the paragraph
+  // Main display function; allow prepend for older messages
+  const displayMessage = (msg, { prepend = false } = {}) => {
+    if (displayedKeys.has(msg.key)) return;
+    displayedKeys.add(msg.key);
+
+    const wrapper = document.createElement('div');
+    const p = document.createElement('p');
+
+    const ts = new Date(msg.timestamp);
+    const formatted = ts.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+
+    if (msg.name === localStorage.getItem(localStorageNameKey)) {
+      p.classList.add('same-sender');
     }
 
-    const timeDifference = previousMessageTimestamp ? (timestamp - previousMessageTimestamp) / (1000 * 60) : 0;
-
-    const extraSpace = timeDifference > 10 ? document.createElement('hr') : null;
-    if (extraSpace) {
-      extraSpace.classList.add('message-spacer');
-      messageElement.appendChild(extraSpace);
+    // Spacer if more than 10 minutes since last
+    if (window._lastTs) {
+      const diffMin = (ts - window._lastTs) / 60000;
+      if (diffMin > 10) {
+        const hr = document.createElement('hr');
+        hr.classList.add('message-spacer');
+        wrapper.appendChild(hr);
+      }
     }
+    window._lastTs = ts;
 
-    messageParagraph.innerHTML = `
-      <span class="message-text"><strong>${message.name}:</strong> ${message.text}</span>
-      <span class="timestamp">${formattedTime}</span>
+    p.innerHTML = `
+      <span class="message-text"><strong>${msg.name}:</strong> ${msg.text}</span>
+      <span class="timestamp">${formatted}</span>
     `;
+    wrapper.appendChild(p);
 
-    messageElement.appendChild(messageParagraph);
-    chatbox.appendChild(messageElement);
-    previousMessageTimestamp = timestamp;
+    if (prepend) {
+      chatbox.insertBefore(wrapper, chatbox.firstChild);
+    } else {
+      chatbox.appendChild(wrapper);
+    }
   };
 
-  const displayedMessageKeys = new Set(); // To track shown messages
+  // Load the most recent 30 messages
+  const loadRecent = async () => {
+    const recentQ = query(
+      messagesRef,
+      orderByChild('timestamp'),
+      limitToLast(30)
+    );
+    const snap = await get(recentQ);
+    if (!snap.exists()) return;
 
-  get(messagesRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const messages = snapshot.val();
-      chatbox.innerHTML = '';
+    // Convert & sort ascending
+    const arr = Object.entries(snap.val())
+      .map(([key,val]) => ({ key, ...val }))
+      .sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-      Object.entries(messages).forEach(([key, msg]) => {
-        displayMessage(msg);
-        displayedMessageKeys.add(key);
-      });
+    chatbox.innerHTML = '';
+    arr.forEach(m => displayMessage(m));
+    chatbox.scrollTop = chatbox.scrollHeight;
 
+    // Record the oldest timestamp
+    oldestTimestamp = arr[0].timestamp;
+  };
+
+  // Listen for brand-new messages (timestamp ≥ now)
+  const startLiveListener = () => {
+    const nowISO = new Date().toISOString();
+    const liveQ = query(
+      messagesRef,
+      orderByChild('timestamp'),
+      startAt(nowISO)
+    );
+    onChildAdded(liveQ, snap => {
+      const msg = snapToMsg(snap);
+      displayMessage(msg);
       chatbox.scrollTop = chatbox.scrollHeight;
-    }
-
-    onChildAdded(messagesRef, (snapshot) => {
-      const newMessage = snapshot.val();
-      const messageKey = snapshot.key;
-
-      if (!displayedMessageKeys.has(messageKey)) {
-        displayMessage(newMessage);
-        displayedMessageKeys.add(messageKey);
-        chatbox.scrollTop = chatbox.scrollHeight;
-      }
-    }, (error) => {
-      console.error("Error listening for new child_added:", error);
+    }, err => {
+      console.error("Live listener error:", err);
     });
+  };
 
-  }).catch((error) => {
-    console.error("Error fetching initial messages:", error);
+  // Infinite scroll—load older when scrolled to top
+  chatbox.addEventListener('scroll', async () => {
+    if (chatbox.scrollTop !== 0 || !oldestTimestamp) return;
+
+    const oldQ = query(
+      messagesRef,
+      orderByChild('timestamp'),
+      endBefore(oldestTimestamp),
+      limitToLast(30)
+    );
+    const snap = await get(oldQ);
+    if (!snap.exists()) return;
+
+    const older = Object.entries(snap.val())
+      .map(([key,val]) => ({ key, ...val }))
+      .sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    // Save scroll position to restore later
+    const beforeHeight = chatbox.scrollHeight;
+
+    older.forEach(m => displayMessage(m, { prepend: true }));
+    oldestTimestamp = older[0].timestamp;
+
+    // Restore scroll so user stays “at” the same messages
+    const afterHeight = chatbox.scrollHeight;
+    chatbox.scrollTop = afterHeight - beforeHeight;
   });
 
+  // Send logic
   const sendMessage = () => {
-    const messageText = messageInput.value.trim();
-    if (userName !== "Anonymous" && messageText) {
-      push(messagesRef, { name: userName, text: messageText, timestamp: new Date().toISOString() })
-        .then(() => {
-          messageInput.value = '';
-          chatbox.scrollTop = chatbox.scrollHeight;
-        })
-        .catch((error) => {
-          console.error("Error pushing message:", error);
-          alert("Error sending message. Please try again.");
-        });
-    } else if (userName === "Anonymous") {
-      alert("Please set your name first.");
-    } else {
-      alert("Please enter a message to send.");
+    const text = messageInput.value.trim();
+    if (userName === "Anonymous") {
+      return alert("Please set your name first.");
     }
+    if (!text) {
+      return alert("Please enter a message to send.");
+    }
+    push(messagesRef, {
+      name: userName,
+      text,
+      timestamp: new Date().toISOString()
+    })
+    .then(() => {
+      messageInput.value = '';
+      chatbox.scrollTop = chatbox.scrollHeight;
+    })
+    .catch(err => {
+      console.error("Push error:", err);
+      alert("Error sending message. Please try again.");
+    });
   };
-
   sendButton.addEventListener('click', sendMessage);
-
-  messageInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter' || event.keyCode === 13) {
-      event.preventDefault();
+  messageInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
       sendMessage();
     }
   });
 
+  // Kick things off
+  loadRecent();
+  startLiveListener();
+
 } catch (error) {
-  console.error("Error initializing Firebase or getting database:", error);
+  console.error("Initialization error:", error);
 }
