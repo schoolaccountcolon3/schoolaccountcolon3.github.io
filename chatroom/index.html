@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>def google classroom</title>
+<title>def google classroom - Secure Chat</title>
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="stylesheet" href="/styles/style.css">
 <script type="module" src="./main.js"></script>
@@ -9,7 +9,6 @@
 <script src="/theme.js"></script>
 </head>
 <body>
-    <!-- Theme Switcher -->
   <div id="styleSwitcher">
       <label for="themeSelect">Theme:</label>
       <select id="themeSelect">
@@ -22,19 +21,49 @@
         <option value="green">Green</option>
       </select>
   </div>
-  <h1>Chatroom</h1>
 
-  <div id="name-input">
-    <input type="text" id="name" placeholder="Enter your name">
-    <button id="set-name">Set Name</button>
+  <div id="edit-bio-trigger-container">
+      <button id="toggle-bio-editor-button" style="display: none;">Edit Bio</button>
+  </div>
+
+  <div id="bio-editor-panel">
+      <label for="bio-input">Your Bio:</label>
+      <textarea id="bio-input" placeholder="Max 200 chars" maxlength="200" rows="3"></textarea>
+      <div class="bio-controls">
+          <button id="set-bio-button">Save Bio</button>
+          <span id="bio-char-count">0/200</span>
+      </div>
+  </div>
+
+  <h1>Secure Chatroom</h1>
+
+  <div id="name-auth-area">
+    <div id="auth-status" style="margin-bottom: 10px; font-weight: bold;">Please set your name and authenticate.</div>
+    <div id="name-input-group">
+        <input type="text" id="name" placeholder="Enter your name">
+        <button id="set-name">Set Name / Register</button>
+    </div>
   </div>
 
   <div id="chatbox"></div>
 
   <div id="message-input">
-    <input type="text" id="message" placeholder="Enter message">
-    <button id="send">Send</button>
+    <button id="image-url-button" title="Send Image from URL" disabled>🔗</button>
+    <input type="text" id="message" placeholder="Enter message" disabled>
+    <button id="send" disabled>Send</button>
   </div>
 
+  <div id="bio-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">×</span>
+        <h3 id="modal-username">User Bio</h3>
+        <p id="modal-bio-text">Loading...</p>
+    </div>
+  </div>
+
+  <div id="image-lightbox-modal">
+    <span class="close-button">×</span>
+    <img src="" alt="Enlarged image" id="lightbox-image">
+  </div>
 </body>
 </html>
