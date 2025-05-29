@@ -4,7 +4,7 @@
 <title>def google classroom - Secure Chat</title>
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="stylesheet" href="/styles/style.css">
-<script type="module" src="./main.js"></script>
+<script type="module" src="main.js"></script>
 <link rel="stylesheet" id="styleSheet" />
 <script src="/theme.js"></script>
 </head>
@@ -12,21 +12,25 @@
   <div id="styleSwitcher">
       <label for="themeSelect">Theme:</label>
       <select id="themeSelect">
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-        <option value="pastel">Pastel</option>
-        <option value="purple">Purple</option>
-        <option value="blue">Blue</option>
-        <option value="orange">Orange</option>
+        <option value="dark">Dark</option> <option value="light">Light</option> <option value="pastel">Pastel</option>
+        <option value="purple">Purple</option> <option value="blue">Blue</option> <option value="orange">Orange</option>
         <option value="green">Green</option>
       </select>
   </div>
 
-  <div id="edit-bio-trigger-container">
-      <button id="toggle-bio-editor-button" style="display: none;">Edit Bio</button>
+  <div id="user-controls-container">
+      <img id="current-user-pfp" src="" alt="My PFP">
+      <button id="toggle-bio-editor-button" style="display: none;">Edit Profile</button>
   </div>
 
   <div id="bio-editor-panel">
+      <div id="pfp-upload-section">
+          <label for="pfp-upload-input">Profile Picture:</label>
+          <img id="pfp-preview" src="" alt="PFP Preview">
+          <input type="file" id="pfp-upload-input" accept="image/*">
+          <button id="pfp-upload-button">Choose Image</button>
+          <button id="set-pfp-button" disabled>Set Profile Picture</button>
+      </div>
       <label for="bio-input">Your Bio:</label>
       <textarea id="bio-input" placeholder="Max 200 chars" maxlength="200" rows="3"></textarea>
       <div class="bio-controls">
@@ -56,12 +60,13 @@
   <div id="bio-modal" class="modal">
     <div class="modal-content">
         <span class="close-button">×</span>
+        <img id="modal-pfp" src="" alt="User PFP">
         <h3 id="modal-username">User Bio</h3>
         <p id="modal-bio-text">Loading...</p>
     </div>
   </div>
 
-  <div id="image-lightbox-modal">
+  <div id="image-lightbox-modal" class="modal">
     <span class="close-button">×</span>
     <img src="" alt="Enlarged image" id="lightbox-image">
   </div>
