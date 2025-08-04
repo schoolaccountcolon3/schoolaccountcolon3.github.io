@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>def google classroom - Secure Chat</title>
+<title>def google classroom</title>
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="stylesheet" href="/styles/style.css">
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
 <script type="module" src="main.js"></script>
 <link rel="stylesheet" id="styleSheet" />
 <script src="/theme.js"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<style>
+.message-body span {
+    display: block;
+    margin-bottom: 4px;
+}
+.message-body span:last-child {
+    margin-bottom: 0;
+}
+.message-body img.chat-image {
+    margin-bottom: 4px;
+}
+.message-body img.chat-image:last-child {
+    margin-bottom: 0;
+}
+</style>
 </head>
 <body>
-  <div id="styleSwitcher">
-      <label for="themeSelect">Theme:</label>
-      <select id="themeSelect">
-        <option value="dark">Dark</option> <option value="light">Light</option> <option value="pastel">Pastel</option>
-        <option value="purple">Purple</option> <option value="blue">Blue</option> <option value="orange">Orange</option>
-        <option value="green">Green</option>
-      </select>
+  <div id="dm-sidebar" class="sidebar">
+      <a href="javascript:void(0)" class="closebtn" id="close-dm-sidebar">&times;</a>
+      <h3>Direct Messages</h3>
+      <div id="dm-user-list"></div>
   </div>
 
   <div id="user-controls-container">
+      <button id="open-dm-sidebar" style="display: none;">&#9776;</button>
       <img id="current-user-pfp" src="" alt="My PFP">
       <button id="toggle-bio-editor-button" style="display: none;">Edit Profile</button>
   </div>
@@ -29,40 +44,72 @@
           <img id="pfp-preview" src="" alt="PFP Preview">
           <input type="file" id="pfp-upload-input" accept="image/*">
           <button id="pfp-upload-button">Choose Image</button>
-          <button id="set-pfp-button" disabled>Set Profile Picture</button>
       </div>
+      <div class="bio-section">
+          <label for="pronouns-input">Pronouns:</label>
+          <input type="text" id="pronouns-input" placeholder="e.g. they/them" maxlength="50">
+      </div>
+      <div class="bio-section">
       <label for="bio-input">Your Bio:</label>
       <textarea id="bio-input" placeholder="Max 200 chars" maxlength="200" rows="3"></textarea>
       <div class="bio-controls">
-          <button id="set-bio-button">Save Bio</button>
           <span id="bio-char-count">0/200</span>
+          </div>
       </div>
+      <button id="save-profile-button" class="save-profile-button">Save Profile</button>
   </div>
 
-  <h1>Secure Chatroom</h1>
+  <div id="styleSwitcher">
+      <label for="themeSelect">Theme:</label>
+      <select id="themeSelect">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="pastel">Pastel</option>
+        <option value="purple">Purple</option>
+        <option value="blue">Blue</option>
+        <option value="orange">Orange</option>
+        <option value="green">Green</option>
+      </select>
+  </div>
 
-  <div id="name-auth-area">
-    <div id="auth-status" style="margin-bottom: 10px; font-weight: bold;">Please set your name and authenticate.</div>
-    <div id="name-input-group">
-        <input type="text" id="name" placeholder="Enter your name">
-        <button id="set-name">Set Name / Register</button>
+  <div id="particles-js"></div>
+  
+  <div id="main-content">
+    <h1 id="chat-header">Chatroom</h1>
+
+    <div id="name-auth-area">
+      <div id="auth-status" style="margin-bottom: 10px; font-weight: bold;">Please set your name and authenticate.</div>
+      <div id="name-input-group">
+          <input type="text" id="name" placeholder="Enter your name">
+          <button id="set-name">Set Name / Register</button>
+      </div>
     </div>
-  </div>
 
-  <div id="chatbox"></div>
+    <div id="chatbox"></div>
 
-  <div id="message-input">
-    <button id="image-url-button" title="Send Image from URL" disabled>🔗</button>
-    <input type="text" id="message" placeholder="Enter message" disabled>
-    <button id="send" disabled>Send</button>
+    <div id="message-input">
+      <button id="image-url-button" title="Send Image from URL" disabled>🔗</button>
+      <input type="text" id="message" placeholder="Enter message" disabled>
+      <button id="send" disabled>Send</button>
+    </div>
   </div>
 
   <div id="bio-modal" class="modal">
     <div class="modal-content">
         <span class="close-button">×</span>
+        <div class="modal-header">
         <img id="modal-pfp" src="" alt="User PFP">
         <h3 id="modal-username">User Bio</h3>
+            <div class="user-tag">Member</div>
+        </div>
+        <div class="bio-section">
+            <div class="bio-section-title">Pronouns</div>
+            <p id="modal-pronouns" class="empty-bio">No pronouns set</p>
+        </div>
+        <div class="bio-section">
+            <div class="bio-section-title">About Me</div>
         <p id="modal-bio-text">Loading...</p>
+        </div>
     </div>
   </div>
 
@@ -70,5 +117,82 @@
     <span class="close-button">×</span>
     <img src="" alt="Enlarged image" id="lightbox-image">
   </div>
+
+  <script>
+    // Initialize particles.js
+    particlesJS('particles-js', {
+      particles: {
+        number: {
+          value: 80,
+          density: {
+            enable: true,
+            value_area: 800
+          }
+        },
+        color: {
+          value: '#ffffff'
+        },
+        shape: {
+          type: 'circle'
+        },
+        opacity: {
+          value: 0.1,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 1,
+            opacity_min: 0.05,
+            sync: false
+          }
+        },
+        size: {
+          value: 3,
+          random: true
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: '#ffffff',
+          opacity: 0.1,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: 'none',
+          random: true,
+          straight: false,
+          out_mode: 'out',
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: {
+            enable: true,
+            mode: 'grab'
+          },
+          onclick: {
+            enable: true,
+            mode: 'push'
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 140,
+            line_linked: {
+              opacity: 0.2
+            }
+          },
+          push: {
+            particles_nb: 4
+          }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
 </body>
 </html>

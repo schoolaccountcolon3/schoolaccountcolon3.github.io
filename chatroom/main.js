@@ -71,8 +71,8 @@ try {
   const toggleBioEditorButton = document.getElementById('toggle-bio-editor-button');
   const bioEditorPanel        = document.getElementById('bio-editor-panel');
   const bioInput              = document.getElementById('bio-input');
-  const setBioButton          = document.getElementById('set-bio-button');
   const bioCharCount          = document.getElementById('bio-char-count');
+  const pronounsInput         = document.getElementById('pronouns-input');
 
   const pfpUploadInput        = document.getElementById('pfp-upload-input');
   const pfpUploadButton       = document.getElementById('pfp-upload-button');
@@ -84,6 +84,7 @@ try {
   const modalUsername         = document.getElementById('modal-username');
   const modalBioText          = document.getElementById('modal-bio-text');
   const closeModalButtonBio   = document.querySelector('#bio-modal .close-button'); 
+  const modalPronouns         = document.getElementById('modal-pronouns');
 
   const imageUrlButton = document.getElementById('image-url-button');
   let isSendingImage = false;
@@ -92,12 +93,49 @@ try {
   const lightboxImage = document.getElementById('lightbox-image');
   const closeLightboxButton = document.querySelector('#image-lightbox-modal .close-button');
 
+  const md = window.markdownit();
+
+  const openDmSidebarButton = document.getElementById('open-dm-sidebar');
+  const closeDmSidebarButton = document.getElementById('close-dm-sidebar');
+  const dmSidebar = document.getElementById('dm-sidebar');
+  const dmUserList = document.getElementById('dm-user-list');
+  const mainContent = document.getElementById('main-content');
+
+  let currentChatContext = { type: 'global' }; // 'global' or 'dm'
+
   const localStorageNameKey = 'chatUserName';
   const localStorageAuthKey = 'chatUserAuthenticated';
+  const localStoragePfpCacheKey = 'chatPfpCache';
+  const sessionChatContextKey = 'chatSessionContext';
   let userName = null;
   let isAuthenticated = false;
   let selectedPfpFile = null;
   const pfpCache = new Map();
+
+  // Load cached profile pictures from localStorage
+  try {
+    const cachedPfps = localStorage.getItem(localStoragePfpCacheKey);
+    if (cachedPfps) {
+      const parsedCache = JSON.parse(cachedPfps);
+      Object.entries(parsedCache).forEach(([key, value]) => {
+        pfpCache.set(key, value);
+      });
+    }
+  } catch (error) {
+    console.warn('Error loading cached profile pictures:', error);
+  }
+
+  // Function to save pfpCache to localStorage
+  function savePfpCache() {
+    try {
+      const cacheObject = Object.fromEntries(pfpCache);
+      localStorage.setItem(localStoragePfpCacheKey, JSON.stringify(cacheObject));
+    } catch (error) {
+      console.warn('Error saving profile picture cache:', error);
+    }
+  }
+
+  const saveProfileButton = document.getElementById('save-profile-button');
 
   async function resizeAndEncodeImage(file) {
     return new Promise((resolve, reject) => {
@@ -134,11 +172,9 @@ try {
             const reader = new FileReader();
             reader.onload = (e) => { if(pfpPreviewImg) pfpPreviewImg.src = e.target.result; }
             reader.readAsDataURL(file);
-            if (setPfpButton) setPfpButton.disabled = false;
         } else {
             selectedPfpFile = null;
             if (pfpPreviewImg) pfpPreviewImg.src = currentUserPfpImg.src || generateDefaultPfpDataUrl(userName);
-            if (setPfpButton) setPfpButton.disabled = true;
         }
     });
   }
@@ -215,16 +251,17 @@ try {
           const snapshot = await get(userPfpRef);
           const pfpData = snapshot.exists() ? snapshot.val() : defaultPfp;
           pfpCache.set(userNameForPfp, pfpData);
+          savePfpCache(); // Save to localStorage when new profile picture is cached
           return pfpData;
       } catch (error) {
           console.warn(`Could not fetch PFP for ${userNameForPfp}:`, error);
           pfpCache.set(userNameForPfp, defaultPfp);
+          savePfpCache(); // Save to localStorage even for default profile pictures
           return defaultPfp;
       }
   }
 
   function updateDisplayedPfpsForUser(targetUserName, newPfpDataUrl) {
-
     const pfpImagesInChat = document.querySelectorAll(`#chatbox img.message-pfp`);
     pfpImagesInChat.forEach(img => {
         if (img.getAttribute('data-pfp-for-user') === targetUserName) {
@@ -235,6 +272,10 @@ try {
     if (bioModal && bioModal.style.display === 'flex' && modalUsername && modalUsername.textContent.startsWith(targetUserName)) {
         if (modalPfpImg) modalPfpImg.src = newPfpDataUrl;
     }
+    
+    // Update cache and save to localStorage
+    pfpCache.set(targetUserName, newPfpDataUrl);
+    savePfpCache();
   }
 
   async function hashPassword(password) {
@@ -251,28 +292,113 @@ try {
   }
 
   async function loadCurrentUserBio() {
-    if (!isAuthenticated || !userName || !bioInput) return;
+    if (!isAuthenticated || !userName || !bioInput || !pronounsInput) return;
     const sanitizedName = sanitizeFirebaseKey(userName);
-    const userBioRef = ref(database, `user_credentials/${sanitizedName}/bio`);
-    try { const snapshot = await get(userBioRef); bioInput.value = snapshot.exists() ? snapshot.val() : '';
-    } catch (error) { console.error("Error loading user bio:", error); bioInput.value = ''; }
+    const userBioRef = ref(database, `user_credentials/${sanitizedName}`);
+    try {
+        const snapshot = await get(userBioRef);
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            bioInput.value = userData.bio || '';
+            pronounsInput.value = userData.pronouns || '';
+        } else {
+            bioInput.value = '';
+            pronounsInput.value = '';
+        }
+    } catch (error) {
+        console.error("Error loading user bio:", error);
+        bioInput.value = '';
+        pronounsInput.value = '';
+    }
     updateBioCharCount();
   }
 
-  async function saveUserBio() { 
-    if (!isAuthenticated || !userName || !bioInput) { alert("You must be logged in to set a bio."); return; }
+  async function saveUserProfile() { 
+    if (!isAuthenticated || !userName || !bioInput || !pronounsInput) {
+        alert("You must be logged in to set your profile.");
+        return;
+    }
+
     const bioText = bioInput.value.trim();
-    if (bioText.length > 200) { alert("Bio cannot exceed 200 characters."); return; }
+    const pronounsText = pronounsInput.value.trim();
+    
+    if (bioText.length > 200) {
+        alert("Bio cannot exceed 200 characters.");
+        return;
+    }
+
+    if (saveProfileButton) {
+        saveProfileButton.disabled = true;
+        saveProfileButton.classList.add('saving');
+        saveProfileButton.textContent = "Saving...";
+    }
+    
     const sanitizedName = sanitizeFirebaseKey(userName);
-    const userCredBioRef = ref(database, `user_credentials/${sanitizedName}/bio`);
-    try { await set(userCredBioRef, bioText); alert("Bio updated successfully!");
-    } catch (error) { console.error("Error setting bio:", error); alert("Failed to update bio. Please try again."); }
+    const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
+
+    try {
+        // Get current user data
+        const snapshot = await get(userCredRef);
+        const currentData = snapshot.exists() ? snapshot.val() : {};
+        
+        // Prepare update data
+        const updateData = {
+            ...currentData,
+            bio: bioText,
+            pronouns: pronounsText
+        };
+
+        // If there's a new profile picture, process and add it
+        if (selectedPfpFile) {
+            try {
+                const base64Pfp = await resizeAndEncodeImage(selectedPfpFile);
+                updateData.pfpBase64 = base64Pfp;
+                
+                // Update the current user's PFP display
+                if (currentUserPfpImg) currentUserPfpImg.src = base64Pfp;
+                pfpCache.set(userName, base64Pfp);
+                updateDisplayedPfpsForUser(userName, base64Pfp);
+            } catch (error) {
+                console.error("Error processing profile picture:", error);
+                alert("Failed to process profile picture. Other changes were saved.");
+            }
+        }
+
+        // Save all changes
+        await set(userCredRef, updateData);
+        
+        // Reset the file input and preview
+        selectedPfpFile = null;
+        if (pfpUploadInput) pfpUploadInput.value = '';
+        if (pfpPreviewImg) pfpPreviewImg.src = currentUserPfpImg.src;
+
+        alert("Profile updated successfully!");
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Failed to update profile. Please try again.");
+    } finally {
+        if (saveProfileButton) {
+            saveProfileButton.disabled = false;
+            saveProfileButton.classList.remove('saving');
+            saveProfileButton.textContent = "Save Profile";
+        }
+    }
   }
 
+  if (saveProfileButton) {
+    saveProfileButton.addEventListener('click', saveUserProfile);
+  }
+
+  if (bioInput) bioInput.addEventListener('input', updateBioCharCount);
+  if (closeModalButtonBio) closeModalButtonBio.addEventListener('click', () => { if(bioModal) bioModal.style.display = 'none'; });
+
   async function showBioModal(clickedUserName) { 
-    if (!bioModal || !modalUsername || !modalBioText || !modalPfpImg) return;
-    modalUsername.textContent = `${clickedUserName}'s Bio`;
+    if (!bioModal || !modalUsername || !modalBioText || !modalPfpImg || !modalPronouns) return;
+    modalUsername.textContent = clickedUserName;
     modalBioText.textContent = "Loading...";
+    modalPronouns.textContent = "Loading...";
+    modalBioText.className = '';
+    modalPronouns.className = '';
     modalPfpImg.src = generateDefaultPfpDataUrl(clickedUserName); 
     bioModal.style.display = 'flex';
 
@@ -282,33 +408,61 @@ try {
         const snapshot = await get(userCredRef);
         if (snapshot.exists()) {
             const userData = snapshot.val();
-            modalBioText.textContent = (userData.bio && userData.bio.trim() !== "") ? userData.bio : "This user hasn't set a bio yet, or it's empty.";
+            
+            // Handle bio
+            if (userData.bio && userData.bio.trim() !== "") {
+                modalBioText.textContent = userData.bio;
+            } else {
+                modalBioText.textContent = "No bio yet";
+                modalBioText.className = 'empty-bio';
+            }
+            
+            // Handle pronouns
+            if (userData.pronouns && userData.pronouns.trim() !== "") {
+                modalPronouns.textContent = userData.pronouns;
+            } else {
+                modalPronouns.textContent = "No pronouns set";
+                modalPronouns.className = 'empty-bio';
+            }
+            
             modalPfpImg.src = userData.pfpBase64 || generateDefaultPfpDataUrl(clickedUserName);
             pfpCache.set(clickedUserName, modalPfpImg.src); 
         } else {
-            modalBioText.textContent = "User data not found.";
+            modalBioText.textContent = "No bio yet";
+            modalBioText.className = 'empty-bio';
+            modalPronouns.textContent = "No pronouns set";
+            modalPronouns.className = 'empty-bio';
         }
     } catch (error) {
         console.error("Error fetching bio/PFP for modal:", error);
-        modalBioText.textContent = "Could not load user data due to an error.";
+        modalBioText.textContent = "Could not load user data";
+        modalBioText.className = 'empty-bio';
+        modalPronouns.textContent = "Could not load user data";
+        modalPronouns.className = 'empty-bio';
     }
   }
 
-  if (setBioButton) setBioButton.addEventListener('click', saveUserBio);
-  if (bioInput) bioInput.addEventListener('input', updateBioCharCount);
-  if (closeModalButtonBio) closeModalButtonBio.addEventListener('click', () => { if(bioModal) bioModal.style.display = 'none'; });
-
   function toggleProfilePanel() { 
       if (bioEditorPanel) {
-          const isVisible = bioEditorPanel.style.display === 'flex';
-          bioEditorPanel.style.display = isVisible ? 'none' : 'flex';
-          if (!isVisible && isAuthenticated) { 
-              loadCurrentUserBio();
-              loadCurrentUserPfp(); 
-              if(bioInput) bioInput.focus();
-              if(setPfpButton) setPfpButton.disabled = true; 
-              selectedPfpFile = null;
-              if(pfpUploadInput) pfpUploadInput.value = '';
+          const isVisible = bioEditorPanel.classList.contains('visible');
+          if (!isVisible) {
+              bioEditorPanel.style.display = 'flex';
+              // Force a reflow
+              bioEditorPanel.offsetHeight;
+              bioEditorPanel.classList.add('visible');
+              if (isAuthenticated) { 
+                  loadCurrentUserBio();
+                  loadCurrentUserPfp(); 
+                  if(bioInput) bioInput.focus();
+                  selectedPfpFile = null;
+                  if(pfpUploadInput) pfpUploadInput.value = '';
+              }
+          } else {
+              bioEditorPanel.classList.remove('visible');
+              // Wait for the animation to complete before hiding
+              setTimeout(() => {
+                  bioEditorPanel.style.display = 'none';
+              }, 300);
           }
       }
   }
@@ -325,6 +479,120 @@ try {
           toggleProfilePanel();
       });
   }
+
+  function openNav() {
+    if (dmSidebar) {
+      dmSidebar.style.width = "250px";
+      document.body.classList.add('sidebar-open');
+      populateUserList();
+    }
+  }
+
+  function closeNav() {
+    if (dmSidebar) {
+      dmSidebar.style.width = "0";
+      document.body.classList.remove('sidebar-open');
+    }
+  }
+
+  async function populateUserList() {
+    if (!dmUserList) return;
+    dmUserList.innerHTML = ''; 
+
+    // Add Global Chat
+    const globalChatItem = document.createElement('div');
+    globalChatItem.textContent = 'Global Chat';
+    globalChatItem.classList.add('user-item');
+    if (currentChatContext.type === 'global') {
+        globalChatItem.classList.add('active');
+    }
+    globalChatItem.addEventListener('click', () => {
+        switchToGlobalChat();
+    });
+    dmUserList.appendChild(globalChatItem);
+
+    try {
+        const snapshot = await get(credentialsRef);
+        if (snapshot.exists()) {
+            const users = snapshot.val();
+            const promises = Object.keys(users).map(async (sanitizedName) => {
+                const realName = sanitizedName.replace(/_/g, '.');
+                if (realName === userName) return null;
+
+                const userPfp = await getPfpDataForUser(realName);
+                return { name: realName, pfp: userPfp, sanitized: sanitizedName };
+            });
+
+            const userList = (await Promise.all(promises)).filter(Boolean);
+
+            userList.forEach(userData => {
+                const userElement = document.createElement('div');
+                userElement.classList.add('user-item');
+                if (currentChatContext.type === 'dm' && currentChatContext.with === userData.name) {
+                    userElement.classList.add('active');
+                }
+
+                const pfpImg = document.createElement('img');
+                pfpImg.src = userData.pfp;
+                pfpImg.alt = `${userData.name}'s PFP`;
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = userData.name;
+
+                userElement.appendChild(pfpImg);
+                userElement.appendChild(nameSpan);
+
+                userElement.addEventListener('click', () => {
+                    startDirectMessage(userData.name);
+                    closeNav();
+                });
+                dmUserList.appendChild(userElement);
+            });
+        }
+    } catch (error) {
+        console.error("Error populating user list:", error);
+        const errorItem = document.createElement('div');
+        errorItem.textContent = 'Error loading users.';
+        errorItem.classList.add('user-item');
+        dmUserList.appendChild(errorItem);
+    }
+  }
+
+  function startDirectMessage(otherUserName) {
+    if (!userName || !otherUserName || userName === otherUserName) return;
+    const sanitizedCurrentUser = sanitizeFirebaseKey(userName);
+    const sanitizedOtherUser = sanitizeFirebaseKey(otherUserName);
+    const dmID = [sanitizedCurrentUser, sanitizedOtherUser].sort().join('_');
+    currentChatContext = { type: 'dm', dmId: dmID, with: otherUserName };
+    sessionStorage.setItem(sessionChatContextKey, JSON.stringify(currentChatContext));
+    updateChatHeader();
+    loadRecent();
+    startLiveListener();
+  }
+
+  function switchToGlobalChat() {
+    currentChatContext = { type: 'global' };
+    sessionStorage.setItem(sessionChatContextKey, JSON.stringify(currentChatContext));
+    updateChatHeader();
+    loadRecent();
+    startLiveListener();
+    closeNav();
+  }
+
+  function updateChatHeader() {
+    const chatHeader = document.getElementById('chat-header');
+    if (!chatHeader) return;
+
+    if (currentChatContext.type === 'dm') {
+        chatHeader.textContent = `Chat with ${currentChatContext.with}`;
+    } else {
+        chatHeader.textContent = 'Global Chat';
+    }
+  }
+
+  if(openDmSidebarButton) openDmSidebarButton.addEventListener('click', openNav);
+  if(closeDmSidebarButton) closeDmSidebarButton.addEventListener('click', closeNav);
+
 
   async function isValidImageUrl(url) {
     return new Promise((resolve) => {
@@ -379,8 +647,8 @@ try {
 
       if (currentUserPfpImg) currentUserPfpImg.style.display = 'block';
       if (toggleBioEditorButton) toggleBioEditorButton.style.display = 'inline-block';
+      if(openDmSidebarButton) openDmSidebarButton.style.display = 'inline-block';
       if (bioInput) bioInput.disabled = false;
-      if (setBioButton) setBioButton.disabled = false;
       if (pfpUploadButton) pfpUploadButton.disabled = false;
 
       loadCurrentUserBio();
@@ -401,11 +669,10 @@ try {
 
       if (currentUserPfpImg) currentUserPfpImg.style.display = 'none';
       if (toggleBioEditorButton) toggleBioEditorButton.style.display = 'none';
+      if(openDmSidebarButton) openDmSidebarButton.style.display = 'none';
       if (bioEditorPanel) bioEditorPanel.style.display = 'none';
       if (bioInput) { bioInput.disabled = true; bioInput.value = ''; }
-      if (setBioButton) setBioButton.disabled = true;
       if (pfpUploadButton) pfpUploadButton.disabled = true;
-      if (setPfpButton) setPfpButton.disabled = true;
       if (pfpPreviewImg) pfpPreviewImg.src = generateDefaultPfpDataUrl('loggedout'); 
 
       updateBioCharCount();
@@ -441,8 +708,18 @@ try {
   }
 
   if(setNameButton) setNameButton.addEventListener('click', () => {
-    if (isAuthenticated) { userName = null; isAuthenticated = false; localStorage.removeItem(localStorageNameKey); localStorage.removeItem(localStorageAuthKey); if(nameInput) nameInput.value = ''; if (bioEditorPanel) bioEditorPanel.style.display = 'none'; updateUIBasedOnAuthState(); alert("You have been logged out.");
-    } else { handleAuthentication(); }
+    if (isAuthenticated) { 
+      userName = null; 
+      isAuthenticated = false; 
+      localStorage.removeItem(localStorageNameKey); 
+      localStorage.removeItem(localStorageAuthKey); 
+      if(nameInput) nameInput.value = ''; 
+      if (bioEditorPanel) bioEditorPanel.style.display = 'none'; 
+      updateUIBasedOnAuthState(); 
+      alert("You have been logged out.");
+    } else { 
+      handleAuthentication(); 
+    }
   });
 
   let oldestTimestamp = null;
@@ -455,20 +732,181 @@ try {
       if (displayedKeys.has(msg.key)) return;
       displayedKeys.add(msg.key);
 
-      const wrapper = document.createElement('div'); 
-      const p = document.createElement('p');        
-      wrapper.setAttribute('data-message-key', msg.key);
       const ts = new Date(msg.timestamp);
       const formatted = ts.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
 
+      // Check if we should group with adjacent messages
+      let shouldGroupWithPrev = false;
+      let shouldGroupWithNext = false;
+      let nextMessage = null;
+      let prevMessage = null;
+
+      if (!prepend && chatbox.lastChild) {
+          prevMessage = chatbox.lastChild;
+          const prevMessageName = prevMessage.querySelector('.message-username')?.textContent;
+          const prevMessageTime = new Date(prevMessage.getAttribute('data-timestamp'));
+          const timeDiff = (ts - prevMessageTime) / 1000; // difference in seconds
+          
+          shouldGroupWithPrev = prevMessageName === msg.name && timeDiff < 300; // group if same user and within 5 minutes
+      }
+
+      if (prepend && chatbox.firstChild) {
+          nextMessage = chatbox.firstChild;
+          const nextMessageName = nextMessage.querySelector('.message-username')?.textContent;
+          const nextMessageTime = new Date(nextMessage.getAttribute('data-timestamp'));
+          const timeDiff = (nextMessageTime - ts) / 1000; // difference in seconds
+          
+          shouldGroupWithNext = nextMessageName === msg.name && timeDiff < 300; // group if same user and within 5 minutes
+      }
+
+      if (shouldGroupWithPrev) {
+          // Add message to existing group
+          const messageBody = prevMessage.querySelector('.message-body');
+          
+          if (msg.type === 'image' && msg.imageUrl) {
+              const imgElement = document.createElement('img');
+              imgElement.src = msg.imageUrl;
+              imgElement.alt = `${msg.name}'s image`;
+              imgElement.classList.add('chat-image');
+              imgElement.addEventListener('click', () => openImageLightbox(msg.imageUrl));
+              imgElement.onerror = function() {
+                  const errorText = document.createElement('span');
+                  errorText.textContent = ` (Image: ${this.src.substring(0,30)}... failed to load)`;
+                  errorText.classList.add('image-error-text');
+                  if (this.parentNode) this.parentNode.insertBefore(errorText, this.nextSibling);
+                  this.remove();
+              };
+              messageBody.appendChild(imgElement);
+          } else {
+              const textSpan = document.createElement('span');
+              textSpan.innerHTML = md.renderInline(msg.text || '');
+              messageBody.appendChild(textSpan);
+          }
+
+          // Update timestamp
+          const timestampSpan = prevMessage.querySelector('.timestamp');
+          if (timestampSpan) {
+              timestampSpan.textContent = formatted;
+          }
+          prevMessage.setAttribute('data-timestamp', msg.timestamp);
+          return;
+      }
+
+      if (shouldGroupWithNext) {
+          // Create new message group that will be merged with next message
+          const wrapper = document.createElement('div');
+          wrapper.setAttribute('data-message-key', msg.key);
+          wrapper.setAttribute('data-timestamp', msg.timestamp);
+          const p = document.createElement('p');
+          if (msg.name === userName) p.classList.add('same-sender');
+
+          const pfpImg = document.createElement('img');
+          pfpImg.classList.add('message-pfp');
+          pfpImg.src = await getPfpDataForUser(msg.name);
+          pfpImg.setAttribute('data-pfp-for-user', msg.name);
+          p.appendChild(pfpImg);
+
+          const contentWrapper = document.createElement('div');
+          contentWrapper.classList.add('message-content-wrapper');
+
+          const messageHeader = document.createElement('div');
+          messageHeader.classList.add('message-header');
+
+          const nameStrong = document.createElement('strong');
+          nameStrong.textContent = msg.name;
+          nameStrong.classList.add('message-username');
+          nameStrong.addEventListener('click', (e) => { e.stopPropagation(); showBioModal(msg.name); });
+          messageHeader.appendChild(nameStrong);
+
+          const timestampSpan = document.createElement('span');
+          timestampSpan.classList.add('timestamp');
+          timestampSpan.textContent = formatted;
+          messageHeader.appendChild(timestampSpan);
+
+          const messageControls = document.createElement('div');
+          messageControls.classList.add('message-controls');
+
+          if (msg.name === userName) {
+              const deleteButton = document.createElement('button');
+              deleteButton.textContent = 'Delete';
+              deleteButton.classList.add('delete-button');
+              deleteButton.addEventListener('click', () => {
+                  if (confirm(`Are you sure you want to delete this message?`)) {
+                      remove(ref(database, `messages/${msg.key}`))
+                          .then(() => { console.log('Message deleted successfully!'); })
+                          .catch(error => { console.error('Error deleting message:', error); alert('Error deleting message. Please try again.'); });
+                  }
+              });
+              messageControls.appendChild(deleteButton);
+          }
+          messageHeader.appendChild(messageControls);
+          contentWrapper.appendChild(messageHeader);
+
+          const messageBody = document.createElement('div');
+          messageBody.classList.add('message-body');
+
+          if (msg.type === 'image' && msg.imageUrl) {
+              const imgElement = document.createElement('img');
+              imgElement.src = msg.imageUrl;
+              imgElement.alt = `${msg.name}'s image`;
+              imgElement.classList.add('chat-image');
+              imgElement.addEventListener('click', () => openImageLightbox(msg.imageUrl));
+              imgElement.onerror = function() {
+                  const errorText = document.createElement('span');
+                  errorText.textContent = ` (Image: ${this.src.substring(0,30)}... failed to load)`;
+                  errorText.classList.add('image-error-text');
+                  if (this.parentNode) this.parentNode.insertBefore(errorText, this.nextSibling);
+                  this.remove();
+              };
+              messageBody.appendChild(imgElement);
+          } else {
+              const textSpan = document.createElement('span');
+              textSpan.innerHTML = md.renderInline(msg.text || '');
+              messageBody.appendChild(textSpan);
+          }
+          contentWrapper.appendChild(messageBody);
+
+          p.appendChild(contentWrapper);
+          wrapper.appendChild(p);
+
+          // Insert before the next message
+          chatbox.insertBefore(wrapper, nextMessage);
+
+          // Move the content to the next message's body
+          const nextMessageBody = nextMessage.querySelector('.message-body');
+          const currentMessageBody = wrapper.querySelector('.message-body');
+
+          const newContentDiv = document.createElement('div');
+          newContentDiv.innerHTML = currentMessageBody.innerHTML;
+          
+          nextMessageBody.insertBefore(newContentDiv, nextMessageBody.firstChild);
+
+          // Update timestamp
+          const nextTimestampSpan = nextMessage.querySelector('.timestamp');
+          if (nextTimestampSpan) {
+              nextTimestampSpan.textContent = formatted;
+          }
+          nextMessage.setAttribute('data-timestamp', msg.timestamp);
+
+          // Remove the temporary wrapper
+          wrapper.remove();
+          return;
+      }
+
+      // Create new message group (no grouping)
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('data-message-key', msg.key);
+      wrapper.setAttribute('data-timestamp', msg.timestamp);
+      const p = document.createElement('p');
       if (msg.name === userName) p.classList.add('same-sender');
 
       if (window._lastTs && !prepend) {
-        const diffMin = (ts - window._lastTs) / 60000;
-        if (diffMin > 10) {
-          const hr = document.createElement('hr'); hr.classList.add('message-spacer');
-          wrapper.appendChild(hr);
-        }
+          const diffMin = (ts - window._lastTs) / 60000;
+          if (diffMin > 10) {
+              const hr = document.createElement('hr');
+              hr.classList.add('message-spacer');
+              wrapper.appendChild(hr);
+          }
       }
       if (!prepend) window._lastTs = ts;
 
@@ -490,26 +928,26 @@ try {
       nameStrong.addEventListener('click', (e) => { e.stopPropagation(); showBioModal(msg.name); });
       messageHeader.appendChild(nameStrong);
 
-      const messageControls = document.createElement('div');
-      messageControls.classList.add('message-controls');
-
       const timestampSpan = document.createElement('span');
       timestampSpan.classList.add('timestamp');
       timestampSpan.textContent = formatted;
-      messageControls.appendChild(timestampSpan);
+      messageHeader.appendChild(timestampSpan);
 
-      if (msg.name === userName) { 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.classList.add('delete-button');
-        deleteButton.addEventListener('click', () => {
-            if (confirm(`Are you sure you want to delete this message?`)) {
-                remove(ref(database, `messages/${msg.key}`))
-                    .then(() => { console.log('Message deleted successfully!'); })
-                    .catch(error => { console.error('Error deleting message:', error); alert('Error deleting message. Please try again.'); });
-            }
-        });
-        messageControls.appendChild(deleteButton);
+      const messageControls = document.createElement('div');
+      messageControls.classList.add('message-controls');
+
+      if (msg.name === userName) {
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.classList.add('delete-button');
+          deleteButton.addEventListener('click', () => {
+              if (confirm(`Are you sure you want to delete this message?`)) {
+                  remove(ref(database, `messages/${msg.key}`))
+                      .then(() => { console.log('Message deleted successfully!'); })
+                      .catch(error => { console.error('Error deleting message:', error); alert('Error deleting message. Please try again.'); });
+              }
+          });
+          messageControls.appendChild(deleteButton);
       }
       messageHeader.appendChild(messageControls);
       contentWrapper.appendChild(messageHeader);
@@ -533,7 +971,7 @@ try {
           messageBody.appendChild(imgElement);
       } else {
           const textSpan = document.createElement('span');
-          textSpan.textContent = msg.text || ''; 
+          textSpan.innerHTML = md.renderInline(msg.text || '');
           messageBody.appendChild(textSpan);
       }
       contentWrapper.appendChild(messageBody);
@@ -547,33 +985,59 @@ try {
 
   const loadRecent = async () => { 
     if (!isAuthenticated || !chatbox) return;
-    const recentQ = query( messagesRef, orderByChild('timestamp'), limitToLast(30) );
-    const snap = await get(recentQ);
-    if (!snap.exists()) { oldestTimestamp = null; return; }
-    const arr = Object.entries(snap.val()).map(([key,val]) => ({ key, ...val })).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-    chatbox.innerHTML = ''; displayedKeys.clear(); window._lastTs = null;
 
-    const uniqueUserNames = [...new Set(arr.map(m => m.name))];
-    await Promise.all(uniqueUserNames.map(name => getPfpDataForUser(name)));
+    chatbox.innerHTML = '';
+    displayedKeys.clear();
+    window._lastTs = null;
+    oldestTimestamp = null;
+    
+    try {
+        const chatRef = currentChatContext.type === 'dm' 
+            ? ref(database, `dms/${currentChatContext.dmId}`) 
+            : messagesRef;
 
-    for (const m of arr) { await displayMessage(m); } 
+        const recentQ = query(chatRef, orderByChild('timestamp'), limitToLast(30));
+        const snap = await get(recentQ);
 
-    if (chatbox.firstChild) chatbox.scrollTop = chatbox.scrollHeight;
-    oldestTimestamp = arr.length > 0 ? arr[0].timestamp : null;
+        if (!snap.exists()) {
+            oldestTimestamp = null;
+            if (currentChatContext.type === 'dm') {
+                chatbox.innerHTML = '<div class="chat-notice">This is the beginning of your direct message history.</div>';
+            }
+            return;
+        }
+
+        const arr = Object.entries(snap.val()).map(([key,val]) => ({ key, ...val })).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+        
+        const uniqueUserNames = [...new Set(arr.map(m => m.name))];
+        await Promise.all(uniqueUserNames.map(name => getPfpDataForUser(name)));
+
+        for (const m of arr) { await displayMessage(m); } 
+
+        if (chatbox.firstChild) chatbox.scrollTop = chatbox.scrollHeight;
+        oldestTimestamp = arr.length > 0 ? arr[0].timestamp : null;
+
+    } catch (error) {
+        console.error("Error loading recent messages:", error);
+        chatbox.innerHTML = '<div class="chat-notice error">Could not load messages.</div>';
+    }
   };
 
   window._liveListenerUnsubscribe = [];
   const startLiveListener = () => { 
       if (!isAuthenticated) return;
       if (window._liveListenerUnsubscribe.length > 0) { window._liveListenerUnsubscribe.forEach(unsub => unsub()); window._liveListenerUnsubscribe = []; }
-      const nowISO = new Date().toISOString(); const liveQ = query( messagesRef, orderByChild('timestamp'), startAt(nowISO) );
+      
+      const chatRef = currentChatContext.type === 'dm' ? ref(database, `dms/${currentChatContext.dmId}`) : messagesRef;
+
+      const nowISO = new Date().toISOString(); const liveQ = query( chatRef, orderByChild('timestamp'), startAt(nowISO) );
       const unsubChildAdded = onChildAdded(liveQ, async snap => { 
           if (!isAuthenticated) return; const msg = snapToMsg(snap);
           await displayMessage(msg); 
           if (chatbox && chatbox.lastChild) chatbox.scrollTop = chatbox.scrollHeight;
       }, err => { console.error("Live listener error (onChildAdded):", err); });
       window._liveListenerUnsubscribe.push(unsubChildAdded);
-      const unsubChildRemoved = onChildRemoved(messagesRef, snap => {
+      const unsubChildRemoved = onChildRemoved(chatRef, snap => {
           if (!isAuthenticated) return; displayedKeys.delete(snap.key);
           const messageElement = document.querySelector(`div[data-message-key="${snap.key}"]`);
           if (messageElement) { messageElement.remove(); } 
@@ -583,7 +1047,10 @@ try {
 
   if(chatbox) chatbox.addEventListener('scroll', async () => { 
     if (!isAuthenticated || chatbox.scrollTop !== 0 || !oldestTimestamp) return;
-    const oldQ = query( messagesRef, orderByChild('timestamp'), endBefore(oldestTimestamp), limitToLast(30) );
+
+    const chatRef = currentChatContext.type === 'dm' ? ref(database, `dms/${currentChatContext.dmId}`) : messagesRef;
+
+    const oldQ = query( chatRef, orderByChild('timestamp'), endBefore(oldestTimestamp), limitToLast(30) );
     const snap = await get(oldQ); if (!snap.exists()) { oldestTimestamp = null; return; }
     const olderOriginal = Object.entries(snap.val()).map(([key,val]) => ({ key, ...val })).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
     if (olderOriginal.length === 0) { oldestTimestamp = null; return; }
@@ -607,7 +1074,10 @@ try {
     let messageData;
     if (isSendingImage) { messageData = { name: userName, type: 'image', imageUrl: content, timestamp: new Date().toISOString() };
     } else { messageData = { name: userName, type: 'text', text: content, timestamp: new Date().toISOString() }; }
-    push(messagesRef, messageData).then(() => {
+    
+    const chatRef = currentChatContext.type === 'dm' ? ref(database, `dms/${currentChatContext.dmId}`) : messagesRef;
+    
+    push(chatRef, messageData).then(() => {
       messageInput.value = '';
       if (isSendingImage && imageUrlButton) { isSendingImage = false; messageInput.placeholder = "Enter message"; imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }
     }).catch(err => { console.error("Push error:", err); alert("Error sending message. Please try again."); });
@@ -626,6 +1096,30 @@ try {
             } catch (dbError) { console.error("Error checking user credentials during session validation:", dbError); alert("Error validating session. Please try logging in."); localStorage.removeItem(localStorageAuthKey); isAuthenticated = false; }
         } else { isAuthenticated = false; }
     } else { userName = null; isAuthenticated = false; if(nameInput) nameInput.value = ''; }
+    
+    const savedContext = sessionStorage.getItem(sessionChatContextKey);
+    if (isAuthenticated && savedContext) {
+        try {
+            currentChatContext = JSON.parse(savedContext);
+        } catch (e) {
+            console.warn("Could not parse saved chat context, defaulting to global.", e);
+            currentChatContext = { type: 'global' };
+        }
+    } else {
+        currentChatContext = { type: 'global' };
+    }
+
+    if (isAuthenticated && currentChatContext.type === 'dm') {
+      const sanitizedCurrentUser = sanitizeFirebaseKey(userName);
+      const participants = currentChatContext.dmId.split('_');
+      if (!participants.includes(sanitizedCurrentUser)) {
+          console.warn(`Attempted to access unauthorized DM (${currentChatContext.dmId}). Reverting to global chat.`);
+          currentChatContext = { type: 'global' };
+          sessionStorage.setItem(sessionChatContextKey, JSON.stringify(currentChatContext));
+      }
+    }
+
+    updateChatHeader();
     updateUIBasedOnAuthState(); updateBioCharCount();
   }
 
