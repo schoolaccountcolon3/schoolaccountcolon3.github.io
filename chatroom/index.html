@@ -118,6 +118,38 @@
     <img src="" alt="Enlarged image" id="lightbox-image">
   </div>
 
+  <div id="custom-alert-modal" class="modal">
+    <div class="modal-content">
+      <div class="alert-header">
+        <h3 id="alert-title">Alert</h3>
+        <span class="close-button" id="alert-close-button">×</span>
+      </div>
+      <div class="alert-body">
+        <p id="alert-message">Message goes here</p>
+      </div>
+      <div class="alert-footer">
+        <button id="alert-ok-button" class="alert-button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="custom-prompt-modal" class="modal">
+    <div class="modal-content">
+      <div class="alert-header">
+        <h3 id="prompt-title">Enter Password</h3>
+        <span class="close-button" id="prompt-close-button">×</span>
+      </div>
+      <div class="alert-body">
+        <p id="prompt-message">Please enter your password:</p>
+        <input type="password" id="prompt-input" placeholder="Password">
+      </div>
+      <div class="alert-footer">
+        <button id="prompt-cancel-button" class="alert-button secondary">Cancel</button>
+        <button id="prompt-ok-button" class="alert-button">OK</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Initialize particles.js
     particlesJS('particles-js', {

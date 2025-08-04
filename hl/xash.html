@@ -8,7 +8,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="MobileOptimized" content="640" />
 	<meta name="HandheldFriendly" content="true" />
-	<title>Pixelsuft hl</title>
+	<title>Half-Life</title>
+	<link rel="stylesheet" href="../styles/style.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<script>
 		document.addEventListener('contextmenu', event => event.preventDefault());
 		window.onbeforeunload = function(e) {
@@ -35,23 +37,65 @@
 					break;
 			}
 		};
-		var a = new Audio('music.mp3');
-		var pashalka_count = 0;
-
-		function play_sound() {
-			if (pashalka_count == 40) a.play();
-			if (pashalka_count < 100) pashalka_count += 1;
-		}
-		window.addEventListener('click', play_sound);
-		window.addEventListener('keydown', play_sound);
 	</script>
 	<style>
 		body {
-			font-family: arial;
+			font-family: var(--font-main);
 			margin: 0;
-			padding: none;
-			background-color: #555555;
-			color: #f0b418;
+			padding: 0;
+			background-color: var(--color-bg);
+			color: var(--color-fg);
+			overflow-x: hidden;
+		}
+
+		.game-header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+			background: var(--color-card-bg);
+			padding: 15px 20px;
+			border-bottom: 1px solid var(--color-border);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			backdrop-filter: blur(10px);
+			box-shadow: 0 2px 10px var(--color-shadow);
+		}
+
+		.game-title {
+			font-size: 1.3em;
+			font-weight: 600;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.game-controls {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+		}
+
+		.control-button {
+			padding: 8px 16px;
+			background: var(--color-button-bg);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 0.9em;
+			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.control-button:hover {
+			background: var(--color-button-hover);
+			transform: translateY(-1px);
 		}
 
 		.emscripten {
@@ -59,19 +103,49 @@
 			margin-left: auto;
 			margin-right: auto;
 			display: block;
+			margin-top: 70px;
 		}
 
 		div.emscripten {
 			text-align: center;
 		}
 
-		div.emscripten_border {}
+		div.emscripten_border {
+			text-align: center;
+			margin-top: 70px;
+		}
 
 		/* the canvas *must not* have any border or padding, or mouse coords will be wrong */
 		canvas.emscripten {
 			border: 0px none;
 			background-image: url(xd.png);
-			box-shadow: #ffa600 0px 0px 9px 4px;
+			box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
+			max-width: 100vw;
+			max-height: 100vh;
+		}
+
+		/* Fullscreen canvas adjustments */
+		canvas.emscripten:fullscreen {
+			width: 100vw !important;
+			height: 100vh !important;
+			max-width: none;
+			max-height: none;
+		}
+
+		/* Fullscreen container adjustments */
+		.emscripten_border:fullscreen {
+			margin: 0 !important;
+			padding: 0 !important;
+			width: 100vw !important;
+			height: 100vh !important;
+			display: flex !important;
+			justify-content: center !important;
+			align-items: center !important;
+		}
+
+		/* Pointer lock handling */
+		canvas.emscripten:focus {
+			outline: none;
 		}
 
 		@-webkit-keyframes rotation {
@@ -114,13 +188,55 @@
 			}
 		}
 
-
 		#controls {
-			display: inline-block;
-			float: right;
-			vertical-align: top;
-			margin-top: 5px;
-			margin-right: 20px;
+			position: fixed;
+			top: 70px;
+			right: 20px;
+			z-index: 999;
+			background: var(--color-card-bg);
+			padding: 15px;
+			border-radius: 12px;
+			border: 1px solid var(--color-border);
+			box-shadow: 0 4px 12px var(--color-shadow);
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			min-width: 200px;
+		}
+
+		#controls label {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			color: var(--color-fg);
+			font-size: 0.9em;
+			cursor: pointer;
+			transition: color 0.3s ease;
+		}
+
+		#controls label:hover {
+			color: var(--color-primary);
+		}
+
+		#controls input[type="checkbox"] {
+			margin: 0;
+		}
+
+		#controls input[type="button"] {
+			padding: 8px 12px;
+			background: var(--color-button-bg);
+			color: white;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 0.9em;
+			transition: all 0.3s ease;
+			width: 100%;
+		}
+
+		#controls input[type="button"]:hover {
+			background: var(--color-button-hover);
+			transform: translateY(-1px);
 		}
 
 		#output {
@@ -138,14 +254,13 @@
 			color: rgba(0, 255, 0, 255);
 			font-family: 'Lucida Console', Monaco, monospace;
 			outline: none;
-			border-color: #f0B418;
+			border-color: var(--color-primary);
 		}
 
-
 		.loader {
-			border: 4px solid #f3f3f3;
+			border: 4px solid var(--color-border);
 			border-radius: 50%;
-			border-top: 4px solid #ffa600;
+			border-top: 4px solid var(--color-primary);
 			width: 16px;
 			height: 16px;
 			-webkit-animation: spin 2s linear infinite;
@@ -174,13 +289,11 @@
 			}
 		}
 
-
-
 		a.glow,
 		a.glow:hover,
 		a.glow:focus {
 			text-decoration: none;
-			color: #F0B418;
+			color: var(--color-link);
 			text-shadow: none;
 			-webkit-transition: 500ms linear 0s;
 			-moz-transition: 500ms linear 0s;
@@ -192,34 +305,36 @@
 
 		a.glow:hover,
 		a.glow:focus {
-			color: #ffa600;
-			text-shadow: -1px 1px 8px #ffa600, 1px -1px 8px #ffa600;
+			color: var(--color-link-hover);
+			text-shadow: -1px 1px 8px var(--color-primary), 1px -1px 8px var(--color-primary);
 		}
 
 		input[type="button"i],
 		#label_file_select {
-			color: #f0b418;
-			background-color: #555555;
-			border: 2px solid #f0b418;
-			border-radius: 40px;
-			font-family: Segoe UI;
-			font-size: 20px;
-			transition: 0.5s all;
+			color: var(--color-fg);
+			background-color: var(--color-button-bg);
+			border: 2px solid var(--color-primary);
+			border-radius: 8px;
+			font-family: var(--font-main);
+			font-size: 16px;
+			transition: 0.3s all;
+			padding: 8px 16px;
 		}
 
 		hr {
-			border-color: #ffa600;
+			border-color: var(--color-primary);
 		}
 
 		input[type="button"i]:hover,
 		#label_file_select:hover {
-			color: #555555;
-			background-color: #f0b418;
-			font-size: 20px;
+			color: var(--color-bg);
+			background-color: var(--color-primary);
+			transform: translateY(-1px);
 		}
 
 		#label_file_select {
-			padding: 1px 6px;
+			padding: 8px 16px;
+			cursor: pointer;
 		}
 
 		input[type="file"i] {
@@ -227,13 +342,19 @@
 		}
 
 		input[type="text"i] {
-			color: #f0b418;
-			background-color: #555555;
-			border: 2px solid #f0b418;
-			border-radius: 40px;
-			font-family: Segoe UI;
-			font-size: 15px;
-			transition: 0.5s all;
+			color: var(--color-fg);
+			background-color: var(--color-input-bg);
+			border: 2px solid var(--color-border);
+			border-radius: 8px;
+			font-family: var(--font-main);
+			font-size: 14px;
+			transition: 0.3s all;
+			padding: 8px 12px;
+		}
+
+		input[type="text"i]:focus {
+			border-color: var(--color-primary);
+			outline: none;
 		}
 
 		* {
@@ -245,33 +366,245 @@
 			outline: none;
 		}
 
-		if (document.createElement("detect").style.textShadow==="") {
-			document.getElementsByTagName("html")[0].className+=" textshadow";
+		audio{
+			display: none;
+		}
+
+		/* Game Options Panel */
+		#optionsTitle {
+			background: var(--color-card-bg);
+			padding: 20px;
+			border-radius: 12px;
+			margin: 20px;
+			border: 1px solid var(--color-border);
+			text-align: center;
+		}
+
+		#optionsTitle h1 {
+			color: #fff;
+			margin: 0;
+			font-size: 1.5em;
+		}
+
+		#fSettings {
+			background: var(--color-card-bg);
+			padding: 25px;
+			border-radius: 12px;
+			margin: 20px;
+			border: 1px solid var(--color-border);
+			color: var(--color-fg);
+		}
+
+		#fSettings label {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin: 8px 0;
+			cursor: pointer;
+			padding: 8px 12px;
+			border-radius: 6px;
+			transition: background-color 0.3s ease;
+		}
+
+		#fSettings label:hover {
+			background: var(--color-button-hover);
+		}
+
+		#fSettings input[type="radio"] {
+			margin: 0;
+		}
+
+		#fSettings select {
+			background: var(--color-input-bg);
+			color: var(--color-fg);
+			border: 1px solid var(--color-border);
+			border-radius: 6px;
+			padding: 6px 12px;
+			margin: 5px 0;
+			font-family: var(--font-main);
+		}
+
+		#fSettings hr {
+			margin: 15px 0;
+			border-color: var(--color-border);
+		}
+
+		#fSettings input[type="text"] {
+			width: 100%;
+			padding: 8px 12px;
+			border: 1px solid var(--color-border);
+			border-radius: 6px;
+			background: var(--color-input-bg);
+			color: var(--color-fg);
+			font-family: var(--font-main);
+			margin: 8px 0;
+			box-sizing: border-box;
+		}
+
+		#fSettings input[type="text"]:focus {
+			border-color: var(--color-primary);
+			outline: none;
+		}
+
+		#fSettings input[type="button"] {
+			width: 100%;
+			padding: 12px;
+			background: var(--color-button-bg);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-family: var(--font-main);
+			font-size: 1em;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			margin-top: 15px;
+		}
+
+		#fSettings input[type="button"]:hover {
+			background: var(--color-button-hover);
+			transform: translateY(-1px);
+		}
+
+		#fSettings .section-title {
+			font-weight: 600;
+			color: #fff;
+			margin: 15px 0 10px 0;
+			font-size: 1.1em;
+		}
+
+		#fSettings .option-group {
+			margin: 10px 0;
+		}
+
+		/* Status and Progress */
+		#status {
+			color: var(--color-fg);
+			font-weight: 500;
+			position: fixed;
+			top: 70px;
+			left: 20px;
+			z-index: 999;
+			background: var(--color-card-bg);
+			padding: 10px 15px;
+			border-radius: 8px;
+			border: 1px solid var(--color-border);
+			box-shadow: 0 2px 8px var(--color-shadow);
+		}
+
+		#progress1 {
+			position: fixed;
+			top: 110px;
+			left: 20px;
+			z-index: 999;
+			width: 200px;
+			height: 20px;
+			background: var(--color-bg);
+			border: 2px solid var(--color-primary);
+			border-radius: 6px;
+			overflow: hidden;
+			display: none;
+		}
+
+		#progress {
+			background: var(--color-primary);
+			color: var(--color-bg);
+			text-align: center;
+			height: 100%;
+			transition: width 0.3s ease;
+			line-height: 16px;
+			font-size: 0.8em;
+			font-weight: 600;
+		}
+
+		/* Responsive Design */
+		@media (max-width: 768px) {
+			.game-header {
+				padding: 10px 15px;
+			}
+
+			.game-title {
+				font-size: 1.1em;
+			}
+
+			.control-button {
+				padding: 6px 12px;
+				font-size: 0.8em;
+			}
+
+			#controls {
+				top: 60px;
+				right: 10px;
+				min-width: 180px;
+			}
+
+			#status {
+				top: 60px;
+				left: 10px;
+				font-size: 0.9em;
+			}
+
+			#progress1 {
+				top: 100px;
+				left: 10px;
+				width: 150px;
+			}
+
+			#fSettings {
+				margin: 10px;
+				padding: 20px;
+			}
 		}
 	</style>
 </head>
 
-<body onerror=alert(event); bgcolor=#555555 text=#F0B418 link=#ffa600 vlink=#ffa600>
+<body onerror=alert(event);>
+	<div class="game-header">
+		<div class="game-title">
+			<i class="fas fa-crosshairs"></i>
+			Half-Life
+		</div>
+		<div class="game-controls">
+			<button class="control-button" onclick="location.href='index.html'">
+				<i class="fas fa-arrow-left"></i>
+				Back
+			</button>
+			<button class="control-button" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, document.getElementById('resize').checked)">
+				<i class="fas fa-expand"></i>
+				Fullscreen
+			</button>
+		</div>
+	</div>
+
 	<div class="emscripten_border">
 		<canvas style="display:none" class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
 	</div>
 
-	<p>
-	<div style=width:100%;height:0px>
-		<div style="float:left;" id="status">Downloading...</div>
-		<div id="progress1" style=position:relative;z-index:10;display:none;float:right;width:70%;border-color:#F0B418;border-style:solid;border-width:2px;height:20px>
-			<div id=progress style=text-align:center;background-color:#F0B418;border-color:#555555;border-style:solid:border-width:3px;width:50%;height:20px></div>
-		</div><br>
-	</div><br></p>
+	<div id="status">Downloading...</div>
+	<div id="progress1">
+		<div id="progress"></div>
+	</div>
 
-	<div class="loader" id=loader1></div>
+	<div class="loader" id="loader1"></div>
 
-	<div style=width:100%><span id='controls'>
-			<a class="glow"><span><label id="label_show_console_log" style="display: none;"><input type="checkbox" id="show_console_log">Show Console Log</label></span></a>
-			<a class="glow"><span><label><input type="checkbox" id="resize">Resize canvas</label></span></a>
-			<a class="glow"><span><label><input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer &nbsp;&nbsp;&nbsp;</label></span></a>
-			<span><input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, document.getElementById('resize').checked)"></span>
-		</span></div>
+	<div id="controls">
+		<label id="label_show_console_log">
+			<input type="checkbox" id="show_console_log" checked>
+			<i class="fas fa-terminal"></i>
+			Show Console Log
+		</label>
+		<label>
+			<input type="checkbox" id="resize">
+			<i class="fas fa-expand-arrows-alt"></i>
+			Resize Canvas
+		</label>
+		<label>
+			<input type="checkbox" id="pointerLock" checked>
+			<i class="fas fa-mouse-pointer"></i>
+			Lock Mouse Pointer
+		</label>
+		<input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, document.getElementById('resize').checked)">
+	</div>
 
 	<textarea id="output" rows="8" style="display: none;"></textarea>
 	<div id="asyncDialog" style="float:left"></div>
@@ -281,21 +614,36 @@
 			<h1>Game Options</h1>
 		</div>
 	</a>
-	<form style=display:none id=fSettings>Select filesystem for settings and save and restore:<br><br>
-		<div id=idbHider style=display:none><label><input name=a type=radio id=rIndexedDB checked=true />IndexedDB (Need exit correctly to save changes)</label><br></div>
-		<label><input name=a type=radio id=rLocalStorage />LocalStorage (Sometimes not enough space)</label><br>
-		<label><input name=a type=radio id=rNone />None(in RAM)</label><br><br>
+	<form style=display:none id=fSettings>
+		<div class="section-title">Filesystem Settings</div>
+		<div class="option-group">
+			<div id=idbHider style=display:none>
+				<label><input name=a type=radio id=rIndexedDB checked=true />IndexedDB (Need exit correctly to save changes)</label>
+			</div>
+			<label><input name=a type=radio id=rLocalStorage />LocalStorage (Sometimes not enough space)</label>
+			<label><input name=a type=radio id=rNone />None(in RAM)</label>
+		</div>
+
 		<hr>
-		Select game data source:<br><br>
-		<label>
-			<div id=pkgHider style=display:none><input name=b type=radio id=rPackage />Emscripten package from server (cached in IndexedDB if availiable)
-		</label><select id=selectPkg style=display:none></select><br></div>
-		<label>
-			<div id=zipHider style=display:none><input name=b type=radio id=rZip checked=true />ZIP archive from server (slow, but small, no IndexedDB cache)
-		</label><select id=selectZip style=display:none></select><br></div>
-		<label><input name=b type=radio id=rLocalZip />Local ZIP file:</label><label id="label_file_select"><input type=file name=c id=iZipFile />Select ZIP file</label><br><br>
+
+		<div class="section-title">Game Data Source</div>
+		<div class="option-group">
+			<div id=pkgHider style=display:none>
+				<label><input name=b type=radio id=rPackage />Emscripten package from server (cached in IndexedDB if available)</label>
+				<select id=selectPkg style=display:none></select>
+			</div>
+			<div id=zipHider style=display:none>
+				<label><input name=b type=radio id=rZip checked=true />ZIP archive from server (slow, but small, no IndexedDB cache)</label>
+				<select id=selectZip style=display:none></select>
+			</div>
+			<label><input name=b type=radio id=rLocalZip />Local ZIP file:</label>
+			<label id="label_file_select"><input type=file name=c id=iZipFile />Select ZIP file</label>
+		</div>
+
 		<hr>
-		Command-line arguments: <input name=d type=text id=iArgs value="-dev 1 -game valve" /><br><br>
+
+		<div class="section-title">Command Line Arguments</div>
+		<input name=d type=text id=iArgs value="-dev 1 -game valve" />
 
 		<input type=button onclick="startXash();return false;" value="Launch Xash3D!" />
 
@@ -393,10 +741,9 @@
 					//text = text.replace(/</g, "&lt;");
 					//text = text.replace(/>/g, "&gt;");
 					//text = text.replace('\n', '<br>', 'g');
-					//console.log(text);
+					console.log(text);
 					if (text) {
 						myerrorbuf += text + '\n';
-						console.log(text);
 						if (text == "exit(0)")
 						{
 							document.getElementById('canvas').style.display = "none";
@@ -405,10 +752,14 @@
 							}, 1000);
 						}
 						else if (text == "shader success") {
-							pashalka_count = 100;
-							a.pause();
+							// Show the canvas when shader is ready
 							document.getElementById('canvas').style.display = "block";
-						} else {
+							document.getElementById('status').innerHTML = "Game Ready!";
+							// Hide the loader
+							document.getElementById('loader1').style.display = "none";
+						} else if (text.includes("Xash3D")) {
+							// Update status for Xash3D messages
+							document.getElementById('status').innerHTML = text;
 						}
 					}
 					if (element) {
@@ -445,6 +796,15 @@
 					alert('WebGL context lost. You will need to reload the page.');
 					e.preventDefault();
 				}, false);
+
+				// Add pointer lock request when canvas becomes visible
+				canvas.addEventListener('display', function() {
+					if (document.getElementById('pointerLock').checked) {
+						setTimeout(function() {
+							canvas.requestPointerLock();
+						}, 500);
+					}
+				});
 
 				return canvas;
 			})(),
@@ -689,9 +1049,13 @@
 				var script = document.createElement('script');
 				script.onload = function() {
 					moduleCount++;
+					Module.setStatus("Script " + name + " loaded (" + moduleCount + "/3)");
 					if (moduleCount == 3) {
-						Module.setStatus("Scripts downloaded!");
+						Module.setStatus("All scripts downloaded! Ready to launch.");
 					}
+				};
+				script.onerror = function() {
+					Module.setStatus("Failed to load " + name + ".js");
 				};
 				document.body.appendChild(script);
 				script.src = name + ".js";
@@ -707,6 +1071,117 @@
 		//Module.websocket.url = 'wsproxy://the-swank.pp.ua:3000/'
 		Module.websocket.url = 'wsproxy://4.tcp.ngrok.io:10657/';
 		ENV = [];
+
+		// Add pointer lock event listeners
+		document.addEventListener('pointerlockchange', function() {
+			if (document.pointerLockElement === document.getElementById('canvas')) {
+				// Pointer is locked
+				console.log('Pointer locked');
+			} else {
+				// Pointer is unlocked - try to re-lock if the game is running
+				console.log('Pointer unlocked');
+				if (document.getElementById('canvas').style.display !== 'none') {
+					// Game is running, try to re-capture mouse
+					setTimeout(function() {
+						if (document.getElementById('pointerLock').checked) {
+							document.getElementById('canvas').requestPointerLock();
+						}
+					}, 100);
+				}
+			}
+		});
+
+		document.addEventListener('pointerlockerror', function() {
+			console.log('Pointer lock error');
+		});
+
+		// Add click handler to canvas for re-capturing mouse
+		document.getElementById('canvas').addEventListener('click', function() {
+			if (document.getElementById('pointerLock').checked && 
+				document.pointerLockElement !== document.getElementById('canvas')) {
+				this.requestPointerLock();
+			}
+		});
+
+		// Fullscreen change event listeners
+		document.addEventListener('fullscreenchange', handleFullscreenChange);
+		document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+		document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+		document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+		function handleFullscreenChange() {
+			var canvas = document.getElementById('canvas');
+			var container = document.querySelector('.emscripten_border');
+			
+			if (document.fullscreenElement || document.webkitFullscreenElement || 
+				document.mozFullScreenElement || document.msFullscreenElement) {
+				// Entered fullscreen
+				if (document.getElementById('resize').checked) {
+					canvas.style.width = '100vw';
+					canvas.style.height = '100vh';
+				}
+				if (document.getElementById('pointerLock').checked) {
+					setTimeout(function() {
+						canvas.requestPointerLock();
+					}, 100);
+				}
+			} else {
+				// Exited fullscreen
+				canvas.style.width = '';
+				canvas.style.height = '';
+			}
+		}
+
+		// Function to manually re-capture mouse
+		function recaptureMouse() {
+			if (document.getElementById('pointerLock').checked && 
+				document.getElementById('canvas').style.display !== 'none') {
+				document.getElementById('canvas').requestPointerLock();
+			}
+		}
+
+		// Enhanced fullscreen function
+		Module.requestFullscreen = function(pointerLock, resize) {
+			var canvas = document.getElementById('canvas');
+			var container = document.querySelector('.emscripten_border');
+			
+			if (!document.fullscreenElement) {
+				// Enter fullscreen
+				if (container.requestFullscreen) {
+					container.requestFullscreen();
+				} else if (container.webkitRequestFullscreen) {
+					container.webkitRequestFullscreen();
+				} else if (container.msRequestFullscreen) {
+					container.msRequestFullscreen();
+				}
+				
+				// Adjust canvas size for fullscreen
+				setTimeout(function() {
+					if (resize) {
+						canvas.style.width = '100vw';
+						canvas.style.height = '100vh';
+					}
+					if (pointerLock) {
+						canvas.requestPointerLock();
+					}
+				}, 100);
+			} else {
+				// Exit fullscreen
+				if (document.exitFullscreen) {
+					document.exitFullscreen();
+				} else if (document.webkitExitFullscreen) {
+					document.webkitExitFullscreen();
+				} else if (document.msExitFullscreen) {
+					document.msExitFullscreen();
+				}
+				
+				// Reset canvas size
+				setTimeout(function() {
+					canvas.style.width = '';
+					canvas.style.height = '';
+				}, 100);
+			}
+		};
 	</script>
 
 	<script>

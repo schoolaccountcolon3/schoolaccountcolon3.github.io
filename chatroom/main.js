@@ -101,7 +101,104 @@ try {
   const dmUserList = document.getElementById('dm-user-list');
   const mainContent = document.getElementById('main-content');
 
+  const customAlertModal = document.getElementById('custom-alert-modal');
+  const alertTitle = document.getElementById('alert-title');
+  const alertMessage = document.getElementById('alert-message');
+  const alertOkButton = document.getElementById('alert-ok-button');
+  const alertCloseButton = document.getElementById('alert-close-button');
+
+  const customPromptModal = document.getElementById('custom-prompt-modal');
+  const promptTitle = document.getElementById('prompt-title');
+  const promptMessage = document.getElementById('prompt-message');
+  const promptInput = document.getElementById('prompt-input');
+  const promptOkButton = document.getElementById('prompt-ok-button');
+  const promptCancelButton = document.getElementById('prompt-cancel-button');
+  const promptCloseButton = document.getElementById('prompt-close-button');
+
   let currentChatContext = { type: 'global' }; // 'global' or 'dm'
+
+  function showCustomAlert(message, title = 'Alert') {
+    if (alertMessage && alertTitle && customAlertModal) {
+      alertMessage.textContent = message;
+      alertTitle.textContent = title;
+      customAlertModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // Focus the OK button for accessibility
+      if (alertOkButton) alertOkButton.focus();
+    }
+  }
+
+  function hideCustomAlert() {
+    if (customAlertModal) {
+      customAlertModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  function showCustomPrompt(message, title = 'Enter Password') {
+    return new Promise((resolve) => {
+      if (promptMessage && promptTitle && promptInput && customPromptModal) {
+        promptMessage.textContent = message;
+        promptTitle.textContent = title;
+        promptInput.value = '';
+        customPromptModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Focus the input field
+        if (promptInput) promptInput.focus();
+        
+        // Set up one-time event listeners
+        const handleOk = () => {
+          const value = promptInput.value;
+          hideCustomPrompt();
+          resolve(value);
+        };
+        
+        const handleCancel = () => {
+          hideCustomPrompt();
+          resolve(null);
+        };
+        
+        const handleClose = () => {
+          hideCustomPrompt();
+          resolve(null);
+        };
+        
+        const handleKeyPress = (e) => {
+          if (e.key === 'Enter') {
+            handleOk();
+          } else if (e.key === 'Escape') {
+            handleCancel();
+          }
+        };
+        
+        if (promptOkButton) promptOkButton.addEventListener('click', handleOk, { once: true });
+        if (promptCancelButton) promptCancelButton.addEventListener('click', handleCancel, { once: true });
+        if (promptCloseButton) promptCloseButton.addEventListener('click', handleClose, { once: true });
+        if (customPromptModal) customPromptModal.addEventListener('click', (event) => {
+          if (event.target === customPromptModal) handleCancel();
+        }, { once: true });
+        if (promptInput) promptInput.addEventListener('keydown', handleKeyPress, { once: true });
+      } else {
+        resolve(null);
+      }
+    });
+  }
+
+  function hideCustomPrompt() {
+    if (customPromptModal) {
+      customPromptModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Set up event listeners for the custom alert
+  if (alertOkButton) alertOkButton.addEventListener('click', hideCustomAlert);
+  if (alertCloseButton) alertCloseButton.addEventListener('click', hideCustomAlert);
+  if (customAlertModal) customAlertModal.addEventListener('click', (event) => {
+    if (event.target === customAlertModal) hideCustomAlert();
+  });
 
   const localStorageNameKey = 'chatUserName';
   const localStorageAuthKey = 'chatUserAuthenticated';
@@ -182,7 +279,7 @@ try {
   if (setPfpButton) {
     setPfpButton.addEventListener('click', async () => {
         if (!isAuthenticated || !userName || !selectedPfpFile) {
-            alert("Please select an image file first.");
+            showCustomAlert("Please select an image file first.", 'No Image Selected');
             return;
         }
         setPfpButton.disabled = true;
@@ -198,12 +295,12 @@ try {
             if (pfpPreviewImg) pfpPreviewImg.src = base64Pfp;
             updateDisplayedPfpsForUser(userName, base64Pfp); 
 
-            alert("Profile picture updated successfully!");
+            showCustomAlert("Profile picture updated successfully!", 'Success');
             selectedPfpFile = null;
             if(pfpUploadInput) pfpUploadInput.value = ''; 
         } catch (error) {
             console.error("Error updating PFP:", error);
-            alert("Failed to update profile picture: " + error.message);
+            showCustomAlert("Failed to update profile picture: " + error.message, 'Update Error');
         } finally {
             if (setPfpButton) {
                 setPfpButton.disabled = true; 
@@ -315,7 +412,7 @@ try {
 
   async function saveUserProfile() { 
     if (!isAuthenticated || !userName || !bioInput || !pronounsInput) {
-        alert("You must be logged in to set your profile.");
+        showCustomAlert("You must be logged in to set your profile.", 'Authentication Required');
         return;
     }
 
@@ -323,7 +420,7 @@ try {
     const pronounsText = pronounsInput.value.trim();
     
     if (bioText.length > 200) {
-        alert("Bio cannot exceed 200 characters.");
+        showCustomAlert("Bio cannot exceed 200 characters.", 'Invalid Input');
         return;
     }
 
@@ -360,7 +457,7 @@ try {
                 updateDisplayedPfpsForUser(userName, base64Pfp);
             } catch (error) {
                 console.error("Error processing profile picture:", error);
-                alert("Failed to process profile picture. Other changes were saved.");
+                showCustomAlert("Failed to process profile picture. Other changes were saved.", 'Update Error');
             }
         }
 
@@ -372,10 +469,10 @@ try {
         if (pfpUploadInput) pfpUploadInput.value = '';
         if (pfpPreviewImg) pfpPreviewImg.src = currentUserPfpImg.src;
 
-        alert("Profile updated successfully!");
+        showCustomAlert("Profile updated successfully!", 'Success');
     } catch (error) {
         console.error("Error updating profile:", error);
-        alert("Failed to update profile. Please try again.");
+        showCustomAlert("Failed to update profile. Please try again.", 'Update Error');
     } finally {
         if (saveProfileButton) {
             saveProfileButton.disabled = false;
@@ -609,7 +706,7 @@ try {
         const url = prompt("Enter the URL of the image you want to send:"); if (url === null || url.trim() === '') { return; }
         const trimmedUrl = url.trim(); const isValid = await isValidImageUrl(trimmedUrl);
         if (isValid) { messageInput.value = trimmedUrl; isSendingImage = true; messageInput.placeholder = "Image URL entered. Press Send."; imageUrlButton.innerHTML = '✓'; imageUrlButton.title = "Clear image URL / Send text instead"; if(messageInput) messageInput.focus();
-        } else { alert("Invalid image URL. Must be http/https, end with .jpg, .png, .gif, or .webp, and be loadable."); }
+        } else { showCustomAlert("Invalid image URL. Must be http/https, end with .jpg, .png, .gif, or .webp, and be loadable.", 'Invalid URL'); }
     });
     if (messageInput) { messageInput.addEventListener('input', () => { if (isSendingImage && !messageInput.value.startsWith('http')) { isSendingImage = false; messageInput.placeholder = "Enter message"; if (imageUrlButton) { imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }}}); }
   }
@@ -686,24 +783,28 @@ try {
   }
 
   async function handleAuthentication() {
-    const enteredName = nameInput.value.trim(); if (!enteredName) { alert("Please enter a name."); return; }
+    const enteredName = nameInput.value.trim(); if (!enteredName) { showCustomAlert("Please enter a name.", 'No Name'); return; }
     const sanitizedName = sanitizeFirebaseKey(enteredName); const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
     try {
       const snapshot = await get(userCredRef);
       if (snapshot.exists()) { 
-        const storedHash = snapshot.val().hashedPassword; const password = prompt(`User "${enteredName}" exists. Enter password to login:`); if (!password) return;
+        const storedHash = snapshot.val().hashedPassword; 
+        const password = await showCustomPrompt(`User "${enteredName}" exists. Enter password to login:`, 'Login');
+        if (!password) return;
         const inputHash = await hashPassword(password);
-        if (inputHash === storedHash) { userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; alert(`Login successful for ${userName}!`);
-        } else { alert("Incorrect password."); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
+        if (inputHash === storedHash) { userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; showCustomAlert(`Login successful for ${userName}!`, 'Login Successful');
+        } else { showCustomAlert("Incorrect password.", 'Login Failed'); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
       } else { 
-        const newPassword = prompt(`User "${enteredName}" not found. Create a password to register:`); if (!newPassword) return;
-        const confirmPassword = prompt("Confirm your password:"); if (!confirmPassword) return;
+        const newPassword = await showCustomPrompt(`User "${enteredName}" not found. Create a password to register:`, 'Create Password');
+        if (!newPassword) return;
+        const confirmPassword = await showCustomPrompt("Confirm your password:", 'Confirm Password');
+        if (!confirmPassword) return;
         if (newPassword === confirmPassword) { const newHashedPassword = await hashPassword(newPassword);
           await set(userCredRef, { hashedPassword: newHashedPassword });
-          userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; alert(`User "${userName}" registered successfully!`);
-        } else { alert("Passwords do not match. Registration failed."); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
+          userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; showCustomAlert(`User "${userName}" registered successfully!`, 'Registration Successful');
+        } else { showCustomAlert("Passwords do not match. Registration failed.", 'Registration Failed'); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
       }
-    } catch (error) { console.error("Authentication error:", error); alert("An error occurred during authentication. Check console."); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
+    } catch (error) { console.error("Authentication error:", error); showCustomAlert("An error occurred during authentication. Check console.", 'Authentication Error'); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
     updateUIBasedOnAuthState();
   }
 
@@ -716,7 +817,7 @@ try {
       if(nameInput) nameInput.value = ''; 
       if (bioEditorPanel) bioEditorPanel.style.display = 'none'; 
       updateUIBasedOnAuthState(); 
-      alert("You have been logged out.");
+      showCustomAlert("You have been logged out.", 'Logout');
     } else { 
       handleAuthentication(); 
     }
@@ -834,7 +935,7 @@ try {
                   if (confirm(`Are you sure you want to delete this message?`)) {
                       remove(ref(database, `messages/${msg.key}`))
                           .then(() => { console.log('Message deleted successfully!'); })
-                          .catch(error => { console.error('Error deleting message:', error); alert('Error deleting message. Please try again.'); });
+                          .catch(error => { console.error('Error deleting message:', error); showCustomAlert('Error deleting message. Please try again.', 'Delete Error'); });
                   }
               });
               messageControls.appendChild(deleteButton);
@@ -944,7 +1045,7 @@ try {
               if (confirm(`Are you sure you want to delete this message?`)) {
                   remove(ref(database, `messages/${msg.key}`))
                       .then(() => { console.log('Message deleted successfully!'); })
-                      .catch(error => { console.error('Error deleting message:', error); alert('Error deleting message. Please try again.'); });
+                      .catch(error => { console.error('Error deleting message:', error); showCustomAlert('Error deleting message. Please try again.', 'Delete Error'); });
               }
           });
           messageControls.appendChild(deleteButton);
@@ -1068,9 +1169,9 @@ try {
   });
 
   const sendMessage = () => {
-    if (!isAuthenticated) { alert("You must be authenticated to send messages."); return; }
-    const content = messageInput.value.trim(); if (!userName) { return alert("Error: User name not set."); }
-    if (!content) { return alert("Please enter a message or image URL."); }
+    if (!isAuthenticated) { showCustomAlert("You must be authenticated to send messages.", 'Authentication Required'); return; }
+    const content = messageInput.value.trim(); if (!userName) { return showCustomAlert("Error: User name not set.", 'Error'); }
+    if (!content) { return showCustomAlert("Please enter a message or image URL.", 'No Message'); }
     let messageData;
     if (isSendingImage) { messageData = { name: userName, type: 'image', imageUrl: content, timestamp: new Date().toISOString() };
     } else { messageData = { name: userName, type: 'text', text: content, timestamp: new Date().toISOString() }; }
@@ -1080,7 +1181,7 @@ try {
     push(chatRef, messageData).then(() => {
       messageInput.value = '';
       if (isSendingImage && imageUrlButton) { isSendingImage = false; messageInput.placeholder = "Enter message"; imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }
-    }).catch(err => { console.error("Push error:", err); alert("Error sending message. Please try again."); });
+    }).catch(err => { console.error("Push error:", err); showCustomAlert("Error sending message. Please try again.", 'Send Error'); });
   };
 
   if(sendButton) sendButton.addEventListener('click', sendMessage);
@@ -1092,8 +1193,8 @@ try {
         if (sessionInitiallyActive) { const sanitizedName = sanitizeFirebaseKey(storedUserName); const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
             try { const snapshot = await get(userCredRef);
                 if (snapshot.exists()) { isAuthenticated = true; }
-                else { alert(`User "${storedUserName}" from your previous session was not found. Please log in or register again.`); localStorage.removeItem(localStorageNameKey); localStorage.removeItem(localStorageAuthKey); userName = null; isAuthenticated = false; if(nameInput) nameInput.value = '';}
-            } catch (dbError) { console.error("Error checking user credentials during session validation:", dbError); alert("Error validating session. Please try logging in."); localStorage.removeItem(localStorageAuthKey); isAuthenticated = false; }
+                else { showCustomAlert(`User "${storedUserName}" from your previous session was not found. Please log in or register again.`, 'Session Expired'); localStorage.removeItem(localStorageNameKey); localStorage.removeItem(localStorageAuthKey); userName = null; isAuthenticated = false; if(nameInput) nameInput.value = '';}
+            } catch (dbError) { console.error("Error checking user credentials during session validation:", dbError); showCustomAlert("Error validating session. Please try logging in.", 'Session Error'); localStorage.removeItem(localStorageAuthKey); isAuthenticated = false; }
         } else { isAuthenticated = false; }
     } else { userName = null; isAuthenticated = false; if(nameInput) nameInput.value = ''; }
     
