@@ -1,12 +1,17 @@
 # Sandboxels
 A falling sand simulation game with hundreds of elements, heat simulation, chemical reactions, fire, density, electricity, and more.
 
-Play for free at [Sandboxels.R74n.com](https://sandboxels.r74n.com/).
+Play for free at [schoolaccountcolon3.github.io/sandboxels](https://schoolaccountcolon3.github.io/sandboxels/).
 
 Join the [Discord server](https://discord.com/invite/ejUc6YPQuS).
 
 ![Landscape made in Sandboxels](https://raw.githubusercontent.com/R74nCom/sandboxels/main/icons/cover-3840x1240px-text.png)
- 
+
+# Modding
+New to modding? Read the Sandboxels Wiki articles on [getting started with modding](https://sandboxels.wiki.gg/wiki/Modding/Getting_started) or [publishing your mod](https://sandboxels.wiki.gg/wiki/Modding/Putting_it_online).
+
+Please read the [Contribution Guidelines](https://github.com/R74nCom/sandboxels/tree/main/.github/CONTRIBUTING.md) before submitting your mod.
+
 # Controls
  * Left Click = Draw pixels
  * Right Click = Erase pixels

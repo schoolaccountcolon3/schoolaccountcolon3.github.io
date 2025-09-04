@@ -1,5 +1,6 @@
-// created by SquareScreamYT
-// https://github.com/SquareScreamYT/aChefsDream.js
+// created by SquareScreamYT/sq
+// https://github.com/SquareScreamYT/
+// https://youtube.com/@sqec
 
 runAfterLoad(function() {
     console.log("Thanks for using aChefsDream.js! -sqec")
@@ -1134,7 +1135,7 @@ elements.dry_icing = {
 
 elements.cream.reactions.baked_batter = {elem2: "cake" }
 
-elements.sugar.breakInto = {elem1: "icing_sugar"}
+elements.sugar.breakInto = "icing_sugar"
 
 elements.boiler = {
 	color: "#73fff8",
@@ -7447,8 +7448,8 @@ elements.raw_beef = {
     stateHigh: "steak",
     reactions: {
         "smoke": {elem1: "smoked_beef"},
-        "charcoal": {elem1: "barbecued_beef", tempMin: 70},
-        "fire": {elem1: "barbecued_beef"}
+        "charcoal": {elem1: "brisket", tempMin: 70},
+        "fire": {elem1: "brisket"}
     }
 };
 

@@ -1,9 +1,11 @@
 airResistance = 0.1;
 terminalVelocity = 5;
 gravityPull = 0.2;
+elements.head.noGravity = true;
+elements.body.noGravity = true;
 
 validateMoves((pixel,nx,ny) => {
-    if (elements[pixel.element].isGas) return true;
+    if (elements[pixel.element].isGas || elements[pixel.element].noGravity) return true;
     if (isEmpty(pixel.x,pixel.y+1) && pixel.y-ny < 0) { //goes down usually
         pixel.vy = (pixel.vy||0) + gravityPull;
     }
@@ -47,8 +49,8 @@ runPerPixel((pixel) => {
                     newPixel.vx = (newPixel.vx||0) + vx*0.6;
                     newPixel.vy = (newPixel.vy||0) + vy*0.6;
                 }
-                vx = vx*0.3;
-                vy = vy*0.3;
+                vx = vx*0.4;
+                vy = vy*0.4;
             };
         }
 
@@ -143,8 +145,8 @@ explodeAt = function(x,y,radius,fire="fire") {
                 else {
                     createPixel(fire,coords[i].x,coords[i].y);
                 }
-                pixelMap[coords[i].x][coords[i].y].vy = 2*power * (1-distance) * -1;
-                pixelMap[coords[i].x][coords[i].y].vx = 2*power * (1-distance) * dirX;
+                pixelMap[coords[i].x][coords[i].y].vy = 2*power * -1;
+                pixelMap[coords[i].x][coords[i].y].vx = 2*power * dirX;
             }
         }
         else if (!outOfBounds(coords[i].x,coords[i].y)) {

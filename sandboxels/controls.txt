@@ -1,4 +1,4 @@
-A fancier version of this can be found here: https://sandboxels.r74n.com/controls
+A fancier version of this can be found here: https://schoolaccountcolon3.github.io/sandboxels/controls
 
 [Sandboxels Controls]
 Left Click        =  Place Pixels
@@ -28,6 +28,7 @@ F or F11          =  Toggle Fullscreen
 1 or 0            =  Normal View
 2                 =  Thermal View
 3                 =  Basic View (No Effects)
+4                 =  Streak View
 H                 =  Hide Canvas
 F1                =  Toggle GUI / HUD
 F2 or C           =  Capture Screenshot

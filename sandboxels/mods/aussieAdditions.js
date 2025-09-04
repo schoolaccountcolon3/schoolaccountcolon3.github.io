@@ -1,5 +1,5 @@
 // This is the code for the Sandboxels mod AussieAdditions.
-// All code was written by AussieBox, taken from free-to-use code, or taken from the example mod file found at the bottom of the modlist on the Sandboxels website (sandboxels.r74n.com).
+// All code was written by AussieBox, taken from free-to-use code, or taken from the example mod file found at the bottom of the modlist on the Sandboxels website (schoolaccountcolon3.github.io/sandboxels).
 // Please do not steal this code or any ideas from the mod and claim they are yours!
 // With love, from AussieBox. :]
 // (And that means no copying the file, tampering with one line, re-uploading it and claiming it as yours!)
