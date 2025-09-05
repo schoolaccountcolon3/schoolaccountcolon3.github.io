@@ -117,6 +117,56 @@ try {
 
   let currentChatContext = { type: 'global' }; // 'global' or 'dm'
 
+  // --- START: Favicon Notification Code ---
+  let originalFaviconUrl = null;
+  let isFaviconNotified = false;
+  const faviconLink = document.querySelector("link[rel~='icon']");
+  if (faviconLink) {
+    originalFaviconUrl = faviconLink.href;
+  }
+
+  function drawFaviconWithDot() {
+    if (!originalFaviconUrl || isFaviconNotified || !faviconLink) return;
+
+    const img = new Image();
+    img.src = originalFaviconUrl;
+    img.crossOrigin = 'anonymous'; 
+
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const size = img.width || 32;
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext('2d');
+
+        context.drawImage(img, 0, 0, size, size);
+
+        const dotRadius = size * 0.25;
+        const dotX = size - dotRadius;
+        const dotY = size - dotRadius;
+        context.beginPath();
+        context.arc(dotX, dotY, dotRadius, 0, 2 * Math.PI, false);
+        context.fillStyle = '#ff0000';
+        context.fill();
+
+        faviconLink.href = canvas.toDataURL('image/png');
+        isFaviconNotified = true;
+    };
+    img.onerror = () => {
+        console.warn("Could not load favicon to draw notification dot.");
+    };
+  }
+
+  function resetFavicon() {
+      if (originalFaviconUrl && isFaviconNotified && faviconLink) {
+          faviconLink.href = originalFaviconUrl;
+          isFaviconNotified = false;
+      }
+  }
+
+  window.addEventListener('focus', resetFavicon);
+  // --- END: Favicon Notification Code ---
+
   function showCustomAlert(message, title = 'Alert') {
     if (alertMessage && alertTitle && customAlertModal) {
       alertMessage.textContent = message;
@@ -124,7 +174,6 @@ try {
       customAlertModal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       
-      // Focus the OK button for accessibility
       if (alertOkButton) alertOkButton.focus();
     }
   }
@@ -145,10 +194,8 @@ try {
         customPromptModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        // Focus the input field
         if (promptInput) promptInput.focus();
         
-        // Set up one-time event listeners
         const handleOk = () => {
           const value = promptInput.value;
           hideCustomPrompt();
@@ -193,7 +240,6 @@ try {
     }
   }
 
-  // Set up event listeners for the custom alert
   if (alertOkButton) alertOkButton.addEventListener('click', hideCustomAlert);
   if (alertCloseButton) alertCloseButton.addEventListener('click', hideCustomAlert);
   if (customAlertModal) customAlertModal.addEventListener('click', (event) => {
@@ -209,7 +255,6 @@ try {
   let selectedPfpFile = null;
   const pfpCache = new Map();
 
-  // Load cached profile pictures from localStorage
   try {
     const cachedPfps = localStorage.getItem(localStoragePfpCacheKey);
     if (cachedPfps) {
@@ -222,7 +267,6 @@ try {
     console.warn('Error loading cached profile pictures:', error);
   }
 
-  // Function to save pfpCache to localStorage
   function savePfpCache() {
     try {
       const cacheObject = Object.fromEntries(pfpCache);
@@ -348,12 +392,12 @@ try {
           const snapshot = await get(userPfpRef);
           const pfpData = snapshot.exists() ? snapshot.val() : defaultPfp;
           pfpCache.set(userNameForPfp, pfpData);
-          savePfpCache(); // Save to localStorage when new profile picture is cached
+          savePfpCache();
           return pfpData;
       } catch (error) {
           console.warn(`Could not fetch PFP for ${userNameForPfp}:`, error);
           pfpCache.set(userNameForPfp, defaultPfp);
-          savePfpCache(); // Save to localStorage even for default profile pictures
+          savePfpCache();
           return defaultPfp;
       }
   }
@@ -370,7 +414,6 @@ try {
         if (modalPfpImg) modalPfpImg.src = newPfpDataUrl;
     }
     
-    // Update cache and save to localStorage
     pfpCache.set(targetUserName, newPfpDataUrl);
     savePfpCache();
   }
@@ -434,24 +477,20 @@ try {
     const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
 
     try {
-        // Get current user data
         const snapshot = await get(userCredRef);
         const currentData = snapshot.exists() ? snapshot.val() : {};
         
-        // Prepare update data
         const updateData = {
             ...currentData,
             bio: bioText,
             pronouns: pronounsText
         };
 
-        // If there's a new profile picture, process and add it
         if (selectedPfpFile) {
             try {
                 const base64Pfp = await resizeAndEncodeImage(selectedPfpFile);
                 updateData.pfpBase64 = base64Pfp;
                 
-                // Update the current user's PFP display
                 if (currentUserPfpImg) currentUserPfpImg.src = base64Pfp;
                 pfpCache.set(userName, base64Pfp);
                 updateDisplayedPfpsForUser(userName, base64Pfp);
@@ -461,10 +500,8 @@ try {
             }
         }
 
-        // Save all changes
         await set(userCredRef, updateData);
         
-        // Reset the file input and preview
         selectedPfpFile = null;
         if (pfpUploadInput) pfpUploadInput.value = '';
         if (pfpPreviewImg) pfpPreviewImg.src = currentUserPfpImg.src;
@@ -506,7 +543,6 @@ try {
         if (snapshot.exists()) {
             const userData = snapshot.val();
             
-            // Handle bio
             if (userData.bio && userData.bio.trim() !== "") {
                 modalBioText.textContent = userData.bio;
             } else {
@@ -514,7 +550,6 @@ try {
                 modalBioText.className = 'empty-bio';
             }
             
-            // Handle pronouns
             if (userData.pronouns && userData.pronouns.trim() !== "") {
                 modalPronouns.textContent = userData.pronouns;
             } else {
@@ -544,7 +579,6 @@ try {
           const isVisible = bioEditorPanel.classList.contains('visible');
           if (!isVisible) {
               bioEditorPanel.style.display = 'flex';
-              // Force a reflow
               bioEditorPanel.offsetHeight;
               bioEditorPanel.classList.add('visible');
               if (isAuthenticated) { 
@@ -556,7 +590,6 @@ try {
               }
           } else {
               bioEditorPanel.classList.remove('visible');
-              // Wait for the animation to complete before hiding
               setTimeout(() => {
                   bioEditorPanel.style.display = 'none';
               }, 300);
@@ -596,7 +629,6 @@ try {
     if (!dmUserList) return;
     dmUserList.innerHTML = ''; 
 
-    // Add Global Chat
     const globalChatItem = document.createElement('div');
     globalChatItem.textContent = 'Global Chat';
     globalChatItem.classList.add('user-item');
@@ -695,7 +727,7 @@ try {
     return new Promise((resolve) => {
         if (!url || typeof url !== 'string') { resolve(false); return; }
         const trimmedUrl = url.trim();
-        if (!trimmedUrl.match(/^https?:\/\/[^\s/$.?#].[^\s]*\.(jpe?g|png|gif|webp)(\?[^\s]*)?$/i)) { resolve(false); return; }
+        if (!trimmedUrl.match(/^(https?:\/\/[^\s/$.?#].[^\s]*\.(jpe?g|png|gif|webp)(\?[^\s]*)?$)|(^data:image\/(jpeg|png|gif|webp);base64,)/i)) { resolve(false); return; }
         const img = new Image(); img.onload = () => resolve(true); img.onerror = () => resolve(false); img.src = trimmedUrl;
     });
   }
@@ -708,7 +740,7 @@ try {
         if (isValid) { messageInput.value = trimmedUrl; isSendingImage = true; messageInput.placeholder = "Image URL entered. Press Send."; imageUrlButton.innerHTML = '✓'; imageUrlButton.title = "Clear image URL / Send text instead"; if(messageInput) messageInput.focus();
         } else { showCustomAlert("Invalid image URL. Must be http/https, end with .jpg, .png, .gif, or .webp, and be loadable.", 'Invalid URL'); }
     });
-    if (messageInput) { messageInput.addEventListener('input', () => { if (isSendingImage && !messageInput.value.startsWith('http')) { isSendingImage = false; messageInput.placeholder = "Enter message"; if (imageUrlButton) { imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }}}); }
+    if (messageInput) { messageInput.addEventListener('input', () => { if (isSendingImage && !messageInput.value.startsWith('http') && !messageInput.value.startsWith('data:image')) { isSendingImage = false; messageInput.placeholder = "Enter message"; if (imageUrlButton) { imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }}}); }
   }
   function openImageLightbox(imageUrl) {
     if (imageLightboxModal && lightboxImage) { lightboxImage.src = imageUrl; imageLightboxModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
@@ -836,7 +868,6 @@ try {
       const ts = new Date(msg.timestamp);
       const formatted = ts.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
 
-      // Check if we should group with adjacent messages
       let shouldGroupWithPrev = false;
       let shouldGroupWithNext = false;
       let nextMessage = null;
@@ -846,22 +877,21 @@ try {
           prevMessage = chatbox.lastChild;
           const prevMessageName = prevMessage.querySelector('.message-username')?.textContent;
           const prevMessageTime = new Date(prevMessage.getAttribute('data-timestamp'));
-          const timeDiff = (ts - prevMessageTime) / 1000; // difference in seconds
+          const timeDiff = (ts - prevMessageTime) / 1000;
           
-          shouldGroupWithPrev = prevMessageName === msg.name && timeDiff < 300; // group if same user and within 5 minutes
+          shouldGroupWithPrev = prevMessageName === msg.name && timeDiff < 300;
       }
 
       if (prepend && chatbox.firstChild) {
           nextMessage = chatbox.firstChild;
           const nextMessageName = nextMessage.querySelector('.message-username')?.textContent;
           const nextMessageTime = new Date(nextMessage.getAttribute('data-timestamp'));
-          const timeDiff = (nextMessageTime - ts) / 1000; // difference in seconds
+          const timeDiff = (nextMessageTime - ts) / 1000;
           
-          shouldGroupWithNext = nextMessageName === msg.name && timeDiff < 300; // group if same user and within 5 minutes
+          shouldGroupWithNext = nextMessageName === msg.name && timeDiff < 300;
       }
 
       if (shouldGroupWithPrev) {
-          // Add message to existing group
           const messageBody = prevMessage.querySelector('.message-body');
           
           if (msg.type === 'image' && msg.imageUrl) {
@@ -884,7 +914,6 @@ try {
               messageBody.appendChild(textSpan);
           }
 
-          // Update timestamp
           const timestampSpan = prevMessage.querySelector('.timestamp');
           if (timestampSpan) {
               timestampSpan.textContent = formatted;
@@ -894,7 +923,6 @@ try {
       }
 
       if (shouldGroupWithNext) {
-          // Create new message group that will be merged with next message
           const wrapper = document.createElement('div');
           wrapper.setAttribute('data-message-key', msg.key);
           wrapper.setAttribute('data-timestamp', msg.timestamp);
@@ -970,10 +998,8 @@ try {
           p.appendChild(contentWrapper);
           wrapper.appendChild(p);
 
-          // Insert before the next message
           chatbox.insertBefore(wrapper, nextMessage);
 
-          // Move the content to the next message's body
           const nextMessageBody = nextMessage.querySelector('.message-body');
           const currentMessageBody = wrapper.querySelector('.message-body');
 
@@ -982,19 +1008,16 @@ try {
           
           nextMessageBody.insertBefore(newContentDiv, nextMessageBody.firstChild);
 
-          // Update timestamp
           const nextTimestampSpan = nextMessage.querySelector('.timestamp');
           if (nextTimestampSpan) {
               nextTimestampSpan.textContent = formatted;
           }
           nextMessage.setAttribute('data-timestamp', msg.timestamp);
 
-          // Remove the temporary wrapper
           wrapper.remove();
           return;
       }
 
-      // Create new message group (no grouping)
       const wrapper = document.createElement('div');
       wrapper.setAttribute('data-message-key', msg.key);
       wrapper.setAttribute('data-timestamp', msg.timestamp);
@@ -1133,7 +1156,14 @@ try {
 
       const nowISO = new Date().toISOString(); const liveQ = query( chatRef, orderByChild('timestamp'), startAt(nowISO) );
       const unsubChildAdded = onChildAdded(liveQ, async snap => { 
-          if (!isAuthenticated) return; const msg = snapToMsg(snap);
+          if (!isAuthenticated) return; 
+          const msg = snapToMsg(snap);
+
+          // --- MODIFICATION: Trigger favicon notification ---
+          if (document.hidden && msg.name !== userName) {
+              drawFaviconWithDot();
+          }
+
           await displayMessage(msg); 
           if (chatbox && chatbox.lastChild) chatbox.scrollTop = chatbox.scrollHeight;
       }, err => { console.error("Live listener error (onChildAdded):", err); });
@@ -1173,7 +1203,9 @@ try {
     const content = messageInput.value.trim(); if (!userName) { return showCustomAlert("Error: User name not set.", 'Error'); }
     if (!content) { return showCustomAlert("Please enter a message or image URL.", 'No Message'); }
     let messageData;
-    if (isSendingImage) { messageData = { name: userName, type: 'image', imageUrl: content, timestamp: new Date().toISOString() };
+    const isBase64Image = content.startsWith('data:image');
+
+    if (isSendingImage || isBase64Image) { messageData = { name: userName, type: 'image', imageUrl: content, timestamp: new Date().toISOString() };
     } else { messageData = { name: userName, type: 'text', text: content, timestamp: new Date().toISOString() }; }
     
     const chatRef = currentChatContext.type === 'dm' ? ref(database, `dms/${currentChatContext.dmId}`) : messagesRef;
