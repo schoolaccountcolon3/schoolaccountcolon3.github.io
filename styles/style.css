@@ -1297,7 +1297,11 @@ body.sidebar-open #styleSwitcher {
   color: var(--color-link-hover);
 }
 
-/* Games Grid for Other Games */
+.game-item:hover a {
+  color: var(--color-fg);
+  transform: none;
+}
+
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1428,3 +1432,4 @@ body.sidebar-open #styleSwitcher {
     padding: 20px;
   }
 }
+

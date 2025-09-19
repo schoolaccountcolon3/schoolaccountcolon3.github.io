@@ -8,34 +8,11 @@
 		<meta name="MobileOptimized" content="640"/>
 		<meta name="HandheldFriendly" content="true"/>
 		<title>Half-Life</title>
-		<link rel="stylesheet" href="../styles/style.css" />
+		<link rel="stylesheet" href="/styles/style.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-		<script src="../theme.js"></script>
+		<script src="/theme.js"></script>
 		<script>
 		document.addEventListener('contextmenu', event => event.preventDefault());
-		
-		// Simple theme loader for pages without theme picker
-		document.addEventListener('DOMContentLoaded', () => {
-			const savedTheme = localStorage.getItem('theme');
-			if (savedTheme) {
-				const themes = {
-					dark: '../styles/style-dark.css',
-					light: '../styles/style-light.css',
-					pastel: '../styles/style-pastel.css',
-					purple: '../styles/style-purple.css',
-					blue: '../styles/style-blue.css',
-					orange: '../styles/style-orange.css',
-					green: '../styles/style-green.css'
-				};
-				
-				if (themes[savedTheme]) {
-					const link = document.createElement('link');
-					link.rel = 'stylesheet';
-					link.href = themes[savedTheme];
-					document.head.appendChild(link);
-				}
-			}
-		});
 		</script>
 		<style>
 			body {
@@ -214,6 +191,7 @@
 	</head>
 
 <body>
+	<div id="styleSwitcher"></div>
 	<div class="hl-container">
 		<h1 class="hl-title">
 			<i class="fas fa-crosshairs"></i>

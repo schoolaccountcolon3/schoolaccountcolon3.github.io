@@ -1,78 +1,130 @@
 // theme.js
 document.addEventListener('DOMContentLoaded', () => {
-  const themeSelect = document.getElementById('themeSelect');
-  const styleSheet = document.getElementById('styleSheet');
+  // --- Configuration ---
+  const themesJsonPath = '/themes.json'; // Path to your themes JSON file
+  const defaultTheme = 'dark';          // The theme to apply if none is saved
+  const styleSwitcherContainerId = 'styleSwitcher'; // The ID for the UI container
 
-  if (!themeSelect || !styleSheet) return; // Avoid errors if elements are missing
-
-  const themes = {
-    dark: '/styles/style-dark.css',
-    light: '/styles/style-light.css',
-    pastel: '/styles/style-pastel.css',
-    purple: '/styles/style-purple.css',
-    blue: '/styles/style-blue.css',
-    orange: '/styles/style-orange.css',
-    green: '/styles/style-green.css',
-    custom: null // Custom theme doesn't use a CSS file
-  };
-
-  function clearCustomTheme() {
-    // Clear all custom theme variables
-    const customTheme = JSON.parse(localStorage.getItem('customTheme') || '{}');
-    Object.keys(customTheme).forEach(name => {
-      document.documentElement.style.removeProperty(`--${name}`);
+  /**
+   * Applies a theme to the document by setting CSS variables.
+   * This function requires the full theme data object to work.
+   *
+   * @param {string} themeName - The name of the theme to apply (e.g., 'dark').
+   * @param {object} allThemes - The object containing all theme definitions.
+   */
+  function applyTheme(themeName, allThemes) {
+    console.log(`Applying theme: ${themeName}`);
+    
+    // First, create a set of all possible variable names to clear previous themes
+    const allVarNames = new Set();
+    Object.values(allThemes).forEach(theme => {
+      Object.keys(theme).forEach(varName => allVarNames.add(varName));
     });
-  }
+    const customTheme = JSON.parse(localStorage.getItem('customTheme') || '{}');
+    Object.keys(customTheme).forEach(varName => allVarNames.add(varName));
 
-  function applyTheme(theme) {
-    if (theme === 'custom') {
-      // Clear any existing theme CSS
-      styleSheet.href = '';
-      
-      // Apply custom theme from localStorage
-      const customTheme = JSON.parse(localStorage.getItem('customTheme') || '{}');
-      Object.entries(customTheme).forEach(([name, value]) => {
-        document.documentElement.style.setProperty(`--${name}`, value);
+    // Remove all possible properties to ensure a clean slate
+    allVarNames.forEach(name => document.documentElement.style.removeProperty(`--${name}`));
+
+    // Apply the new theme's variables
+    const themeData = themeName === 'custom' ? customTheme : allThemes[themeName];
+    if (themeData) {
+      Object.entries(themeData).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(`--${key}`, value);
       });
-    } else {
-      // Clear custom theme variables first
-      clearCustomTheme();
-      
-      // Load the theme CSS file
-      styleSheet.href = themes[theme] || '/styles/style.css';
     }
   }
 
-  // Add "Custom Theme" option to the select element if it doesn't exist
-  if (!themeSelect.querySelector('option[value="custom"]')) {
+  /**
+   * Builds the interactive theme picker UI.
+   *
+   * @param {HTMLElement} container - The element to build the UI in.
+   * @param {string} currentThemeName - The currently active theme name.
+   * @param {object} allThemes - The object containing all theme definitions.
+   */
+  function buildPickerUI(container, currentThemeName, allThemes) {
+    console.log("Container found. Building theme picker UI.");
+    container.innerHTML = ''; // Clear container
+
+    const label = document.createElement('label');
+    label.htmlFor = 'themeSelect';
+    label.textContent = 'Theme:';
+
+    const themeSelect = document.createElement('select');
+    themeSelect.id = 'themeSelect';
+
+    // Populate dropdown
+    Object.keys(allThemes).forEach(themeName => {
+      const option = document.createElement('option');
+      option.value = themeName;
+      option.textContent = formatThemeName(themeName);
+      themeSelect.appendChild(option);
+    });
+
     const customOption = document.createElement('option');
     customOption.value = 'custom';
     customOption.textContent = 'Custom Theme';
     themeSelect.appendChild(customOption);
-  }
 
-  // Add "Configure Custom Theme" link if it doesn't exist
-  if (!document.querySelector('a[href="theme-config.html"]')) {
     const configLink = document.createElement('a');
     configLink.href = '/theme-config.html';
     configLink.textContent = 'Configure Custom Theme';
     configLink.style.marginLeft = '10px';
     configLink.style.color = 'var(--color-link)';
     configLink.style.textDecoration = 'none';
-    themeSelect.parentNode.appendChild(configLink);
+
+    container.append(label, themeSelect, configLink);
+
+    themeSelect.value = currentThemeName;
+
+    themeSelect.addEventListener('change', () => {
+      const selectedTheme = themeSelect.value;
+      localStorage.setItem('theme', selectedTheme);
+      applyTheme(selectedTheme, allThemes);
+    });
   }
 
-  // Load saved theme
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme && (themes[savedTheme] || savedTheme === 'custom')) {
-    themeSelect.value = savedTheme;
-    applyTheme(savedTheme);
+  function formatThemeName(name) {
+    return name
+      .split(/[-_]/) // split on dash or underscore
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 
-  // Handle theme changes
-  themeSelect.addEventListener('change', () => {
-    const selectedTheme = themeSelect.value;
-    localStorage.setItem('theme', selectedTheme);
-    applyTheme(selectedTheme);
-  });
+  /**
+   * Main function to fetch data and initialize the theme system.
+   */
+  async function initializeThemeSystem() {
+    console.log("Theme system initializing...");
+    try {
+      const response = await fetch(themesJsonPath);
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      const allThemes = await response.json();
+      console.log("Themes loaded successfully.");
+
+      // Determine which theme to apply
+      const savedTheme = localStorage.getItem('theme');
+      const themeToApply = (savedTheme && (allThemes[savedTheme] || savedTheme === 'custom'))
+                           ? savedTheme
+                           : defaultTheme;
+
+      // ALWAYS apply the theme now that we have the data
+      applyTheme(themeToApply, allThemes);
+
+      // CONDITIONALLY build the UI
+      const container = document.getElementById(styleSwitcherContainerId);
+      if (container) {
+        buildPickerUI(container, themeToApply, allThemes);
+      } else {
+        console.log("UI container not found. Skipping picker creation.");
+      }
+    } catch (error) {
+      console.error('Error initializing theme system:', error);
+    }
+  }
+
+  // Start the process
+  initializeThemeSystem();
 });
