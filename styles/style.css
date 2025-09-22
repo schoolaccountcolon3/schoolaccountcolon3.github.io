@@ -477,6 +477,7 @@ background-color: var(--color-input-bg, #121212);
   display: flex;
   gap: 12px;
   align-items: center;
+  position: relative;
 }
 
 #message-input #message {
@@ -935,13 +936,16 @@ body.sidebar-open #styleSwitcher {
   text-decoration: none;
   font-size: 16px;
   color: var(--color-fg);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: 0.2s ease-out;
+  transition: background-color 0.2s ease-out;
   cursor: pointer;
   border-bottom: 1px solid var(--color-border);
+
+  /* --- This is the key part --- */
+  display: flex;         /*  Arrange children (dot, icon, name) in a row */
+  align-items: center;   /*  Vertically center them */
+  gap: 12px;             /*  Create space between the children */
 }
+
 #dm-user-list .user-item:first-child {
     border-top: 1px solid var(--color-border);
 }
@@ -950,15 +954,17 @@ body.sidebar-open #styleSwitcher {
   background-color: var(--color-button-hover);
 }
 
+#dm-user-list .user-item.active {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+}
+
+/* This styles the user's profile picture inside the sidebar item */
 #dm-user-list .user-item img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-}
-#dm-user-list .user-item.active {
-  background-color: var(--color-primary);
-  color: var(--color-bg);
 }
 
 
@@ -1433,3 +1439,214 @@ body.sidebar-open #styleSwitcher {
   }
 }
 
+.presence-indicator {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  flex-shrink: 0; /* Important: Prevents the dot from shrinking */
+}
+
+.presence-indicator.online {
+  background-color: #2de04a; /* Bright Green */
+}
+
+.presence-indicator.offline {
+  background-color: #808080; /* Gray */
+}
+
+.mention {
+  background-color: hsla(217, 89%, 61%, 0.3); /* Light blue background */
+  color: #ffffff;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mention:hover {
+  background-color: hsla(217, 89%, 61%, 0.5);
+}
+
+.mention.highlight {
+  background-color: hsl(45, 100%, 51%); /* Bright yellow for self-mention */
+  color: #000;
+}
+
+.pfp-container {
+  position: relative; /* This is the anchor for the absolute positioning of the dot */
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0; /* Prevents the container from shrinking */
+}
+
+/* 2. Position the indicator within the container */
+.pfp-container .presence-indicator {
+  position: absolute; /* Position relative to the pfp-container */
+  bottom: -2px;       /* Position it at the bottom right corner */
+  right: -2px;
+  height: 12px;       /* Slightly larger size for visibility */
+  width: 12px;
+  
+  /* This creates the "cutout" effect like Discord */
+  border: 2px solid var(--color-bg); /* Use your main message background color */
+  border-radius: 50%;
+  
+  /* Make sure it's on top of the PFP */
+  z-index: 10;
+}
+
+/* 3. Make sure the PFP itself fills the container */
+.pfp-container .message-pfp {
+  width: 100%;
+  height: 100%;
+  margin-top: 0; /* Reset any previous margin */
+}
+
+#image-upload-area {
+    margin-top: 15px;
+    padding: 25px;
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+    background-color: var(--color-input-bg);
+    transition: border-color 0.3s, background-color 0.3s;
+}
+#image-upload-area.dragover { /* Style for when a file is dragged over */
+    border-color: var(--color-primary);
+    background-color: var(--color-bg);
+}
+#image-upload-area label {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+#image-upload-area input[type="file"] {
+    display: none;
+}
+
+/* Modal Content Styling */
+#image-upload-modal .modal-content {
+  width: 500px;
+  max-width: 90vw;
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  animation: fadeInModal 0.2s ease-out;
+}
+#image-upload-modal .modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+#image-upload-modal .modal-header h3 { margin: 0; font-size: 1.1em; }
+
+#image-upload-modal .modal-body { padding: 0 20px 20px 20px; }
+#image-upload-modal .modal-footer {
+  padding: 15px 20px;
+  display: flex; justify-content: flex-end; gap: 10px;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+}
+
+/* Tab styling */
+.tab-buttons {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 15px;
+}
+.tab-button {
+  flex-grow: 1;
+  padding: 12px;
+  background: none;
+  border: none;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-button:hover { color: var(--color-fg); }
+.tab-button.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* URL input styling */
+#url-tab p { margin-top: 0; color: var(--color-fg-muted); }
+#image-url-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-input-bg);
+  color: var(--color-fg);
+  font-family: var(--font-main);
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+/* Preview styling */
+#image-preview-container {
+  margin-top: 15px;
+  text-align: center;
+}
+#image-preview-container img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  object-fit: contain;
+}
+#image-preview-container p {
+  color: var(--color-fg-muted);
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+/* Modal button styling */
+#image-upload-modal .modal-button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+#image-upload-modal .modal-button.secondary {
+  background-color: var(--color-button-bg-secondary);
+  color: var(--color-button-text-secondary);
+}
+#image-upload-modal .modal-button.secondary:hover {
+  background-color: var(--color-button-hover);
+}
+#image-upload-modal .modal-button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+#chatbox .message-body .mention {
+  display: inline-block; /*  <-- This is the crucial fix */
+  background-color: hsla(217, 89%, 61%, 0.3);
+  color: #ffffff;
+  padding: 1px 5px; /* Added slightly more horizontal padding */
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  line-height: 1.4; /* Improves vertical alignment with text */
+}
+
+#chatbox .message-body .mention:hover {
+  background-color: hsla(217, 89%, 61%, 0.5);
+}
+
+#chatbox .message-body .mention.highlight {
+  background-color: hsl(45, 100%, 51%);
+  color: #000;
+}

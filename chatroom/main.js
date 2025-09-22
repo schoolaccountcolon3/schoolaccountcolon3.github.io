@@ -12,6 +12,8 @@ import {
   get,
   remove,
   onChildRemoved,
+  onDisconnect,
+  onValue,
   set
 } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
 
@@ -25,6 +27,14 @@ const firebaseConfig = {
   measurementId: "G-CPP231DLCZ",
   databaseURL: "https://school-chatroom-b93a4-default-rtdb.firebaseio.com/"
 };
+
+const SUPABASE_URL = "https://fegozfcnrfwabapgfxxy.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlZ296ZmNucmZ3YWJhcGdmeHh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwNjcxNDksImV4cCI6MjA3MzY0MzE0OX0.awrBnLpskHP2Q9k5nmPH2_8fzBvxwvDUyV2fLRBrW68";
+const BUCKET = "pfps"; // A dedicated bucket for chat profile pictures
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// For the migration button - add this after your other element selectors
+const migratePfpsBtn = document.getElementById('migrate-pfps-btn');
 
 function stringToColor(str) {
   if (!str) return '#CCCCCC'; 
@@ -248,41 +258,19 @@ try {
 
   const localStorageNameKey = 'chatUserName';
   const localStorageAuthKey = 'chatUserAuthenticated';
-  const localStoragePfpCacheKey = 'chatPfpCache';
   const sessionChatContextKey = 'chatSessionContext';
   let userName = null;
+  let userStatusRef = null;
   let isAuthenticated = false;
   let selectedPfpFile = null;
   const pfpCache = new Map();
 
-  try {
-    const cachedPfps = localStorage.getItem(localStoragePfpCacheKey);
-    if (cachedPfps) {
-      const parsedCache = JSON.parse(cachedPfps);
-      Object.entries(parsedCache).forEach(([key, value]) => {
-        pfpCache.set(key, value);
-      });
-    }
-  } catch (error) {
-    console.warn('Error loading cached profile pictures:', error);
-  }
-
-  function savePfpCache() {
-    try {
-      const cacheObject = Object.fromEntries(pfpCache);
-      localStorage.setItem(localStoragePfpCacheKey, JSON.stringify(cacheObject));
-    } catch (error) {
-      console.warn('Error saving profile picture cache:', error);
-    }
-  }
-
   const saveProfileButton = document.getElementById('save-profile-button');
 
-  async function resizeAndEncodeImage(file) {
+  async function resizeAndGetBlob(file) {
     return new Promise((resolve, reject) => {
         if (!file.type.startsWith('image/')) {
-            reject(new Error('File is not an image.'));
-            return;
+            return reject(new Error('File is not an image.'));
         }
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -293,7 +281,13 @@ try {
                 canvas.width = 256;
                 canvas.height = 256;
                 ctx.drawImage(img, 0, 0, 256, 256);
-                resolve(canvas.toDataURL('image/png', 0.9)); 
+                canvas.toBlob(blob => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Canvas to Blob conversion failed.'));
+                    }
+                }, 'image/png', 0.9);
             };
             img.onerror = (err) => reject(new Error("Image could not be loaded: " + err));
             img.src = e.target.result;
@@ -320,84 +314,43 @@ try {
     });
   }
 
-  if (setPfpButton) {
-    setPfpButton.addEventListener('click', async () => {
-        if (!isAuthenticated || !userName || !selectedPfpFile) {
-            showCustomAlert("Please select an image file first.", 'No Image Selected');
-            return;
-        }
-        setPfpButton.disabled = true;
-        setPfpButton.textContent = "Saving...";
-        try {
-            const base64Pfp = await resizeAndEncodeImage(selectedPfpFile);
-            const sanitizedName = sanitizeFirebaseKey(userName);
-            const userPfpRef = ref(database, `user_credentials/${sanitizedName}/pfpBase64`);
-            await set(userPfpRef, base64Pfp);
-
-            if (currentUserPfpImg) currentUserPfpImg.src = base64Pfp;
-            pfpCache.set(userName, base64Pfp);
-            if (pfpPreviewImg) pfpPreviewImg.src = base64Pfp;
-            updateDisplayedPfpsForUser(userName, base64Pfp); 
-
-            showCustomAlert("Profile picture updated successfully!", 'Success');
-            selectedPfpFile = null;
-            if(pfpUploadInput) pfpUploadInput.value = ''; 
-        } catch (error) {
-            console.error("Error updating PFP:", error);
-            showCustomAlert("Failed to update profile picture: " + error.message, 'Update Error');
-        } finally {
-            if (setPfpButton) {
-                setPfpButton.disabled = true; 
-                setPfpButton.textContent = "Set Profile Picture";
-            }
-        }
-    });
-  }
-
   async function loadCurrentUserPfp() {
     if (!isAuthenticated || !userName || !currentUserPfpImg) return;
-    const cachedPfp = pfpCache.get(userName);
-    const defaultPfp = generateDefaultPfpDataUrl(userName);
+    
+    const pfpData = await getPfpDataForUser(userName);
 
-    if (cachedPfp) {
-        currentUserPfpImg.src = cachedPfp;
-        if (pfpPreviewImg) pfpPreviewImg.src = cachedPfp;
-        return;
-    }
-
-    const sanitizedName = sanitizeFirebaseKey(userName);
-    const userPfpRef = ref(database, `user_credentials/${sanitizedName}/pfpBase64`);
-    try {
-        const snapshot = await get(userPfpRef);
-        const pfpData = snapshot.exists() ? snapshot.val() : defaultPfp;
-        currentUserPfpImg.src = pfpData;
-        if (pfpPreviewImg) pfpPreviewImg.src = pfpData;
-        pfpCache.set(userName, pfpData);
-    } catch (error) {
-        console.error("Error loading current user PFP:", error);
-        currentUserPfpImg.src = defaultPfp;
-        if (pfpPreviewImg) pfpPreviewImg.src = defaultPfp;
-    }
+    currentUserPfpImg.src = pfpData;
+    if (pfpPreviewImg) pfpPreviewImg.src = pfpData;
   }
 
   async function getPfpDataForUser(userNameForPfp) {
       if (!userNameForPfp) return generateDefaultPfpDataUrl('unknown');
+      
+      // Use in-memory session cache
       if (pfpCache.has(userNameForPfp)) {
           return pfpCache.get(userNameForPfp);
       }
+
       const sanitizedName = sanitizeFirebaseKey(userNameForPfp);
-      const userPfpRef = ref(database, `user_credentials/${sanitizedName}/pfpBase64`);
+      const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
       const defaultPfp = generateDefaultPfpDataUrl(userNameForPfp);
+
       try {
-          const snapshot = await get(userPfpRef);
-          const pfpData = snapshot.exists() ? snapshot.val() : defaultPfp;
-          pfpCache.set(userNameForPfp, pfpData);
-          savePfpCache();
-          return pfpData;
+          const snapshot = await get(userCredRef);
+          if (snapshot.exists()) {
+              const userData = snapshot.val();
+              // Prioritize new URL, fallback to old Base64, then to default
+              const pfpData = userData.pfpUrl || userData.pfpBase64 || defaultPfp;
+              pfpCache.set(userNameForPfp, pfpData);
+              return pfpData;
+          } else {
+              // User not found in credentials, use default
+              pfpCache.set(userNameForPfp, defaultPfp);
+              return defaultPfp;
+          }
       } catch (error) {
           console.warn(`Could not fetch PFP for ${userNameForPfp}:`, error);
-          pfpCache.set(userNameForPfp, defaultPfp);
-          savePfpCache();
+          pfpCache.set(userNameForPfp, defaultPfp); // Cache default on error
           return defaultPfp;
       }
   }
@@ -453,7 +406,7 @@ try {
     updateBioCharCount();
   }
 
-  async function saveUserProfile() { 
+  async function saveUserProfile() {
     if (!isAuthenticated || !userName || !bioInput || !pronounsInput) {
         showCustomAlert("You must be logged in to set your profile.", 'Authentication Required');
         return;
@@ -461,7 +414,7 @@ try {
 
     const bioText = bioInput.value.trim();
     const pronounsText = pronounsInput.value.trim();
-    
+
     if (bioText.length > 200) {
         showCustomAlert("Bio cannot exceed 200 characters.", 'Invalid Input');
         return;
@@ -472,14 +425,14 @@ try {
         saveProfileButton.classList.add('saving');
         saveProfileButton.textContent = "Saving...";
     }
-    
+
     const sanitizedName = sanitizeFirebaseKey(userName);
     const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
 
     try {
         const snapshot = await get(userCredRef);
         const currentData = snapshot.exists() ? snapshot.val() : {};
-        
+
         const updateData = {
             ...currentData,
             bio: bioText,
@@ -488,12 +441,26 @@ try {
 
         if (selectedPfpFile) {
             try {
-                const base64Pfp = await resizeAndEncodeImage(selectedPfpFile);
-                updateData.pfpBase64 = base64Pfp;
+                const imageBlob = await resizeAndGetBlob(selectedPfpFile);
+                // Use a consistent filename to prevent clutter in your bucket
+                const fileName = `${sanitizedName}.png`; 
                 
-                if (currentUserPfpImg) currentUserPfpImg.src = base64Pfp;
-                pfpCache.set(userName, base64Pfp);
-                updateDisplayedPfpsForUser(userName, base64Pfp);
+                const { error } = await supabase.storage.from(BUCKET).upload(fileName, imageBlob, {
+                    contentType: "image/png",
+                    upsert: true // This will overwrite the user's existing PFP
+                });
+                if (error) throw error;
+
+                const { data: publicUrlData } = supabase.storage.from(BUCKET).getPublicUrl(fileName);
+                if (!publicUrlData) throw new Error("Could not get public URL for the image.");
+
+                updateData.pfpUrl = `${publicUrlData.publicUrl}?t=${new Date().getTime()}`; // Cache-busting
+                delete updateData.pfpBase64; // IMPORTANT: Remove old Base64 data
+
+                if (currentUserPfpImg) currentUserPfpImg.src = updateData.pfpUrl;
+                pfpCache.set(userName, updateData.pfpUrl);
+                updateDisplayedPfpsForUser(userName, updateData.pfpUrl);
+
             } catch (error) {
                 console.error("Error processing profile picture:", error);
                 showCustomAlert("Failed to process profile picture. Other changes were saved.", 'Update Error');
@@ -501,10 +468,10 @@ try {
         }
 
         await set(userCredRef, updateData);
-        
+
         selectedPfpFile = null;
         if (pfpUploadInput) pfpUploadInput.value = '';
-        if (pfpPreviewImg) pfpPreviewImg.src = currentUserPfpImg.src;
+        if (pfpPreviewImg && updateData.pfpUrl) pfpPreviewImg.src = updateData.pfpUrl;
 
         showCustomAlert("Profile updated successfully!", 'Success');
     } catch (error) {
@@ -626,65 +593,93 @@ try {
   }
 
   async function populateUserList() {
-    if (!dmUserList) return;
-    dmUserList.innerHTML = ''; 
+      if (!dmUserList) return;
+      dmUserList.innerHTML = ''; 
 
-    const globalChatItem = document.createElement('div');
-    globalChatItem.textContent = 'Global Chat';
-    globalChatItem.classList.add('user-item');
-    if (currentChatContext.type === 'global') {
-        globalChatItem.classList.add('active');
-    }
-    globalChatItem.addEventListener('click', () => {
-        switchToGlobalChat();
-    });
-    dmUserList.appendChild(globalChatItem);
+      const globalChatItem = document.createElement('div');
+      globalChatItem.textContent = 'Global Chat';
+      globalChatItem.classList.add('user-item');
+      if (currentChatContext.type === 'global') {
+          globalChatItem.classList.add('active');
+      }
+      globalChatItem.addEventListener('click', () => {
+          switchToGlobalChat();
+      });
+      dmUserList.appendChild(globalChatItem);
 
-    try {
-        const snapshot = await get(credentialsRef);
-        if (snapshot.exists()) {
-            const users = snapshot.val();
-            const promises = Object.keys(users).map(async (sanitizedName) => {
-                const realName = sanitizedName.replace(/_/g, '.');
-                if (realName === userName) return null;
+      try {
+          const usersSnapshot = await get(credentialsRef);
+          if (!usersSnapshot.exists()) return;
 
-                const userPfp = await getPfpDataForUser(realName);
-                return { name: realName, pfp: userPfp, sanitized: sanitizedName };
-            });
+          const users = usersSnapshot.val();
+          const statusSnapshot = await get(ref(database, 'status'));
+          const statuses = statusSnapshot.exists() ? statusSnapshot.val() : {};
 
-            const userList = (await Promise.all(promises)).filter(Boolean);
+          const userPromises = Object.keys(users).map(async (sanitizedName) => {
+              const realName = sanitizedName.replace(/_/g, '.');
+              if (realName === userName) return null;
 
-            userList.forEach(userData => {
-                const userElement = document.createElement('div');
-                userElement.classList.add('user-item');
-                if (currentChatContext.type === 'dm' && currentChatContext.with === userData.name) {
-                    userElement.classList.add('active');
-                }
+              const userPfp = await getPfpDataForUser(realName);
+              const userStatus = statuses[sanitizedName] || 'offline';
+              
+              return { name: realName, pfp: userPfp, sanitized: sanitizedName, status: userStatus };
+          });
 
-                const pfpImg = document.createElement('img');
-                pfpImg.src = userData.pfp;
-                pfpImg.alt = `${userData.name}'s PFP`;
+          const userList = (await Promise.all(userPromises)).filter(Boolean);
 
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = userData.name;
+          userList.forEach(userData => {
+              const userElement = document.createElement('div');
+              userElement.classList.add('user-item');
+              userElement.setAttribute('data-username', userData.sanitized); // Add attribute for real-time updates
 
-                userElement.appendChild(pfpImg);
-                userElement.appendChild(nameSpan);
+              if (currentChatContext.type === 'dm' && currentChatContext.with === userData.name) {
+                  userElement.classList.add('active');
+              }
 
-                userElement.addEventListener('click', () => {
-                    startDirectMessage(userData.name);
-                    closeNav();
-                });
-                dmUserList.appendChild(userElement);
-            });
-        }
-    } catch (error) {
-        console.error("Error populating user list:", error);
-        const errorItem = document.createElement('div');
-        errorItem.textContent = 'Error loading users.';
-        errorItem.classList.add('user-item');
-        dmUserList.appendChild(errorItem);
-    }
+              const presenceIndicator = document.createElement('span');
+              presenceIndicator.classList.add('presence-indicator', userData.status);
+
+              const pfpImg = document.createElement('img');
+              pfpImg.src = userData.pfp;
+              pfpImg.alt = `${userData.name}'s PFP`;
+
+              const nameSpan = document.createElement('span');
+              nameSpan.textContent = userData.name;
+
+              userElement.appendChild(presenceIndicator);
+              userElement.appendChild(pfpImg);
+              userElement.appendChild(nameSpan);
+
+              userElement.addEventListener('click', () => {
+                  startDirectMessage(userData.name);
+                  closeNav();
+              });
+              dmUserList.appendChild(userElement);
+          });
+      } catch (error) {
+          console.error("Error populating user list:", error);
+          const errorItem = document.createElement('div');
+          errorItem.textContent = 'Error loading users.';
+          errorItem.classList.add('user-item');
+          dmUserList.appendChild(errorItem);
+      }
+  }
+
+  function startPresenceListener() {
+      const statusRef = ref(database, 'status');
+      onValue(statusRef, (snapshot) => {
+          if (!snapshot.exists()) return;
+          const statuses = snapshot.val();
+          Object.entries(statuses).forEach(([sanitizedName, status]) => {
+              const userElement = document.querySelector(`.user-item[data-username="${sanitizedName}"]`);
+              if (userElement) {
+                  const indicator = userElement.querySelector('.presence-indicator');
+                  if (indicator) {
+                      indicator.className = `presence-indicator ${status}`;
+                  }
+              }
+          });
+      });
   }
 
   function startDirectMessage(otherUserName) {
@@ -722,6 +717,174 @@ try {
   if(openDmSidebarButton) openDmSidebarButton.addEventListener('click', openNav);
   if(closeDmSidebarButton) closeDmSidebarButton.addEventListener('click', closeNav);
 
+  function showImageUploadModal() {
+    return new Promise((resolve) => {
+      const modal = document.getElementById('image-upload-modal');
+      const closeBtn = document.getElementById('image-upload-close-btn');
+      const cancelBtn = document.getElementById('image-upload-cancel-btn');
+      const sendBtn = document.getElementById('image-upload-send-btn');
+      
+      const uploadArea = document.getElementById('image-upload-area');
+      const fileInput = document.getElementById('image-file-input');
+      const previewContainer = document.getElementById('image-preview-container');
+      const urlInput = document.getElementById('image-url-input');
+      
+      const tabs = document.querySelectorAll('#image-upload-modal .tab-button');
+      const tabContents = document.querySelectorAll('#image-upload-modal .tab-content');
+
+      let activeTab = 'upload-tab';
+      let imageData = null;
+
+      function resetModal() {
+        fileInput.value = '';
+        urlInput.value = '';
+        previewContainer.innerHTML = '';
+        sendBtn.disabled = true;
+        imageData = null;
+      }
+
+      function hideModal(valueToResolve) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        resolve(valueToResolve);
+      }
+
+      // --- Event Listeners for the Modal ---
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          activeTab = tab.dataset.tab;
+          
+          tabContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === activeTab) {
+              content.classList.add('active');
+            }
+          });
+          // Re-validate when switching tabs
+          if (activeTab === 'url-tab') handleUrlInput();
+          else handleFileChange();
+        });
+      });
+
+      closeBtn.onclick = () => hideModal(null);
+      cancelBtn.onclick = () => hideModal(null);
+      sendBtn.onclick = () => hideModal(imageData);
+      modal.onclick = (event) => { if (event.target === modal) hideModal(null); };
+
+      // --- File Upload Logic ---
+      async function handleFileChange() {
+        const file = fileInput.files[0];
+        if (!file) {
+          imageData = null;
+          sendBtn.disabled = true;
+          return;
+        }
+        previewContainer.innerHTML = `<p>Processing image...</p>`;
+        try {
+          const resizedDataUrl = await resizeImageForSending(file);
+          imageData = resizedDataUrl;
+          previewContainer.innerHTML = `<img src="${resizedDataUrl}" alt="Preview"><p>Resized to fit chat.</p>`;
+          sendBtn.disabled = false;
+        } catch (error) {
+          console.error("Image processing error:", error);
+          previewContainer.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+          imageData = null;
+          sendBtn.disabled = true;
+        }
+      }
+      fileInput.onchange = handleFileChange;
+      
+      // Drag and Drop Logic
+      uploadArea.ondragover = (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); };
+      uploadArea.ondragleave = () => uploadArea.classList.remove('dragover');
+      uploadArea.ondrop = (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          fileInput.files = files; // Assign dropped file to the input
+          handleFileChange(); // Trigger the handler
+        }
+      };
+      
+      // --- URL Link Logic ---
+      async function handleUrlInput() {
+        const url = urlInput.value.trim();
+        if (!url) {
+          imageData = null;
+          sendBtn.disabled = true;
+          return;
+        }
+        const isValid = await isValidImageUrl(url);
+        if (isValid) {
+          imageData = url;
+          sendBtn.disabled = false;
+        } else {
+          imageData = null;
+          sendBtn.disabled = true;
+        }
+      }
+      urlInput.oninput = handleUrlInput;
+      
+      // --- Show the Modal ---
+      resetModal();
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  async function resizeImageForSending(file) {
+    const MAX_WIDTH = 512;
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          if (img.width <= MAX_WIDTH) {
+            // If the image is already small enough, just return the original file data
+            return resolve(e.target.result);
+          }
+          
+          // Calculate new height to maintain aspect ratio
+          const aspectRatio = img.height / img.width;
+          const newHeight = Math.round(MAX_WIDTH * aspectRatio);
+          
+          const canvas = document.createElement('canvas');
+          canvas.width = MAX_WIDTH;
+          canvas.height = newHeight;
+          const ctx = canvas.getContext('2d');
+          
+          // Draw the resized image onto the canvas
+          ctx.drawImage(img, 0, 0, MAX_WIDTH, newHeight);
+          
+          // Convert canvas to Base64 Data URL and resolve the promise
+          resolve(canvas.toDataURL(file.type, 0.9)); // 0.9 quality
+        };
+        img.onerror = (err) => reject(new Error("Image could not be loaded."));
+        img.src = e.target.result;
+      };
+      reader.onerror = (err) => reject(new Error("File could not be read."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (imageUrlButton) {
+    imageUrlButton.addEventListener('click', async () => {
+        if (!isAuthenticated) return;
+
+        const imageUrl = await showImageUploadModal();
+
+        if (imageUrl) {
+            messageInput.value = imageUrl;
+            // The isSendingImage flag tells sendMessage to treat the content as an image
+            isSendingImage = true; 
+            sendMessage();
+        }
+    });
+  }
 
   async function isValidImageUrl(url) {
     return new Promise((resolve) => {
@@ -730,17 +893,6 @@ try {
         if (!trimmedUrl.match(/^(https?:\/\/[^\s/$.?#].[^\s]*\.(jpe?g|png|gif|webp)(\?[^\s]*)?$)|(^data:image\/(jpeg|png|gif|webp);base64,)/i)) { resolve(false); return; }
         const img = new Image(); img.onload = () => resolve(true); img.onerror = () => resolve(false); img.src = trimmedUrl;
     });
-  }
-  if (imageUrlButton) {
-    imageUrlButton.addEventListener('click', async () => {
-        if (!isAuthenticated || !messageInput || !imageUrlButton) return;
-        if (isSendingImage) { isSendingImage = false; messageInput.value = ''; messageInput.placeholder = "Enter message"; imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; return; }
-        const url = prompt("Enter the URL of the image you want to send:"); if (url === null || url.trim() === '') { return; }
-        const trimmedUrl = url.trim(); const isValid = await isValidImageUrl(trimmedUrl);
-        if (isValid) { messageInput.value = trimmedUrl; isSendingImage = true; messageInput.placeholder = "Image URL entered. Press Send."; imageUrlButton.innerHTML = '✓'; imageUrlButton.title = "Clear image URL / Send text instead"; if(messageInput) messageInput.focus();
-        } else { showCustomAlert("Invalid image URL. Must be http/https, end with .jpg, .png, .gif, or .webp, and be loadable.", 'Invalid URL'); }
-    });
-    if (messageInput) { messageInput.addEventListener('input', () => { if (isSendingImage && !messageInput.value.startsWith('http') && !messageInput.value.startsWith('data:image')) { isSendingImage = false; messageInput.placeholder = "Enter message"; if (imageUrlButton) { imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }}}); }
   }
   function openImageLightbox(imageUrl) {
     if (imageLightboxModal && lightboxImage) { lightboxImage.src = imageUrl; imageLightboxModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
@@ -786,6 +938,7 @@ try {
       if (imageUrlButton) imageUrlButton.disabled = false;
       loadRecent();
       startLiveListener();
+      startPresenceListener();
     } else { 
       if (nameInput) { nameInput.value = userName || ''; nameInput.disabled = false; }
       if (setNameButton) setNameButton.textContent = userName ? `Login as ${userName}` : "Set Name / Register";
@@ -814,6 +967,19 @@ try {
     }
   }
 
+  function manageUserPresence(sanitizedName) {
+    const userStatusRef = ref(database, `status/${sanitizedName}`);
+
+    // Set the user's status to 'online' when they connect
+    set(userStatusRef, 'online');
+
+    // Use onDisconnect to set their status to 'offline' when they close the browser
+    onDisconnect(userStatusRef).set('offline');
+
+    // Return the reference so we can manually set to 'offline' on logout
+    return userStatusRef;
+  }
+
   async function handleAuthentication() {
     const enteredName = nameInput.value.trim(); if (!enteredName) { showCustomAlert("Please enter a name.", 'No Name'); return; }
     const sanitizedName = sanitizeFirebaseKey(enteredName); const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
@@ -824,7 +990,7 @@ try {
         const password = await showCustomPrompt(`User "${enteredName}" exists. Enter password to login:`, 'Login');
         if (!password) return;
         const inputHash = await hashPassword(password);
-        if (inputHash === storedHash) { userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; showCustomAlert(`Login successful for ${userName}!`, 'Login Successful');
+        if (inputHash === storedHash) { userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; userStatusRef = manageUserPresence(sanitizedName); showCustomAlert(`Login successful for ${userName}!`, 'Login Successful');
         } else { showCustomAlert("Incorrect password.", 'Login Failed'); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
       } else { 
         const newPassword = await showCustomPrompt(`User "${enteredName}" not found. Create a password to register:`, 'Create Password');
@@ -833,7 +999,7 @@ try {
         if (!confirmPassword) return;
         if (newPassword === confirmPassword) { const newHashedPassword = await hashPassword(newPassword);
           await set(userCredRef, { hashedPassword: newHashedPassword });
-          userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; showCustomAlert(`User "${userName}" registered successfully!`, 'Registration Successful');
+          userName = enteredName; localStorage.setItem(localStorageNameKey, userName); localStorage.setItem(localStorageAuthKey, 'true'); isAuthenticated = true; userStatusRef = manageUserPresence(sanitizedName); showCustomAlert(`User "${userName}" registered successfully!`, 'Registration Successful');
         } else { showCustomAlert("Passwords do not match. Registration failed.", 'Registration Failed'); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
       }
     } catch (error) { console.error("Authentication error:", error); showCustomAlert("An error occurred during authentication. Check console.", 'Authentication Error'); isAuthenticated = false; localStorage.removeItem(localStorageAuthKey); }
@@ -844,6 +1010,7 @@ try {
     if (isAuthenticated) { 
       userName = null; 
       isAuthenticated = false; 
+      if (userStatusRef) set(userStatusRef, 'offline');
       localStorage.removeItem(localStorageNameKey); 
       localStorage.removeItem(localStorageAuthKey); 
       if(nameInput) nameInput.value = ''; 
@@ -922,7 +1089,7 @@ try {
               const imgElement = document.createElement('img');
               imgElement.src = msg.imageUrl;
               imgElement.alt = `${msg.name}'s image`;
-              imgElement.classList.add('chat-image');
+              imgElement.classList.add('chat-image'); 
               imgElement.addEventListener('click', () => openImageLightbox(msg.imageUrl));
               imgElement.onerror = function() {
                   const errorText = document.createElement('span');
@@ -934,7 +1101,8 @@ try {
               messageBody.appendChild(imgElement);
           } else {
               const textSpan = document.createElement('span');
-              textSpan.innerHTML = md.renderInline(msg.text || '');
+              // Use the new formatter function
+              textSpan.innerHTML = formatMessageWithMentions(msg, userName);
               messageBody.appendChild(textSpan);
           }
 
@@ -953,11 +1121,29 @@ try {
           const p = document.createElement('p');
           if (msg.name === userName) p.classList.add('same-sender');
 
+          const pfpContainer = document.createElement('div');
+          pfpContainer.classList.add('pfp-container');
+
+          // 2. Create the PFP image
           const pfpImg = document.createElement('img');
           pfpImg.classList.add('message-pfp');
           pfpImg.src = await getPfpDataForUser(msg.name);
           pfpImg.setAttribute('data-pfp-for-user', msg.name);
-          p.appendChild(pfpImg);
+          
+          // 3. Get the user's status
+          const sanitizedName = sanitizeFirebaseKey(msg.name);
+          const statusRef = ref(database, `status/${sanitizedName}`);
+          const statusSnapshot = await get(statusRef);
+          const userStatus = statusSnapshot.exists() ? statusSnapshot.val() : 'offline';
+
+          // 4. Create the indicator dot
+          const presenceIndicator = document.createElement('span');
+          presenceIndicator.classList.add('presence-indicator', userStatus);
+          
+          // 5. Append everything in the correct order
+          pfpContainer.appendChild(pfpImg);
+          pfpContainer.appendChild(presenceIndicator);
+          p.appendChild(pfpContainer); // Add the container to the message
 
           const contentWrapper = document.createElement('div');
           contentWrapper.classList.add('message-content-wrapper');
@@ -1058,11 +1244,29 @@ try {
       }
       if (!prepend) window._lastTs = ts;
 
+      const pfpContainer = document.createElement('div');
+      pfpContainer.classList.add('pfp-container');
+
+      // 2. Create the PFP image
       const pfpImg = document.createElement('img');
       pfpImg.classList.add('message-pfp');
       pfpImg.src = await getPfpDataForUser(msg.name);
       pfpImg.setAttribute('data-pfp-for-user', msg.name);
-      p.appendChild(pfpImg);
+      
+      // 3. Get the user's status
+      const sanitizedName = sanitizeFirebaseKey(msg.name);
+      const statusRef = ref(database, `status/${sanitizedName}`);
+      const statusSnapshot = await get(statusRef);
+      const userStatus = statusSnapshot.exists() ? statusSnapshot.val() : 'offline';
+
+      // 4. Create the indicator dot
+      const presenceIndicator = document.createElement('span');
+      presenceIndicator.classList.add('presence-indicator', userStatus);
+      
+      // 5. Append everything in the correct order
+      pfpContainer.appendChild(pfpImg);
+      pfpContainer.appendChild(presenceIndicator);
+      p.appendChild(pfpContainer); // Add the container to the message
 
       const contentWrapper = document.createElement('div');
       contentWrapper.classList.add('message-content-wrapper');
@@ -1118,9 +1322,12 @@ try {
           };
           messageBody.appendChild(imgElement);
       } else {
+          // --- START: THIS IS THE CORRECTED BLOCK ---
           const textSpan = document.createElement('span');
-          textSpan.innerHTML = md.renderInline(msg.text || '');
+          // Use the formatter function that handles mentions
+          textSpan.innerHTML = formatMessageWithMentions(msg, userName);
           messageBody.appendChild(textSpan);
+          // --- END: THIS IS THE CORRECTED BLOCK ---
       }
       contentWrapper.appendChild(messageBody);
 
@@ -1130,6 +1337,17 @@ try {
       if (prepend) chatbox.insertBefore(wrapper, chatbox.firstChild);
       else chatbox.appendChild(wrapper);
   };
+
+  if (chatbox) {
+    chatbox.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('mention') && target.dataset.mentionedUser) {
+            event.stopPropagation(); // Prevent other click events from firing
+            const mentionedUserName = target.dataset.mentionedUser;
+            showBioModal(mentionedUserName);
+        }
+    });
+  }
 
   const loadRecent = async () => { 
     if (!isAuthenticated || !chatbox) return;
@@ -1222,15 +1440,49 @@ try {
     chatbox.scrollTop = (afterHeight - beforeHeight); 
   });
 
+  function formatMessageWithMentions(msg, currentUserName) {
+    if (!msg.text) return '';
+
+    let formattedText = md.renderInline(msg.text); // Use markdown-it first
+
+    if (msg.mentions && msg.mentions.length > 0) {
+        msg.mentions.forEach(mentionedUser => {
+            const mentionRegex = new RegExp(`@${mentionedUser}`, 'g');
+            const isSelfMention = mentionedUser === currentUserName;
+            const mentionClass = isSelfMention ? 'mention highlight' : 'mention';
+            const replacement = `<span class="${mentionClass}" data-mentioned-user="${mentionedUser}">@${mentionedUser}</span>`;
+            
+            formattedText = formattedText.replace(mentionRegex, replacement);
+        });
+    }
+
+    return formattedText;
+  }
+
   const sendMessage = () => {
     if (!isAuthenticated) { showCustomAlert("You must be authenticated to send messages.", 'Authentication Required'); return; }
     const content = messageInput.value.trim(); if (!userName) { return showCustomAlert("Error: User name not set.", 'Error'); }
     if (!content) { return showCustomAlert("Please enter a message or image URL.", 'No Message'); }
+
     let messageData;
     const isBase64Image = content.startsWith('data:image');
 
-    if (isSendingImage || isBase64Image) { messageData = { name: userName, type: 'image', imageUrl: content, timestamp: new Date().toISOString() };
-    } else { messageData = { name: userName, type: 'text', text: content, timestamp: new Date().toISOString() }; }
+    if (isSendingImage || isBase64Image) {
+        messageData = { name: userName, type: 'image', imageUrl: content, timestamp: new Date().toISOString() };
+    } else {
+        // --- MENTION PARSING LOGIC ---
+        const mentionRegex = /@([a-zA-Z0-9_.]+)/g;
+        const mentions = [...content.matchAll(mentionRegex)].map(match => match[1]);
+        
+        messageData = { 
+            name: userName, 
+            type: 'text', 
+            text: content, 
+            timestamp: new Date().toISOString(),
+            ...(mentions.length > 0 && { mentions: mentions }) // Add mentions array if any are found
+        };
+        // --- END MENTION LOGIC ---
+    }
     
     const chatRef = currentChatContext.type === 'dm' ? ref(database, `dms/${currentChatContext.dmId}`) : messagesRef;
     
@@ -1248,7 +1500,7 @@ try {
     if (storedUserName) { if(nameInput) nameInput.value = storedUserName; userName = storedUserName;
         if (sessionInitiallyActive) { const sanitizedName = sanitizeFirebaseKey(storedUserName); const userCredRef = ref(database, `user_credentials/${sanitizedName}`);
             try { const snapshot = await get(userCredRef);
-                if (snapshot.exists()) { isAuthenticated = true; }
+                if (snapshot.exists()) { isAuthenticated = true; userStatusRef = manageUserPresence(sanitizeFirebaseKey(storedUserName)); }
                 else { showCustomAlert(`User "${storedUserName}" from your previous session was not found. Please log in or register again.`, 'Session Expired'); localStorage.removeItem(localStorageNameKey); localStorage.removeItem(localStorageAuthKey); userName = null; isAuthenticated = false; if(nameInput) nameInput.value = '';}
             } catch (dbError) { console.error("Error checking user credentials during session validation:", dbError); showCustomAlert("Error validating session. Please try logging in.", 'Session Error'); localStorage.removeItem(localStorageAuthKey); isAuthenticated = false; }
         } else { isAuthenticated = false; }

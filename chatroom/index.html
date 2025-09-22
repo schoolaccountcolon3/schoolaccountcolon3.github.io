@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="/styles/style.css">
 <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
 <script type="module" src="main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/theme.js"></script>
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <style>
@@ -103,6 +104,47 @@
   <div id="image-lightbox-modal" class="modal">
     <span class="close-button">×</span>
     <img src="" alt="Enlarged image" id="lightbox-image">
+  </div>
+
+  <div id="image-upload-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Send an Image</h3>
+        <span class="close-button" id="image-upload-close-btn">&times;</span>
+      </div>
+
+      <div class="modal-body">
+        <!-- Tab Navigation -->
+        <div class="tab-buttons">
+          <button class="tab-button active" data-tab="upload-tab">Upload File</button>
+          <button class="tab-button" data-tab="url-tab">From URL</button>
+        </div>
+
+        <!-- Tab Content: Upload File -->
+        <div id="upload-tab" class="tab-content active">
+          <div id="image-upload-area">
+            <input type="file" id="image-file-input" accept="image/png, image/jpeg, image/gif, image/webp">
+            <label for="image-file-input">
+              <strong>Choose a file</strong> or drag it here.
+            </label>
+          </div>
+          <div id="image-preview-container">
+            <!-- Image preview will be generated here -->
+          </div>
+        </div>
+
+        <!-- Tab Content: From URL -->
+        <div id="url-tab" class="tab-content">
+          <p>Enter the public URL of an image.</p>
+          <input type="text" id="image-url-input" placeholder="https://example.com/image.png">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="image-upload-cancel-btn" class="modal-button secondary">Cancel</button>
+        <button id="image-upload-send-btn" class="modal-button" disabled>Send</button>
+      </div>
+    </div>
   </div>
 
   <div id="custom-alert-modal" class="modal">
