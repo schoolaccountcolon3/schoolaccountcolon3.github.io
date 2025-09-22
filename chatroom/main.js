@@ -860,13 +860,37 @@ try {
   window._lastTs = null;
   const snapToMsg = snap => ({ key: snap.key, ...snap.val() });
 
+  function formatTimestamp(timestamp) {
+    const now = new Date();
+    const msgDate = new Date(timestamp);
+
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfYesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+
+    const timeFormat = { hour: 'numeric', minute: '2-digit' };
+    const dateFormat = { month: '2-digit', day: '2-digit', year: 'numeric' };
+
+    if (msgDate >= startOfToday) {
+      // Today
+      return `Today at ${msgDate.toLocaleTimeString([], timeFormat)}`;
+    } else if (msgDate >= startOfYesterday) {
+      // Yesterday
+      return `Yesterday at ${msgDate.toLocaleTimeString([], timeFormat)}`;
+    } else {
+      // Older than yesterday
+      const formattedDate = msgDate.toLocaleDateString([], dateFormat);
+      const formattedTime = msgDate.toLocaleTimeString([], timeFormat);
+      return `${formattedDate} ${formattedTime}`;
+    }
+  }
+
   const displayMessage = async (msg, { prepend = false } = {}) => {
       if (!isAuthenticated || !msg || !chatbox) return;
       if (displayedKeys.has(msg.key)) return;
       displayedKeys.add(msg.key);
 
       const ts = new Date(msg.timestamp);
-      const formatted = ts.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+      const formatted = formatTimestamp(msg.timestamp);
 
       let shouldGroupWithPrev = false;
       let shouldGroupWithNext = false;
