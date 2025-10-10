@@ -16,6 +16,12 @@
       <!-- Theme Switcher -->
       <div id="styleSwitcher"></div>
 
+      <!-- Game Search Bar (moved to side)
+      <div id="game-search-bar" class="side-search-bar">
+         <input type="text" id="game-search-input" placeholder="Search games..." autocomplete="off" />
+         <i class="fas fa-search"></i>
+      </div>  -->
+
       <!-- Main Content -->
       <div class="container">
          <h1 class="main-title">
@@ -184,6 +190,27 @@
             </div>
          </div>
 
+          <div class="dropdown">
+            <div class="dropdown-header">
+               <i class="fas fa-question"></i>
+               Random Stuff <span class="arrow">&#9660;</span>
+            </div>
+            <div class="dropdown-content">
+               <div class="game-item">
+                  <i class="fas fa-music"></i>
+                  <a href="https://jummb.us/">JummBox</a>
+               </div>
+               <div class="game-item">
+                  <i class="fas fa-paintbrush"></i>
+                  <a href="https://libresprite.github.io/online/">Aesprite</a>
+               </div>
+               <div class="game-item">
+                  <i class="fas fa-brain"></i>
+                  <a href="https://aistudio.google.com/u/1/prompts/new_chat">Generative AI (Use a personal Google account)</a>
+               </div>
+            </div>
+         </div>
+
          <!-- Other Games Section -->
          <div class="games-section">
             <h2 class="section-title">
@@ -208,10 +235,6 @@
                   <a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a>
                </div>
                <div class="game-item">
-                  <i class="fas fa-brain"></i>
-                  <a href="https://app.nextchat.dev/">Generative AI</a>
-               </div>
-               <div class="game-item">
                   <i class="fas fa-comments"></i>
                   <a href="./chatroom/index.html">Chatroom</a>
                </div>
@@ -223,6 +246,9 @@
                   <i class="fas fa-lock-open"></i>
                   <a href="https://googledrive.space.space.desmos.lol.cdn.cloudflare.net">Unblocker</a>
                </div>
+               <div class="game-item">
+                  <i class="fas fa-car"></i>
+                  <a href="https://jasongamesdev.github.io/polytrack/">PolyTrack</a>
             </div>
          </div>
 
@@ -330,7 +356,7 @@
            win.document.body.appendChild(iframe);
          }
 
-         // Enhanced dropdown functionality
+         // Enhanced dropdown functionality (auto open on search)
          document.querySelectorAll('.dropdown').forEach(dropdown => {
            const header = dropdown.querySelector('.dropdown-header');
            const content = dropdown.querySelector('.dropdown-content');
@@ -350,16 +376,51 @@
                });
              }
            });
+
+           // Expose a method to open the dropdown programmatically
+           dropdown.openDropdown = function() {
+             isOpen = true;
+             content.style.maxHeight = content.scrollHeight + 'px';
+             dropdown.classList.add('open');
+           };
+           dropdown.closeDropdown = function() {
+             isOpen = false;
+             content.style.maxHeight = '0';
+             dropdown.classList.remove('open');
+           };
          });
 
-         const combinedLink = document.getElementById('combinedLink');
-         combinedLink.addEventListener('click', (event) => {
-           event.preventDefault();
-           const flashLink = "https://flash.fsh.plus/";
-           const gamesLink = "https://github.com/BinBashBanana/gstore/tree/master";
+         // Game Search Functionality with auto-open dropdowns
+         const searchInput = document.getElementById('game-search-input');
+         searchInput.addEventListener('input', function () {
+           const query = this.value.trim().toLowerCase();
 
-           const linkToOpen = event.offsetX < combinedLink.offsetWidth / 7 ? flashLink : gamesLink;
-           window.open(linkToOpen, '_blank');
+           document.querySelectorAll('.dropdown, .games-section').forEach(section => {
+             let anyVisible = false;
+             section.querySelectorAll('.game-item').forEach(item => {
+               const text = item.textContent.toLowerCase();
+               if (query === "" || text.includes(query)) {
+                 item.style.display = "";
+                 anyVisible = true;
+               } else {
+                 item.style.display = "none";
+               }
+             });
+             // Hide entire dropdown if no items match (for dropdowns)
+             const dropdownContent = section.querySelector('.dropdown-content');
+             if (dropdownContent) {
+               dropdownContent.style.display = anyVisible ? "" : "none";
+               // Auto-open dropdowns if searching
+               const dropdown = section;
+               if (typeof dropdown.openDropdown === "function") {
+                 if (query && anyVisible) {
+                   dropdown.openDropdown();
+                 } else if (!query) {
+                   dropdown.closeDropdown();
+                 }
+               }
+             }
+           });
          });
       </script>
    </body>
