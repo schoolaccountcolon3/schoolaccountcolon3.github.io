@@ -9,9 +9,13 @@
       <script src="./theme.js"></script>
       <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
       <!-- Font Awesome for icons -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/all.css"/>
    </head>
    <body>
+            <!-- Popup Notification -->
+               <div id="word-popup" style="display:none;position:fixed;right:32px;bottom:-300px;z-index:9999;transition:bottom 0.5s cubic-bezier(.4,2,.6,1);padding:0;margin:0;background:none;box-shadow:none;border-radius:18px 18px 0 0;">
+                  <img id="word-popup-img" src="" alt="Popup" style="max-width:220px;max-height:180px;cursor:pointer;display:block;" />
+               </div>
       <div id="particles-js"></div>
       <!-- Theme Switcher -->
       <div id="styleSwitcher"></div>
@@ -235,6 +239,10 @@
                   <a href="https://sparticle999.github.io/SpaceCompany/">Space Colony</a>
                </div>
                <div class="game-item">
+                  <i class="fas fa-pickaxe"></i>
+                  <a href="https://gtst1.github.io/dogeminer2/">Dogeminer 2</a>
+               </div>
+               <div class="game-item">
                   <i class="fas fa-comments"></i>
                   <a href="./chatroom/index.html">Chatroom</a>
                </div>
@@ -263,6 +271,57 @@
 
       <!-- JavaScript -->
       <script>
+               // Popup trigger words and images
+                     const popupWords = {
+                        'test': {
+                           img: '/img/test.png'
+                        }
+                        // Add more words here: 'word': { img: '...' }
+                     };
+
+               // Listen for typing anywhere on the main page
+               let popupBuffer = '';
+               document.addEventListener('keydown', function(e) {
+                  // Ignore if typing in an input/textarea
+                  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.isContentEditable)) return;
+                  // Only allow a-z, 0-9, space, backspace
+                  if (e.key.length === 1 && /[a-zA-Z0-9 ]/.test(e.key)) {
+                     popupBuffer += e.key.toLowerCase();
+                     if (popupBuffer.length > 20) popupBuffer = popupBuffer.slice(-20);
+                  } else if (e.key === 'Backspace') {
+                     popupBuffer = popupBuffer.slice(0, -1);
+                  } else {
+                     return;
+                  }
+                  // Check for any trigger word at the end
+                  for (const word in popupWords) {
+                     if (popupBuffer.endsWith(word)) {
+                        showWordPopup(word);
+                        popupBuffer = '';
+                        break;
+                     }
+                  }
+               });
+
+                     function showWordPopup(word) {
+                        const popup = document.getElementById('word-popup');
+                        const img = document.getElementById('word-popup-img');
+                        img.src = popupWords[word].img;
+                        popup.style.display = '';
+                        setTimeout(() => {
+                           popup.style.bottom = '0px';
+                        }, 10);
+                     }
+
+               // Hide popup on image click
+                     document.addEventListener('DOMContentLoaded', function() {
+                        const popup = document.getElementById('word-popup');
+                        const img = document.getElementById('word-popup-img');
+                        img.addEventListener('click', function() {
+                           popup.style.bottom = '-300px';
+                           setTimeout(() => { popup.style.display = 'none'; }, 500);
+                        });
+                     });
          // Initialize particles.js with enhanced configuration
          particlesJS('particles-js', {
            particles: {
