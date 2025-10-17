@@ -59,12 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
             image.onerror = () => { image.src = 'placeholder.png'; };
 
             const link = document.createElement('a');
+            // default to proxied URL; we'll store both URLs on the element for easy toggling
             link.href = createProxiedURL(mod.iframeLink);
+            link.dataset.proxied = createProxiedURL(mod.iframeLink);
+            link.dataset.original = mod.iframeLink;
             link.textContent = mod.modName;
-            link.target = '_blank';
-
+            link.className = 'mod-link';
             item.appendChild(image);
-            item.appendChild(link);
+            const linkContainer = document.createElement('div');
+            linkContainer.appendChild(link);
+            item.appendChild(linkContainer);
             modsGrid.appendChild(item);
 
             imageObserver.observe(image);
@@ -94,6 +98,29 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error loading or parsing the CSV file:', error);
             modsGrid.innerHTML = `<p class="error">Failed to load mod data. Please check the console.</p>`;
         }
+    }
+
+    // add logic for the global "original toggle" checkbox
+    const originalToggle = document.getElementById('original-toggle');
+    function updateLinksToOriginal(openOriginal) {
+        const links = modsGrid.querySelectorAll('.mod-link');
+        links.forEach(a => {
+            if (openOriginal) {
+                a.href = a.dataset.original || a.href;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+            } else {
+                a.href = a.dataset.proxied || a.href;
+                a.removeAttribute('target');
+                a.removeAttribute('rel');
+            }
+        });
+    }
+
+    if (originalToggle) {
+        originalToggle.addEventListener('change', (e) => {
+            updateLinksToOriginal(e.target.checked);
+        });
     }
 
     searchBar.addEventListener('input', (e) => {
