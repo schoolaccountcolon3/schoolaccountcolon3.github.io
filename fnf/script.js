@@ -9,9 +9,9 @@ function encodeUltravioletURL(url) {
     return encodeURIComponent(encoded);
 }
 
-function createProxiedURL(originalUrl, proxyDomain = 'https://0hgmbni0.space.stayinschooleducation.org.cdn.cloudflare.net') {
+function createProxiedURL(originalUrl, proxyDomain = 'https://youcantypeanythinghere.hu.stayinschooleducation.org.cdn.cloudflare.net') {
     const encoded = encodeUltravioletURL(originalUrl);
-    return `${proxyDomain}/@/space/${encoded}`;
+    return `${proxyDomain}/network/service/${encoded}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,6 +75,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Robust CSV parser that handles quoted fields and escaped quotes ("")
+    function parseCSV(text) {
+        const rows = [];
+        let cur = '';
+        let row = [];
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+
+            if (ch === '"') {
+                // If we're in quotes and next char is also a quote, it's an escaped quote
+                if (inQuotes && text[i + 1] === '"') {
+                    cur += '"';
+                    i++; // skip the next quote
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (ch === ',' && !inQuotes) {
+                row.push(cur);
+                cur = '';
+            } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+                // Handle CRLF and lone CR or LF
+                row.push(cur);
+                cur = '';
+                rows.push(row);
+                row = [];
+
+                // if CRLF, skip the LF after CR
+                if (ch === '\r' && text[i + 1] === '\n') {
+                    i++;
+                }
+            } else {
+                cur += ch;
+            }
+        }
+
+        // push remaining
+        if (cur !== '' || row.length > 0) {
+            row.push(cur);
+            rows.push(row);
+        }
+
+        // Trim possible BOM from first cell
+        if (rows.length && rows[0].length && typeof rows[0][0] === 'string') {
+            rows[0][0] = rows[0][0].replace(/^\uFEFF/, '');
+        }
+
+        return rows;
+    }
+
     async function loadCSV() {
         try {
             const response = await fetch('fnf_mods_combined.csv');
@@ -83,13 +134,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const csvData = await response.text();
 
-            const rows = csvData.trim().split('\n').slice(1);
-            allMods = rows.map(row => {
-                const columns = row.split(',');
+            // Use robust CSV parser to handle quoted fields
+            const parsed = parseCSV(csvData.trim());
+
+            // If there is a header row, skip it. Otherwise use all rows.
+            const startIndex = parsed.length > 0 && parsed[0].some(cell => /mod/i.test(cell) || /iframe/i.test(cell)) ? 1 : 0;
+
+            allMods = parsed.slice(startIndex).map(columns => {
+                // columns may be shorter; default to empty strings
+                const [modName = '', iframeLink = '', imageUrl = ''] = columns;
                 return {
-                    modName: columns[0],
-                    iframeLink: columns[1],
-                    imageUrl: columns[2]
+                    modName: String(modName).trim(),
+                    iframeLink: String(iframeLink).trim(),
+                    imageUrl: String(imageUrl).trim()
                 };
             }).filter(mod => mod.modName);
 
