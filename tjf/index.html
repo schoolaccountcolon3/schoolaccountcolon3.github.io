@@ -1,4 +1,13 @@
 <head>
+  <script>
+    (function(){
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect != location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
   <title>Loading...</title>
   <link rel="icon" href="https://cdn.jsdelivr.net/gh/mercuryworkshop/scramjet-app@latest/public/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,7 +28,7 @@
         <h4 style="margin:auto;">WISP Server</h4>
         <br>
         <form style="margin:auto;"id="wispInput">
-          <input id="websocket" type="text" placeholder="wss://gointospace.app/wisp/" value="wss://gointospace.app/wisp/">
+          <input id="websocket" type="text" placeholder="wss://girlspreples.org/w" value="wss://girlspreples.org/wi/">
           <button type="submit">Set WISP</button>
         </form>
       <br>
@@ -180,7 +189,7 @@
 
     function getWispUrl() {
       const wisp = document.getElementById("websocket").value.trim();
-      const defaultWisp = "wss://gointospace.app/wisp/";
+      const defaultWisp = "wss://girlspreples.org/wi/";
       return wisp || defaultWisp;
     }
 
@@ -229,7 +238,7 @@
       return template.replace("%s", encodeURIComponent(input));
     }
 
-    const currentWisp = localStorage.getItem('selectedWisp') || "wss://gointospace.app/wisp/";
+    const currentWisp = localStorage.getItem('selectedWisp') || "wss://girlspreples.org/wi/";
     const currentTransport = localStorage.getItem('selectedTransport') || "epoxy";
     const currentTheme = localStorage.getItem('selectedTheme') || "default";
     const currentSearchEngine = localStorage.getItem('selectedSearchEngine') || "brave";
