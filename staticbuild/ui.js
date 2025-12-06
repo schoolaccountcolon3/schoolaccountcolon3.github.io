@@ -16,9 +16,9 @@ const { ScramjetController } = $scramjetLoadController();
 
 const ScramJet = new ScramjetController({
 	files: {
-		wasm: "./scram/scramjet.wasm.wasm",
-		all: "./scram/scramjet.all.js",
-		sync: "./scram/scramjet.sync.js",
+		wasm: "/staticbuild/scram/scramjet.wasm.wasm",
+		all: "/staticbuild/scram/scramjet.all.js",
+		sync: "/staticbuild/scram/scramjet.sync.js",
 	},
 	flags: {
 		rewriterLogs: false,
@@ -31,8 +31,8 @@ const ScramJet = new ScramjetController({
 ScramJet.init();
 navigator.serviceWorker.register("./sw.js");
 
-const connection = new BareMux.BareMuxConnection("./baremux/worker.js");
-connection.setTransport("./epoxy/index.mjs", [{
+const connection = new BareMux.BareMuxConnection("/staticbuild/baremux/worker.js");
+connection.setTransport("/staticbuild/epoxy/index.mjs", [{
 	wisp: "wss://girlspreples.org/wi/"
 }]);
 
