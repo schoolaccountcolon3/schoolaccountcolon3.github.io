@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>def google classroom [TUI]</title>
+      <link rel="icon" type="image/png" href="./favicon.png" />
+      <link rel="stylesheet" href="./styles/style.css" />
+      <script src="./theme.js"></script>
+      <style>
+         /* TUI-specific styles */
+         body {
+            font-family: 'Courier New', 'Consolas', 'Monaco', 'Lucida Console', monospace;
+            background-color: var(--color-bg);
+            color: var(--color-fg);
+            margin: 0;
+            padding: 20px 20px 20px 2px;
+            overflow-x: auto;
+         }
+
+         #particles-js {
+            display: none; /* Hide particles in TUI mode */
+         }
+
+         .tui-container {
+            max-width: 1000px;
+            margin: 0;
+            background-color: var(--color-bg);
+            color: var(--color-fg);
+            padding: 2px;
+         }
+
+         .tui-window {
+            border: none;
+            background-color: var(--color-bg);
+            padding: 1px;
+            margin-bottom: 2px;
+         }
+
+         .tui-header {
+            background-color: var(--color-card-bg);
+            color: var(--color-fg);
+            padding: 1px 2px;
+            border-bottom: 1px solid var(--color-fg);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+
+         .tui-content {
+            padding: 1px 2px;
+            background-color: var(--color-bg);
+         }
+
+         .tui-title {
+            text-align: center;
+            padding: 2px 0;
+            margin: 2px 0;
+            font-weight: bold;
+            border-bottom: 1px double var(--color-fg);
+            border-top: 1px double var(--color-fg);
+         }
+
+         .tui-menu-item {
+            padding: 0 2px;
+            margin: 0;
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+            color: var(--color-fg);
+            background-color: transparent;
+            transition: background-color 0.1s, color 0.1s;
+            position: relative;
+         }
+
+         .tui-menu-item::before {
+            content: ' ';
+            display: inline-block;
+            width: 2ch;
+         }
+
+         .tui-menu-item:hover,
+         .tui-menu-item.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-menu-item.selected::before {
+            content: '▶';
+            color: var(--color-primary);
+         }
+
+         .tui-menu-item.focused::before {
+            content: '▶';
+         }
+
+         .tui-menu-item.focused.selected::before {
+            content: '▶';
+         }
+
+         .tui-section-header {
+            padding: 1px 2px;
+            margin: 2px 0 1px 0;
+            font-weight: bold;
+            background-color: var(--color-card-bg);
+            border-left: 2px solid var(--color-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+
+         .tui-section-header:hover,
+         .tui-section-header.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-section-header .arrow {
+            font-family: monospace;
+         }
+
+         .tui-section-content {
+            margin-left: 4px;
+            border-left: 1px solid var(--color-fg);
+            padding-left: 2px;
+            display: none;
+         }
+
+         .tui-section-content.open {
+            display: block;
+         }
+
+         .tui-submenu {
+            margin-left: 2px;
+         }
+
+         .tui-submenu-item {
+            padding: 0 2px;
+            margin: 0;
+            cursor: pointer;
+            display: block;
+            text-decoration: none;
+            color: var(--color-fg);
+            background-color: transparent;
+            transition: background-color 0.1s, color 0.1s;
+            position: relative;
+         }
+
+         .tui-submenu-item::before {
+            content: '  ';
+            display: inline-block;
+            width: 2ch;
+         }
+
+         .tui-submenu-item:hover,
+         .tui-submenu-item.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-submenu-item.focused::before {
+            content: '▶';
+         }
+
+         .tui-submenu-item.featured {
+            border-left: 2px solid var(--color-primary);
+            padding-left: 4px;
+         }
+
+         .tui-submenu-item.featured::before {
+            content: '★';
+         }
+
+         .tui-submenu-item.featured.focused::before {
+            content: '▶';
+         }
+
+         .tui-help {
+            padding: 2px;
+            margin-top: 4px;
+            border-top: 1px solid var(--color-fg);
+            font-size: 0.9em;
+            color: var(--color-fg-muted, #aaa);
+            text-align: center;
+         }
+
+         .tui-separator {
+            border-top: 1px solid var(--color-fg);
+            margin: 1px 0;
+         }
+
+         /* Theme section - distinct styling */
+         .tui-theme-section {
+            margin: 4px 0;
+            border: 2px double var(--color-fg);
+            background-color: var(--color-card-bg);
+            padding: 2px;
+         }
+
+         .tui-theme-header {
+            padding: 1px 2px;
+            margin: 0;
+            font-weight: bold;
+            background-color: var(--color-bg);
+            border-bottom: 1px solid var(--color-fg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+
+         .tui-theme-header:hover,
+         .tui-theme-header.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-theme-header .arrow {
+            font-family: monospace;
+         }
+
+         .tui-theme-content {
+            padding: 2px;
+            display: none;
+            background-color: var(--color-bg);
+         }
+
+         .tui-theme-content.open {
+            display: block;
+         }
+
+         .tui-theme-item {
+            padding: 1px 2px;
+            margin: 1px 0;
+            cursor: pointer;
+            display: block;
+            background-color: var(--color-card-bg);
+            border-left: 1px solid var(--color-fg);
+            padding-left: 4px;
+            transition: background-color 0.1s, color 0.1s;
+         }
+
+         .tui-theme-item::before {
+            content: '  ';
+            display: inline-block;
+            width: 2ch;
+         }
+
+         .tui-theme-item:hover,
+         .tui-theme-item.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-theme-item.focused::before {
+            content: '▶';
+         }
+
+         .tui-theme-item.selected {
+            border-left: 2px solid var(--color-primary);
+            font-weight: bold;
+         }
+
+         .tui-theme-item.selected::before {
+            content: '●';
+         }
+
+         .tui-theme-item.selected.focused::before {
+            content: '▶';
+         }
+
+         .tui-theme-link {
+            padding: 1px 2px;
+            margin: 1px 0;
+            display: block;
+            color: var(--color-link);
+            text-decoration: none;
+            border-left: 1px solid var(--color-fg);
+            padding-left: 4px;
+            transition: background-color 0.1s, color 0.1s;
+         }
+
+         .tui-theme-link::before {
+            content: '  ';
+            display: inline-block;
+            width: 2ch;
+         }
+
+         .tui-theme-link:hover,
+         .tui-theme-link.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-theme-link.focused::before {
+            content: '▶';
+         }
+
+         /* TUI Modal styles */
+         .tui-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+         }
+
+         .tui-modal-overlay.open {
+            display: flex;
+         }
+
+         .tui-modal-window {
+            background-color: var(--color-card-bg);
+            border: 2px double var(--color-fg);
+            padding: 2px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: tuiModalFadeIn 0.2s ease-out;
+         }
+
+         @keyframes tuiModalFadeIn {
+            from {
+               opacity: 0;
+               transform: scale(0.95);
+            }
+            to {
+               opacity: 1;
+               transform: scale(1);
+            }
+         }
+
+         .tui-modal-header {
+            padding: 2px 4px;
+            border-bottom: 1px solid var(--color-fg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--color-bg);
+            font-weight: bold;
+         }
+
+         .tui-modal-title {
+            margin: 0;
+            color: var(--color-fg);
+            font-size: 1em;
+         }
+
+         .tui-modal-close {
+            background: none;
+            border: 1px solid var(--color-fg);
+            color: var(--color-fg);
+            font-size: 1em;
+            cursor: pointer;
+            padding: 1px 4px;
+            font-family: monospace;
+            transition: background-color 0.1s, color 0.1s;
+         }
+
+         .tui-modal-close:hover,
+         .tui-modal-close.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-modal-content {
+            padding: 2px 4px;
+            background-color: var(--color-bg);
+         }
+
+         .tui-modal-item {
+            padding: 1px 2px;
+            margin: 1px 0;
+            cursor: pointer;
+            display: block;
+            background-color: var(--color-card-bg);
+            border-left: 1px solid var(--color-fg);
+            padding-left: 4px;
+            transition: background-color 0.1s, color 0.1s;
+         }
+
+         .tui-modal-item::before {
+            content: '  ';
+            display: inline-block;
+            width: 2ch;
+         }
+
+         .tui-modal-item:hover,
+         .tui-modal-item.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-modal-item.focused::before {
+            content: '▶';
+         }
+
+         .tui-modal-item a {
+            color: var(--color-fg);
+            text-decoration: none;
+            display: block;
+         }
+
+         .tui-modal-item:hover a,
+         .tui-modal-item.focused a {
+            color: var(--color-bg);
+         }
+
+         .tui-button {
+            display: block;
+            width: 100%;
+            padding: 1px 2px;
+            margin: 2px 0;
+            background-color: var(--color-card-bg);
+            color: var(--color-fg);
+            border: 1px solid var(--color-fg);
+            cursor: pointer;
+            text-align: center;
+            font-family: monospace;
+            transition: background-color 0.1s, color 0.1s;
+         }
+
+         .tui-button:hover,
+         .tui-button.focused {
+            background-color: var(--color-primary);
+            color: var(--color-bg);
+         }
+
+         .tui-button:active {
+            background-color: var(--color-primary-hover);
+         }
+
+         /* Keyboard navigation indicator */
+         .tui-status {
+            position: fixed;
+            bottom: 2px;
+            left: 2px;
+            padding: 1px 2px;
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-fg);
+            font-family: monospace;
+            font-size: 0.8em;
+            color: var(--color-fg-muted, #aaa);
+            z-index: 1000;
+         }
+      </style>
+   </head>
+   <body>
+      <!-- Popup Notification -->
+      <div id="word-popup" style="display:none;position:fixed;right:32px;bottom:-300px;z-index:9999;transition:bottom 0.5s cubic-bezier(.4,2,.6,1);padding:0;margin:0;background:none;box-shadow:none;border-radius:18px 18px 0 0;">
+         <img id="word-popup-img" src="" alt="Popup" style="max-width:220px;max-height:180px;cursor:pointer;display:block;" />
+      </div>
+      
+      <!-- Theme Switcher (hidden, will be populated by theme.js) -->
+      <div id="styleSwitcher" style="display: none;"></div>
+
+      <!-- TUI Status Bar -->
+      <div class="tui-status" id="tui-status">[TUI Mode] Use ↑↓ to navigate, Enter to select, Mouse supported</div>
+
+      <!-- TUI Modal Overlay -->
+      <div id="tui-modal-overlay" class="tui-modal-overlay">
+         <div class="tui-modal-window">
+            <div class="tui-modal-header">
+               <h2 class="tui-modal-title" id="tui-modal-title"></h2>
+               <button class="tui-modal-close" id="tui-modal-close" tabindex="0">✕</button>
+            </div>
+            <div class="tui-modal-content" id="tui-modal-content"></div>
+         </div>
+      </div>
+
+      <!-- Main TUI Container -->
+      <div class="tui-container">
+         <div class="tui-window">
+            <div class="tui-content">
+               <div class="tui-title">def google classroom</div>
+
+               <!-- Theme Section -->
+               <div class="tui-theme-section" id="tui-theme-section">
+                  <div class="tui-theme-header" tabindex="0">
+                     <span>⚙ Theme Settings</span>
+                     <span class="arrow">▼</span>
+                  </div>
+                  <div class="tui-theme-content" id="tui-theme-content">
+                     <!-- Theme options will be loaded here -->
+                  </div>
+               </div>
+
+               <!-- Games will be loaded here from JSON -->
+               <div id="tui-games-container"></div>
+
+               <!-- Action Buttons -->
+               <div style="margin-top: 4px;">
+                  <button class="tui-button" id="open-blank-btn" tabindex="0">Open in about:blank</button>
+               </div>
+
+               <div class="tui-help">
+                  [↑↓] Navigate  [Enter] Select  [Space] Toggle Section  [Mouse] Click to interact
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- JavaScript -->
+      <script>
+         // Popup trigger words and images
+         const popupWords = {
+            'test': {
+               img: '/img/test.png'
+            }
+         };
+
+         // Listen for typing anywhere on the main page
+         let popupBuffer = '';
+         document.addEventListener('keydown', function(e) {
+            // Ignore if typing in an input/textarea
+            if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.isContentEditable)) return;
+            // Only allow a-z, 0-9, space, backspace
+            if (e.key.length === 1 && /[a-zA-Z0-9 ]/.test(e.key)) {
+               popupBuffer += e.key.toLowerCase();
+               if (popupBuffer.length > 20) popupBuffer = popupBuffer.slice(-20);
+            } else if (e.key === 'Backspace') {
+               popupBuffer = popupBuffer.slice(0, -1);
+            } else {
+               return;
+            }
+            // Check for any trigger word at the end
+            for (const word in popupWords) {
+               if (popupBuffer.endsWith(word)) {
+                  showWordPopup(word);
+                  popupBuffer = '';
+                  break;
+               }
+            }
+         });
+
+         function showWordPopup(word) {
+            const popup = document.getElementById('word-popup');
+            const img = document.getElementById('word-popup-img');
+            img.src = popupWords[word].img;
+            popup.style.display = '';
+            setTimeout(() => {
+               popup.style.bottom = '0px';
+            }, 10);
+         }
+
+         // Hide popup on image click
+         document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('word-popup');
+            const img = document.getElementById('word-popup-img');
+            img.addEventListener('click', function() {
+               popup.style.bottom = '-300px';
+               setTimeout(() => { popup.style.display = 'none'; }, 500);
+            });
+         });
+
+         // TUI Keyboard Navigation
+         let currentFocusIndex = -1;
+         let allFocusableElements = [];
+
+         function updateFocusableElements() {
+            allFocusableElements = Array.from(document.querySelectorAll(
+               '.tui-section-header, .tui-submenu-item, .tui-button, .tui-theme-header, .tui-theme-item, .tui-theme-link'
+            )).filter(el => {
+               // Handle theme section
+               if (el.classList.contains('tui-theme-header')) {
+                  return true; // Theme header is always focusable
+               }
+               if (el.classList.contains('tui-theme-item') || el.classList.contains('tui-theme-link')) {
+                  const themeContent = document.getElementById('tui-theme-content');
+                  return themeContent && themeContent.classList.contains('open');
+               }
+               // Handle game sections
+               const section = el.closest('.tui-section');
+               if (section) {
+                  const content = section.querySelector('.tui-section-content');
+                  if (el.classList.contains('tui-section-header')) {
+                     return true; // Headers are always focusable
+                  }
+                  return content && content.classList.contains('open');
+               }
+               return true;
+            });
+         }
+
+         function setFocus(index) {
+            if (index < 0) index = allFocusableElements.length - 1;
+            if (index >= allFocusableElements.length) index = 0;
+            
+            // Remove focus from all elements
+            allFocusableElements.forEach(el => {
+               el.classList.remove('focused');
+               el.blur();
+            });
+            
+            currentFocusIndex = index;
+            const element = allFocusableElements[currentFocusIndex];
+            if (element) {
+               element.classList.add('focused');
+               element.focus();
+               element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+         }
+
+         function handleKeyPress(e) {
+            // Don't interfere with input fields
+            if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT' || document.activeElement.tagName === 'TEXTAREA')) {
+               return;
+            }
+
+            updateFocusableElements();
+
+            switch(e.key) {
+               case 'ArrowDown':
+                  e.preventDefault();
+                  setFocus(currentFocusIndex + 1);
+                  break;
+               case 'ArrowUp':
+                  e.preventDefault();
+                  setFocus(currentFocusIndex - 1);
+                  break;
+               case 'Enter':
+                  e.preventDefault();
+                  if (allFocusableElements[currentFocusIndex]) {
+                     const element = allFocusableElements[currentFocusIndex];
+                     if (element.classList.contains('tui-section-header') || element.classList.contains('tui-theme-header')) {
+                        toggleSection(element);
+                     } else if (element.classList.contains('tui-theme-item')) {
+                        // Select theme
+                        selectTheme(element);
+                     } else if (element.tagName === 'A') {
+                        element.click();
+                     } else if (element.tagName === 'BUTTON') {
+                        element.click();
+                     }
+                  }
+                  break;
+               case ' ':
+                  e.preventDefault();
+                  if (allFocusableElements[currentFocusIndex]) {
+                     const element = allFocusableElements[currentFocusIndex];
+                     if (element.classList.contains('tui-section-header') || element.classList.contains('tui-theme-header')) {
+                        toggleSection(element);
+                     }
+                  }
+                  break;
+            }
+         }
+
+         function toggleSection(header) {
+            // Check if it's the theme section
+            if (header.classList.contains('tui-theme-header')) {
+               const content = document.getElementById('tui-theme-content');
+               const arrow = header.querySelector('.arrow');
+               
+               if (content.classList.contains('open')) {
+                  content.classList.remove('open');
+                  arrow.textContent = '▼';
+               } else {
+                  content.classList.add('open');
+                  arrow.textContent = '▲';
+               }
+            } else {
+               // Regular game section
+               const section = header.closest('.tui-section');
+               const content = section.querySelector('.tui-section-content');
+               const arrow = header.querySelector('.arrow');
+               
+               if (content.classList.contains('open')) {
+                  content.classList.remove('open');
+                  arrow.textContent = '▼';
+               } else {
+                  content.classList.add('open');
+                  arrow.textContent = '▲';
+               }
+            }
+            updateFocusableElements();
+            // Adjust focus if needed
+            if (currentFocusIndex >= allFocusableElements.length) {
+               setFocus(0);
+            }
+         }
+
+         // Initialize keyboard navigation
+         document.addEventListener('keydown', handleKeyPress);
+
+         // Theme management
+         let allThemes = {};
+         let currentTheme = 'dark';
+
+         async function loadThemes() {
+            try {
+               const response = await fetch('/themes.json');
+               if (!response.ok) throw new Error('Failed to load themes');
+               allThemes = await response.json();
+               
+               // Get saved theme or use default (theme.js may have already set this)
+               const savedTheme = localStorage.getItem('theme');
+               currentTheme = (savedTheme && (allThemes[savedTheme] || savedTheme === 'custom'))
+                              ? savedTheme
+                              : 'dark';
+               
+               // Build TUI theme picker (don't re-apply theme, theme.js already did)
+               buildTUIThemePicker();
+               
+               // Update selection to show current theme
+               updateThemeSelection();
+            } catch (error) {
+               console.error('Error loading themes:', error);
+            }
+         }
+
+         async function applyTheme(themeName) {
+            const themeData = themeName === 'custom'
+               ? JSON.parse(localStorage.getItem('customTheme') || '{}')
+               : allThemes[themeName];
+            
+            if (themeData) {
+               Object.entries(themeData).forEach(([key, value]) => {
+                  document.documentElement.style.setProperty(`--${key}`, value);
+               });
+               currentTheme = themeName;
+               updateThemeSelection();
+               
+               // Update favicon to match theme
+               await setThemedFavicon(themeData);
+            }
+         }
+
+         async function setThemedFavicon(theme) {
+            try {
+               const resp = await fetch('/favicon.svg');
+               let svg = await resp.text();
+               
+               svg = svg
+                  .replace(/#FF0000/gi, theme['color-primary'] || '#FFFFFF')
+                  .replace(/#00FF00/gi, theme['color-primary-hover'] || '#FFFFFF')
+                  .replace(/#fff/gi, theme['color-card-bg'] || '#FFFFFF');
+               
+               const url = 'data:image/svg+xml;base64,' + btoa(svg);
+               
+               let link = document.querySelector("link[rel~='icon']");
+               if (!link) {
+                  link = document.createElement('link');
+                  link.rel = 'icon';
+                  document.head.appendChild(link);
+               }
+               link.href = url;
+            } catch (error) {
+               console.error('Error setting themed favicon:', error);
+            }
+         }
+
+         function buildTUIThemePicker() {
+            const container = document.getElementById('tui-theme-content');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Add theme options
+            Object.keys(allThemes).forEach(themeName => {
+               const item = document.createElement('div');
+               item.className = 'tui-theme-item' + (themeName === currentTheme ? ' selected' : '');
+               item.textContent = formatThemeName(themeName);
+               item.setAttribute('data-theme', themeName);
+               item.tabIndex = 0;
+               
+               item.addEventListener('click', () => selectTheme(item));
+               item.addEventListener('mouseenter', function() {
+                  updateFocusableElements();
+                  const index = allFocusableElements.indexOf(this);
+                  if (index !== -1) {
+                     setFocus(index);
+                  }
+               });
+               
+               container.appendChild(item);
+            });
+            
+            // Add custom theme option
+            const customItem = document.createElement('div');
+            customItem.className = 'tui-theme-item' + (currentTheme === 'custom' ? ' selected' : '');
+            customItem.textContent = 'Custom Theme';
+            customItem.setAttribute('data-theme', 'custom');
+            customItem.tabIndex = 0;
+            customItem.addEventListener('click', () => selectTheme(customItem));
+            customItem.addEventListener('mouseenter', function() {
+               updateFocusableElements();
+               const index = allFocusableElements.indexOf(this);
+               if (index !== -1) {
+                  setFocus(index);
+               }
+            });
+            container.appendChild(customItem);
+            
+            // Add config link
+            const configLink = document.createElement('a');
+            configLink.href = '/theme-config.html';
+            configLink.className = 'tui-theme-link';
+            configLink.textContent = 'Configure Custom Theme';
+            configLink.tabIndex = 0;
+            configLink.addEventListener('mouseenter', function() {
+               updateFocusableElements();
+               const index = allFocusableElements.indexOf(this);
+               if (index !== -1) {
+                  setFocus(index);
+               }
+            });
+            container.appendChild(configLink);
+         }
+
+         function selectTheme(element) {
+            const themeName = element.getAttribute('data-theme');
+            if (!themeName) return;
+            
+            localStorage.setItem('theme', themeName);
+            applyTheme(themeName);
+            
+            // Update selection visual
+            document.querySelectorAll('.tui-theme-item').forEach(item => {
+               item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+         }
+
+         function updateThemeSelection() {
+            document.querySelectorAll('.tui-theme-item').forEach(item => {
+               const themeName = item.getAttribute('data-theme');
+               if (themeName === currentTheme) {
+                  item.classList.add('selected');
+               } else {
+                  item.classList.remove('selected');
+               }
+            });
+         }
+
+         function formatThemeName(name) {
+            return name
+               .split(/[-_]/)
+               .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+               .join(' ');
+         }
+
+         // Initialize theme section toggle and load themes
+         document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for theme.js to initialize, then load our TUI theme picker
+            setTimeout(() => {
+               loadThemes();
+            }, 100);
+         });
+
+         // Handle open in blank button
+         document.getElementById('open-blank-btn').addEventListener('click', function() {
+            openInBlank();
+         });
+
+         function openInBlank() {
+            const win = window.open();
+            const iframe = win.document.createElement('iframe');
+            Object.assign(iframe.style, {
+               border: 'none',
+               width: '100%',
+               height: '100%',
+               margin: '0'
+            });
+            iframe.referrerPolicy = 'no-referrer';
+            iframe.allow = 'fullscreen';
+            iframe.src = document.URL;
+         
+            win.document.body.style.margin = '0';
+            win.document.body.style.height = '100vh';
+            win.document.body.appendChild(iframe);
+         }
+
+         // Load games from JSON
+         async function loadGames() {
+            try {
+               const response = await fetch('./games.json');
+               if (!response.ok) throw new Error('Failed to load games');
+               const data = await response.json();
+               window.gamesData = data.sections; // Store for modal access
+               renderGames(data.sections);
+            } catch (error) {
+               console.error('Error loading games:', error);
+               document.getElementById('tui-games-container').innerHTML = '<p>Error loading games. Please refresh the page.</p>';
+            }
+         }
+
+         function renderGames(sections) {
+            const container = document.getElementById('tui-games-container');
+            container.innerHTML = '';
+
+            sections.forEach(section => {
+               // In TUI, render all sections as dropdowns
+                  const tuiSection = document.createElement('div');
+                  tuiSection.className = 'tui-section';
+                  tuiSection.setAttribute('data-section', section.id);
+
+                  const header = document.createElement('div');
+                  header.className = 'tui-section-header';
+                  header.tabIndex = 0;
+                  header.innerHTML = `<span>▸ ${section.name}</span><span class="arrow">▼</span>`;
+
+                  const content = document.createElement('div');
+                  content.className = 'tui-section-content';
+
+                  section.games.forEach((game, index) => {
+                     const link = document.createElement('a');
+                     link.href = game.url;
+                     link.className = 'tui-submenu-item' + (game.featured ? ' featured' : '');
+                     link.tabIndex = 0;
+                     link.textContent = game.name;
+
+                     if (game.special === 'combinedLink') {
+                        link.id = 'combinedLink';
+                        link.addEventListener('click', function(e) {
+                           e.preventDefault();
+                           // Add your flash emulator logic here if needed
+                        });
+                     }
+
+                     // Check if this game should open a modal
+                     if (game.modal) {
+                        link.addEventListener('click', function(e) {
+                           e.preventDefault();
+                           openTUIModalFromGame(game.modal);
+                        });
+                     }
+
+                     content.appendChild(link);
+
+                     // Add separator after featured item if it's not the last
+                     if (game.featured && index < section.games.length - 1) {
+                        const separator = document.createElement('div');
+                        separator.className = 'tui-separator';
+                        content.appendChild(separator);
+                     }
+                  });
+
+                  tuiSection.appendChild(header);
+                  tuiSection.appendChild(content);
+                  container.appendChild(tuiSection);
+            });
+
+            // Initialize TUI sections after rendering
+            initializeTUISections();
+         }
+
+         function initializeTUISections() {
+            // Initialize game sections
+            document.querySelectorAll('.tui-section-header').forEach(header => {
+               header.addEventListener('click', function() {
+                  toggleSection(this);
+               });
+               
+               header.addEventListener('mouseenter', function() {
+                  updateFocusableElements();
+                  const index = allFocusableElements.indexOf(this);
+                  if (index !== -1) {
+                     setFocus(index);
+                  }
+               });
+            });
+
+            // Initialize theme section (if not already done)
+            const themeHeader = document.querySelector('.tui-theme-header');
+            if (themeHeader && !themeHeader.hasAttribute('data-initialized')) {
+               themeHeader.setAttribute('data-initialized', 'true');
+               themeHeader.addEventListener('click', function() {
+                  toggleSection(this);
+               });
+               
+               themeHeader.addEventListener('mouseenter', function() {
+                  updateFocusableElements();
+                  const index = allFocusableElements.indexOf(this);
+                  if (index !== -1) {
+                     setFocus(index);
+                  }
+               });
+            }
+
+            // Handle mouse clicks on menu items
+            document.querySelectorAll('.tui-submenu-item, .tui-button').forEach(item => {
+               item.addEventListener('mouseenter', function() {
+                  updateFocusableElements();
+                  const index = allFocusableElements.indexOf(this);
+                  if (index !== -1) {
+                     setFocus(index);
+                  }
+               });
+            });
+
+            // Handle Flash Emulator link if it exists
+            const combinedLink = document.getElementById('combinedLink');
+            if (combinedLink) {
+               combinedLink.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  // Add your flash emulator logic here if needed
+               });
+            }
+
+            // Initialize keyboard navigation
+            updateFocusableElements();
+            if (allFocusableElements.length > 0) {
+               setFocus(0);
+            }
+         }
+
+         // TUI Modal functions
+         function openTUIModal(section) {
+            const overlay = document.getElementById('tui-modal-overlay');
+            const title = document.getElementById('tui-modal-title');
+            const content = document.getElementById('tui-modal-content');
+            
+            title.innerHTML = `<span>${section.name}</span>`;
+            content.innerHTML = '';
+            
+            section.games.forEach((game, index) => {
+               const item = document.createElement('div');
+               item.className = 'tui-modal-item';
+               item.tabIndex = 0;
+               
+               const link = document.createElement('a');
+               link.href = game.url;
+               link.target = '_blank';
+               link.textContent = game.name;
+               
+               item.appendChild(link);
+               content.appendChild(item);
+               
+               // Add keyboard navigation
+               item.addEventListener('mouseenter', function() {
+                  updateModalFocusableElements();
+                  const index = modalFocusableElements.indexOf(this);
+                  if (index !== -1) {
+                     setModalFocus(index);
+                  }
+               });
+            });
+            
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            // Initialize modal keyboard navigation
+            initializeModalNavigation();
+         }
+
+         function openTUIModalFromGame(modalData) {
+            const overlay = document.getElementById('tui-modal-overlay');
+            const title = document.getElementById('tui-modal-title');
+            const content = document.getElementById('tui-modal-content');
+            
+            title.innerHTML = `<span>${modalData.title}</span>`;
+            content.innerHTML = '';
+            
+            modalData.games.forEach((game, index) => {
+               const item = document.createElement('div');
+               item.className = 'tui-modal-item';
+               item.tabIndex = 0;
+               
+               const link = document.createElement('a');
+               link.href = game.url;
+               link.target = '_blank';
+               link.textContent = game.name;
+               
+               item.appendChild(link);
+               content.appendChild(item);
+               
+               // Add keyboard navigation
+               item.addEventListener('mouseenter', function() {
+                  updateModalFocusableElements();
+                  const index = modalFocusableElements.indexOf(this);
+                  if (index !== -1) {
+                     setModalFocus(index);
+                  }
+               });
+            });
+            
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            // Initialize modal keyboard navigation
+            initializeModalNavigation();
+         }
+
+         function closeTUIModal() {
+            const overlay = document.getElementById('tui-modal-overlay');
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+            modalFocusIndex = -1;
+            modalFocusableElements = [];
+         }
+
+         // Modal keyboard navigation
+         let modalFocusIndex = -1;
+         let modalFocusableElements = [];
+
+         function updateModalFocusableElements() {
+            modalFocusableElements = Array.from(document.querySelectorAll(
+               '.tui-modal-item, .tui-modal-close'
+            ));
+         }
+
+         function setModalFocus(index) {
+            if (index < 0) index = modalFocusableElements.length - 1;
+            if (index >= modalFocusableElements.length) index = 0;
+            
+            modalFocusableElements.forEach(el => {
+               el.classList.remove('focused');
+               el.blur();
+            });
+            
+            modalFocusIndex = index;
+            const element = modalFocusableElements[modalFocusIndex];
+            if (element) {
+               element.classList.add('focused');
+               element.focus();
+            }
+         }
+
+         function initializeModalNavigation() {
+            updateModalFocusableElements();
+            if (modalFocusableElements.length > 0) {
+               setModalFocus(0);
+            }
+            
+            // Handle keyboard in modal
+            const modalKeyHandler = function(e) {
+               if (!document.getElementById('tui-modal-overlay').classList.contains('open')) {
+                  return;
+               }
+               
+               switch(e.key) {
+                  case 'ArrowDown':
+                     e.preventDefault();
+                     setModalFocus(modalFocusIndex + 1);
+                     break;
+                  case 'ArrowUp':
+                     e.preventDefault();
+                     setModalFocus(modalFocusIndex - 1);
+                     break;
+                  case 'Enter':
+                     e.preventDefault();
+                     if (modalFocusableElements[modalFocusIndex]) {
+                        const element = modalFocusableElements[modalFocusIndex];
+                        if (element.classList.contains('tui-modal-close')) {
+                           closeTUIModal();
+                        } else if (element.tagName === 'A' || element.querySelector('a')) {
+                           const link = element.tagName === 'A' ? element : element.querySelector('a');
+                           if (link) link.click();
+                        }
+                     }
+                     break;
+                  case 'Escape':
+                     e.preventDefault();
+                     closeTUIModal();
+                     break;
+               }
+            };
+            
+            document.addEventListener('keydown', modalKeyHandler);
+         }
+
+         // Close modal on close button click
+         document.getElementById('tui-modal-close').addEventListener('click', closeTUIModal);
+
+         // Close modal on overlay click (outside modal)
+         document.getElementById('tui-modal-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+               closeTUIModal();
+            }
+         });
+
+         // Load games on page load
+         document.addEventListener('DOMContentLoaded', function() {
+            loadGames();
+         });
+      </script>
+   </body>
+</html>
+

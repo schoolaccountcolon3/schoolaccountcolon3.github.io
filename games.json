@@ -1,0 +1,305 @@
+{
+  "sections": [
+    {
+      "id": "minecraft",
+      "name": "Minecraft",
+      "icon": "fas fa-cube",
+      "type": "dropdown",
+      "games": [
+        {
+          "name": "Minecraft Launcher (USE THIS)",
+          "url": "https://irv77.github.io/AmplerLauncher/",
+          "icon": "fas fa-star",
+          "featured": true
+        },
+        {
+          "name": "Minecraft (1.8)",
+          "url": "minecraft/eaglercraft.html",
+          "icon": "fas fa-cube"
+        },
+        {
+          "name": "Minecraft (1.12)",
+          "url": "minecraft/eaglercraft12.html",
+          "icon": "fas fa-cube"
+        },
+        {
+          "name": "Minecraft (Modded)",
+          "url": "minecraft/eaglerforge.html",
+          "icon": "fas fa-puzzle-piece"
+        }
+      ]
+    },
+    {
+      "id": "fnaf",
+      "name": "FNAF Games",
+      "icon": "fas fa-robot",
+      "type": "dropdown",
+      "games": [
+        {
+          "name": "FNAF 1",
+          "url": "https://irv77.github.io/hd_fnaf/1/",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "FNAF 2",
+          "url": "https://irv77.github.io/hd_fnaf/2/",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "FNAF 3",
+          "url": "https://irv77.github.io/hd_fnaf/3/",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "FNAF 4",
+          "url": "https://irv77.github.io/hd_fnaf/4/",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "FNAF SL",
+          "url": "https://catgenix22.github.io/FNAFSLcat.github.io/",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "FNAF PS",
+          "url": "https://irv77.github.io/hd_fnaf/ps/",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "FNAF UCN",
+          "url": "https://irv77.github.io/hd_fnaf/ucn/",
+          "icon": "fas fa-robot"
+        }
+      ]
+    },
+    {
+      "id": "modern",
+      "name": "Modern Games",
+      "icon": "fas fa-gamepad",
+      "type": "dropdown",
+      "games": [
+        {
+          "name": "Buckshot Roulette",
+          "url": "./gn-math/Buckshot Roulette.html",
+          "icon": "fas fa-dice"
+        },
+        {
+          "name": "Celeste",
+          "url": "https://celeste.r58playz.dev/",
+          "icon": "fas fa-mountain"
+        },
+        {
+          "name": "Class of '09",
+          "url": "./gn-math/Class of '09.html",
+          "icon": "fas fa-graduation-cap"
+        },
+        {
+          "name": "Cuphead",
+          "url": "./gn-math/Cuphead.html",
+          "icon": "fas fa-mug-hot"
+        },
+        {
+          "name": "Deltarune",
+          "url": "./gn-math/Deltarune.html",
+          "icon": "fas fa-star"
+        },
+        {
+          "name": "Doki Doki Literature Club",
+          "url": "https://soleil-des-chats.github.io/ddlc-web-optimised/",
+          "icon": "fas fa-envelope"
+        },
+        {
+          "name": "Hotline Miami",
+          "url": "./gn-math/Hotline Miami.html",
+          "icon": "fas fa-mask"
+        },
+        {
+          "name": "Kindergarten",
+          "url": "./gn-math/Kindergarten.html",
+          "icon": "fas fa-apple-whole"
+        },
+        {
+          "name": "Kindergarten 2",
+          "url": "./gn-math/Kindergarten 2.html",
+          "icon": "fas fa-apple-whole"
+        },
+        {
+          "name": "osu!",
+          "url": "./webosu/index.html",
+          "icon": "fas fa-music"
+        },
+        {
+          "name": "ULTRAKILL",
+          "url": "./gn-math/ULTRAKILL.html",
+          "icon": "fas fa-robot"
+        },
+        {
+          "name": "Undertale",
+          "url": "./gn-math/Undertale.html",
+          "icon": "fas fa-heart"
+        },
+        {
+          "name": "WebFishing",
+          "url": "./gn-math/WebFishing.html",
+          "icon": "fas fa-fish"
+        }
+      ]
+    },
+    {
+      "id": "retro",
+      "name": "Retro Games",
+      "icon": "fas fa-history",
+      "type": "dropdown",
+      "games": [
+        {
+          "name": "Half-Life",
+          "url": "/hl/index.html",
+          "icon": "fas fa-crosshairs"
+        },
+        {
+          "name": "Tetris",
+          "url": "/apotris/Apotris.html",
+          "icon": "fas fa-th"
+        },
+        {
+          "name": "Quake",
+          "url": "https://qwasm.m-h.org.uk/",
+          "icon": "fas fa-crosshairs"
+        },
+        {
+          "name": "Doom",
+          "url": "https://dwasm.m-h.org.uk/",
+          "icon": "fas fa-skull"
+        },
+        {
+          "name": "Retroarch",
+          "url": "./webretro/index.html",
+          "icon": "fas fa-gamepad"
+        },
+        {
+          "name": "Lego Island",
+          "url": "https://isle.pizza",
+          "icon": "fas fa-building"
+        },
+        {
+          "name": "Flash Emulator (Games)",
+          "url": "#",
+          "icon": "fas fa-bolt",
+          "special": "combinedLink"
+        }
+      ]
+    },
+    {
+      "id": "random",
+      "name": "Random Stuff",
+      "icon": "fas fa-question",
+      "type": "dropdown",
+      "games": [
+        {
+          "name": "JummBox",
+          "url": "https://jummb.us/",
+          "icon": "fas fa-music"
+        },
+        {
+          "name": "Aesprite",
+          "url": "https://libresprite.github.io/online/",
+          "icon": "fas fa-paintbrush"
+        },
+        {
+          "name": "Blockbench",
+          "url": "https://web.blockbench.net/",
+          "icon": "fas fa-cube"
+        }
+      ]
+    },
+    {
+      "id": "other",
+      "name": "Other Games",
+      "icon": "fas fa-dice",
+      "type": "grid",
+      "games": [
+        {
+          "name": "Crazy Cattle 3D",
+          "url": "/cc3d/index.html",
+          "icon": "fas fa-cow"
+        },
+        {
+          "name": "Sandboxels",
+          "url": "/sandboxels/index.html",
+          "icon": "fas fa-atom"
+        },
+        {
+          "name": "Little Alchemy 2",
+          "url": "https://quiz-50.github.io/casual-games/little-alchemy-2/",
+          "icon": "fas fa-flask"
+        },
+        {
+          "name": "Space Colony",
+          "url": "https://sparticle999.github.io/SpaceCompany/",
+          "icon": "fas fa-rocket"
+        },
+        {
+          "name": "Dogeminer 2",
+          "url": "https://gtst1.github.io/dogeminer2/",
+          "icon": "fas fa-pickaxe"
+        },
+        {
+          "name": "Chatroom",
+          "url": "./chatroom/index.html",
+          "icon": "fas fa-comments"
+        },
+        {
+          "name": "Forums",
+          "url": "./forums/index.html",
+          "icon": "fas fa-comment"
+        },
+        {
+          "name": "Unblocker",
+          "url": "#",
+          "icon": "fas fa-lock-open",
+          "modal": {
+            "title": "Unblocker",
+            "games": [
+              {
+                "name": "UV-Static",
+                "url": "/active/index.html",
+                "icon": "fas fa-lock-open"
+              },
+              {
+                "name": "Alura",
+                "url": "https://s3.amazonaws.com/aluramathwork/index.html",
+                "icon": "fas fa-lock-open"
+              },
+              {
+                "name": "Fern",
+                "url": "https://site.nhd.org/62737663/home",
+                "icon": "fas fa-lock-open"
+              },
+              {
+                "name": "Nugget (May not work)",
+                "url": "https://nuggetscorporation.org/",
+                "icon": "fas fa-lock-open"
+              }
+            ]
+          }
+        },
+        {
+          "name": "PolyTrack",
+          "url": "https://xxj0nxx.github.io/Polytrack-0.5.1/",
+          "icon": "fas fa-car"
+        },
+        {
+          "name": "Friday Night Funkin",
+          "url": "./fnf/index.html",
+          "icon": "fas fa-list-music"
+        },
+        {
+          "name": "Clock Simulator",
+          "url": "./clock/index.html",
+          "icon": "fas fa-clock"
+        }
+      ]
+    }
+  ]
+}
+
