@@ -8,7 +8,7 @@ const scramjet = new ScramjetController({
 });
 
 scramjet.init();
-navigator.serviceWorker.register("./sw.js");
+navigator.serviceWorker.register("/staticbuild/sw.js");
 
 const connection = new BareMux.BareMuxConnection("/staticbuild/baremux/worker.js");
 const flex = css`

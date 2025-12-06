@@ -29,7 +29,7 @@ const ScramJet = new ScramjetController({
 });
 
 ScramJet.init();
-navigator.serviceWorker.register("./sw.js");
+navigator.serviceWorker.register("/staticbuild/sw.js");
 
 const connection = new BareMux.BareMuxConnection("/staticbuild/baremux/worker.js");
 connection.setTransport("/staticbuild/epoxy/index.mjs", [{
