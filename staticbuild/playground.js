@@ -1,16 +1,16 @@
 const { ScramjetController } = $scramjetLoadController();
 const scramjet = new ScramjetController({
 	files: {
-		wasm: "/scram/scramjet.wasm.wasm",
-		all: "/scram/scramjet.all.js",
-		sync: "/scram/scramjet.sync.js",
+		wasm: "./scram/scramjet.wasm.wasm",
+		all: "./scram/scramjet.all.js",
+		sync: "./scram/scramjet.sync.js",
 	},
 });
 
 scramjet.init();
 navigator.serviceWorker.register("./sw.js");
 
-const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+const connection = new BareMux.BareMuxConnection("./baremux/worker.js");
 const flex = css`
 	display: flex;
 `;

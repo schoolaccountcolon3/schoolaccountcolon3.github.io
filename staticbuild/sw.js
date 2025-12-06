@@ -8,7 +8,7 @@ if (navigator.userAgent.includes("Firefox")) {
 	});
 }
 
-importScripts("/scram/scramjet.all.js");
+importScripts("./scram/scramjet.all.js");
 const { ScramjetServiceWorker } = $scramjetLoadWorker();
 const scramjet = new ScramjetServiceWorker();
 
@@ -36,7 +36,7 @@ self.addEventListener("message", ({ data }) => {
 async function forwardToInspector(data) {
 	const clients = await self.clients.matchAll();
 	const inspectorClient = clients.find((client) =>
-		client.url.endsWith("/inspector.html")
+		client.url.endsWith("./inspector.html")
 	);
 
 	if (inspectorClient) {
@@ -70,7 +70,7 @@ scramjet.addEventListener("request", async (e) => {
 			// Send the second tee stream directly with transferStreams
 			const clients = await self.clients.matchAll();
 			const inspectorClient = clients.find((client) =>
-				client.url.endsWith("/inspector.html")
+				client.url.endsWith("./inspector.html")
 			);
 
 			if (inspectorClient) {
@@ -135,7 +135,7 @@ scramjet.addEventListener("request", async (e) => {
 			// Send the second tee stream directly with transferStreams
 			const clients = await self.clients.matchAll();
 			const inspectorClient = clients.find((client) =>
-				client.url.endsWith("/inspector.html")
+				client.url.endsWith("./inspector.html")
 			);
 
 			if (inspectorClient) {
