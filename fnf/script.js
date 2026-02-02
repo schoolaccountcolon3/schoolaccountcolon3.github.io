@@ -1,19 +1,3 @@
-function encodeUltravioletURL(url) {
-    const encoded = url.split('').map((char, index) => {
-        if (index % 2 === 1) {
-            return String.fromCharCode(char.charCodeAt(0) ^ 2);
-        } else {
-            return char;
-        }
-    }).join('');
-    return encodeURIComponent(encoded);
-}
-
-function createProxiedURL(originalUrl, proxyDomain = 'https://youcantypeanythinghere.hu.stayinschooleducation.org.cdn.cloudflare.net') {
-    const encoded = encodeUltravioletURL(originalUrl);
-    return `${proxyDomain}/network/service/${encoded}`;
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const modsGrid = document.getElementById('mods-grid');
     const searchBar = document.getElementById('search-bar');
@@ -60,9 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const link = document.createElement('a');
             // default to proxied URL; we'll store both URLs on the element for easy toggling
-            link.href = createProxiedURL(mod.iframeLink);
-            link.dataset.proxied = createProxiedURL(mod.iframeLink);
-            link.dataset.original = mod.iframeLink;
+            link.href = mod.iframeLink;
             link.textContent = mod.modName;
             link.className = 'mod-link';
             item.appendChild(image);
@@ -155,29 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error loading or parsing the CSV file:', error);
             modsGrid.innerHTML = `<p class="error">Failed to load mod data. Please check the console.</p>`;
         }
-    }
-
-    // add logic for the global "original toggle" checkbox
-    const originalToggle = document.getElementById('original-toggle');
-    function updateLinksToOriginal(openOriginal) {
-        const links = modsGrid.querySelectorAll('.mod-link');
-        links.forEach(a => {
-            if (openOriginal) {
-                a.href = a.dataset.original || a.href;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-            } else {
-                a.href = a.dataset.proxied || a.href;
-                a.removeAttribute('target');
-                a.removeAttribute('rel');
-            }
-        });
-    }
-
-    if (originalToggle) {
-        originalToggle.addEventListener('change', (e) => {
-            updateLinksToOriginal(e.target.checked);
-        });
     }
 
     searchBar.addEventListener('input', (e) => {

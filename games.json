@@ -79,6 +79,11 @@
       "type": "dropdown",
       "games": [
         {
+          "name": "Adventure Capatalist",
+          "url": "./gn-math/Adventure Capatalist.html",
+          "icon": "fas fa-money"
+        },
+        {
           "name": "Buckshot Roulette",
           "url": "./gn-math/Buckshot Roulette.html",
           "icon": "fas fa-dice"
@@ -109,6 +114,11 @@
           "icon": "fas fa-envelope"
         },
         {
+          "name": "Hollow Knight",
+          "url": "./gn-math/Hollow Knight.html",
+          "icon": "fas fa-sword"
+        },
+        {
           "name": "Hotline Miami",
           "url": "./gn-math/Hotline Miami.html",
           "icon": "fas fa-mask"
@@ -124,9 +134,24 @@
           "icon": "fas fa-apple-whole"
         },
         {
+          "name": "Kindergarten 3",
+          "url": "./gn-math/Kindergarten 3.html",
+          "icon": "fas fa-apple-whole"
+        },
+        {
           "name": "osu!",
           "url": "./webosu/index.html",
           "icon": "fas fa-music"
+        },
+        {
+          "name": "Papers, Please!",
+          "url": "./gn-math/Papers Please.html",
+          "icon": "fas fa-note"
+        },
+        {
+          "name": "Terraria",
+          "url": "./gn-math/Terraria.html",
+          "icon": "fas fa-tree"
         },
         {
           "name": "ULTRAKILL",
@@ -152,6 +177,11 @@
       "type": "dropdown",
       "games": [
         {
+          "name": "Fallout 1",
+          "url": "./gn-math/Fallout.html",
+          "icon": "fas fa-biohazard"
+        },
+        {
           "name": "Half-Life",
           "url": "/hl/index.html",
           "icon": "fas fa-crosshairs"
@@ -160,6 +190,11 @@
           "name": "Tetris",
           "url": "/apotris/Apotris.html",
           "icon": "fas fa-th"
+        },
+        {
+          "name": "Peggle",
+          "url": "./gn-math/Peggle.html",
+          "icon": "fas fa-bowling-ball"
         },
         {
           "name": "Quake",
