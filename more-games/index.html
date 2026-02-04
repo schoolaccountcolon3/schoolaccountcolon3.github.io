@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/more-games.css" />
+    <script src="/theme.js"></script>
+    <title>Ultimate Game Stash</title>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <div id="loader-text">Launching Game...</div>
+    </div>
+
+    <div id="styleSwitcher"></div>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">Game Stash</div>
+        <div class="nav-scroll" id="nav-container">
+            <!-- Injected via JS -->
+        </div>
+    </nav>
+
+    <main id="main">
+        <div id="topbar">
+            <input type="text" id="search-input" placeholder="Search games">
+        </div>
+        <div id="content-area">
+            <!-- Injected via JS -->
+        </div>
+    </main>
+
+    <script src="games.js"></script>
+    <script>
+        const BASE_URL = "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/";
+
+        const navContainer = document.getElementById('nav-container');
+        const contentArea = document.getElementById('content-area');
+        const searchInput = document.getElementById('search-input');
+        const loader = document.getElementById('loader');
+
+        function init() {
+            if (typeof GAME_DATA === 'undefined') {
+                contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js not found. Run convert.py first!</h2>';
+                return;
+            }
+
+            // Separate categories into "Standard" (A-Z, #) and "Collections" (Consoles, Genres)
+            const keys = Object.keys(GAME_DATA);
+            const standardCats = keys.filter(k => k.length === 1).sort();
+            const specialCats = keys.filter(k => k.length > 1).sort();
+
+            // Render Sidebar
+
+            // 1. Standard A-Z
+            if (standardCats.length > 0) {
+                const label = document.createElement('div');
+                label.className = 'nav-label';
+                label.textContent = 'Library';
+                navContainer.appendChild(label);
+
+                standardCats.forEach(cat => createNavBtn(cat));
+            }
+
+            // 2. Collections (Emulators etc)
+            if (specialCats.length > 0) {
+                const label = document.createElement('div');
+                label.className = 'nav-label';
+                label.textContent = 'Collections & Emulators';
+                navContainer.appendChild(label);
+
+                specialCats.forEach(cat => createNavBtn(cat));
+            }
+
+            // Render Initial View (All Games)
+            renderGames();
+
+            // Search Listener
+            searchInput.addEventListener('input', (e) => renderGames(e.target.value));
+        }
+
+        function createNavBtn(category) {
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            btn.textContent = category;
+            btn.onclick = () => {
+                const el = document.getElementById(`cat-${category}`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Flash effect
+                    el.style.opacity = '0.5';
+                    setTimeout(() => el.style.opacity = '1', 300);
+                }
+            };
+            navContainer.appendChild(btn);
+        }
+
+        function renderGames(filterText = '') {
+            contentArea.innerHTML = '';
+            const lowerFilter = filterText.toLowerCase();
+
+            // Sort order: #, A-Z, then Named Collections
+            const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
+                const isASingle = a.length === 1;
+                const isBSingle = b.length === 1;
+                if (isASingle && !isBSingle) return -1;
+                if (!isASingle && isBSingle) return 1;
+                return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+            });
+
+            let hasResults = false;
+
+            allCategories.forEach(category => {
+                const games = GAME_DATA[category].filter(g =>
+                    g.name.toLowerCase().includes(lowerFilter)
+                );
+
+                if (games.length > 0) {
+                    hasResults = true;
+
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+                    section.id = `cat-${category}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'category-title';
+                    title.textContent = category;
+                    section.appendChild(title);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'game-grid';
+
+                    games.forEach(game => {
+                        const card = document.createElement('div');
+                        card.className = 'game-card';
+                        card.textContent = game.name;
+                        card.onclick = () => launchGame(game.file, game.name);
+                        grid.appendChild(card);
+                    });
+
+                    section.appendChild(grid);
+                    contentArea.appendChild(section);
+                }
+            });
+
+            if (!hasResults) {
+                contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching "${filterText}"</div>`;
+            }
+        }
+
+        function launchGame(filename, gamename) {
+            loader.style.display = 'flex';
+            document.getElementById('loader-text').textContent = `Loading ${gamename}...`;
+
+            const cleanName = filename.trim();
+            const encoded = encodeURIComponent(cleanName);
+            const url = `${BASE_URL}${encoded}?t=${Date.now()}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error("File not found");
+                    return response.text();
+                })
+                .then(text => {
+                    loader.style.display = 'none';
+                    const newWin = window.open("about:blank", "_blank");
+                    if (newWin) {
+                        newWin.document.open();
+                        newWin.document.write(text);
+                        newWin.document.close();
+                    } else {
+                        alert("Pop-up blocked! Please allow pop-ups for this site.");
+                    }
+                })
+                .catch(err => {
+                    loader.style.display = 'none';
+                    alert(`Failed to load ${gamename}. The file might be missing from the repository.`);
+                    console.error(err);
+                });
+        }
+
+        init();
+    </script>
+</body>
+</html>

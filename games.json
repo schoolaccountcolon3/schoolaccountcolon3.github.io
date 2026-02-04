@@ -332,6 +332,11 @@
           "name": "Clock Simulator",
           "url": "./clock/index.html",
           "icon": "fas fa-clock"
+        },
+        {
+          "name": "A LOT more games",
+          "url": "./more-games/index.html",
+          "icon": "fas fa-exclamation"
         }
       ]
     }

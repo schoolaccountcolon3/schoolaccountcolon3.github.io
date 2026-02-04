@@ -119,34 +119,6 @@
             z-index: 1000;
             align-items: flex-end;
         }
-        .preset-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background-color: var(--color-card-bg);
-            padding: 8px 12px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px var(--color-shadow);
-        }
-        .preset-selector label {
-            color: var(--color-fg);
-            font-weight: 500;
-            white-space: nowrap;
-        }
-        .preset-selector select {
-            background-color: var(--color-input-bg);
-            color: var(--color-fg);
-            border: 1px solid var(--color-border);
-            border-radius: 4px;
-            padding: 8px 12px;
-            cursor: pointer;
-            min-width: 120px;
-        }
-        .preset-selector select:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 5px var(--color-focus);
-        }
         .save-button, .reset-button {
             padding: 10px 20px;
             background-color: var(--color-button-bg);
@@ -353,19 +325,6 @@
             <button class="reset-button" onclick="resetTheme()">Reset Theme</button>
             <button class="save-button" onclick="saveCustomTheme()">Save Theme</button>
         </div>
-        <div class="preset-selector">
-            <label for="presetSelect">Load Preset:</label>
-            <select id="presetSelect" onchange="loadPresetTheme()">
-                <option value="">Select a preset...</option>
-                <option value="dark">Dark</option>
-                <option value="light">Light</option>
-                <option value="pastel">Pastel</option>
-                <option value="purple">Purple</option>
-                <option value="blue">Blue</option>
-                <option value="orange">Orange</option>
-                <option value="green">Green</option>
-            </select>
-        </div>
     </div>
     <button class="export-css" onclick="exportCSS()">Export CSS</button>
     <div class="export-css-tooltip" id="exportTooltip">CSS copied to clipboard!</div>
@@ -413,16 +372,6 @@
             { name: 'color-error', label: 'Error Color' },
             { name: 'color-fg-muted', label: 'Muted Text Color' }
         ];
-
-        const themes = {
-            dark: '/styles/style-dark.css',
-            light: '/styles/style-light.css',
-            pastel: '/styles/style-pastel.css',
-            purple: '/styles/style-purple.css',
-            blue: '/styles/style-blue.css',
-            orange: '/styles/style-orange.css',
-            green: '/styles/style-green.css'
-        };
 
         function createColorPicker(varName, label) {
             const container = document.createElement('div');
@@ -577,57 +526,6 @@
             localStorage.setItem('customTheme', JSON.stringify(theme));
             localStorage.setItem('theme', 'custom');
             alert('Theme saved successfully!');
-        }
-
-        async function loadThemeFromCSS(cssFile) {
-            try {
-                const response = await fetch(cssFile);
-                const cssText = await response.text();
-                
-                // Extract CSS variables from the file
-                const cssVars = {};
-                const varRegex = /--([^:]+):\s*([^;]+);/g;
-                let match;
-                
-                while ((match = varRegex.exec(cssText)) !== null) {
-                    const [, name, value] = match;
-                    cssVars[name] = value.trim();
-                }
-                
-                return cssVars;
-            } catch (error) {
-                console.error('Error loading theme:', error);
-                return null;
-            }
-        }
-
-        async function loadPresetTheme() {
-            const presetSelect = document.getElementById('presetSelect');
-            const selectedTheme = presetSelect.value;
-            
-            if (!selectedTheme) return;
-            
-            if (confirm('This will overwrite your current theme settings. Continue?')) {
-                const cssFile = themes[selectedTheme];
-                const themeVars = await loadThemeFromCSS(cssFile);
-                
-                if (themeVars) {
-                    cssVars.forEach(({ name }) => {
-                        const textInput = document.getElementById(`${name}-text`);
-                        const newColor = themeVars[name] || defaultTheme[name];
-                        
-                        textInput.value = newColor;
-                        pickrInstances[name].setColor(newColor);
-                        document.documentElement.style.setProperty(`--${name}`, newColor);
-                    });
-                } else {
-                    alert('Error loading theme. Using default theme instead.');
-                    resetTheme();
-                }
-                
-                // Reset the select to show placeholder
-                presetSelect.value = '';
-            }
         }
 
         function resetTheme() {
