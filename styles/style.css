@@ -637,6 +637,15 @@ color: #ccc;
   box-shadow: 0 4px 12px var(--color-shadow);
 }
 
+.games-grid .game-item.featured {
+  background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0.05) 100%);
+  border: 1px solid rgba(255,215,0,0.3);
+}
+
+.games-grid .game-item.featured i {
+  color: #ffd700;
+}
+
 /* Action Buttons */
 .action-buttons {
   display: flex;

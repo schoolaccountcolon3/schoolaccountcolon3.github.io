@@ -209,3 +209,26 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.cloak-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var(--color-fg-muted);
+    font-size: 0.95em;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.cloak-label:hover {
+    color: var(--color-fg);
+}
+
+.cloak-label input {
+    margin-right: 10px;
+    accent-color: var(--color-primary); /* Uses your primary color for the checkbox */
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}

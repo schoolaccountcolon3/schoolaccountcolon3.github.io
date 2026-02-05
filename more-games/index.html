@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- Loader is visible by default when loading a specific game via URL -->
     <div id="loader">
         <div class="spinner"></div>
         <div id="loader-text">Loading...</div>
@@ -27,7 +26,13 @@
 
     <main id="main">
         <div id="topbar">
-            <input type="text" id="search-input" placeholder="Search games">
+            <input type="text" id="search-input" placeholder="Search games...">
+            
+            <!-- NEW CHECKBOX -->
+            <label class="cloak-label">
+                <input type="checkbox" id="cloak-toggle"> 
+                Open in about:blank
+            </label>
         </div>
         <div id="content-area">
             <!-- Injected via JS -->
@@ -44,30 +49,36 @@
         const loader = document.getElementById('loader');
         const sidebar = document.getElementById('sidebar');
         const main = document.getElementById('main');
+        const cloakToggle = document.getElementById('cloak-toggle');
 
-        // Check for ?g= parameter immediately
+        // Check for ?g= parameter immediately (Direct Link Mode)
         const urlParams = new URLSearchParams(window.location.search);
         const gameParam = urlParams.get('g');
 
         if (gameParam) {
-            // MODE 1: GAME LAUNCHER
-            // If a game parameter exists, hide the menu interface and load the game
-            initializeGameMode(gameParam);
+            initializeGameMode(gameParam, true); // True = decode name
         } else {
-            // MODE 2: MAIN MENU
-            // If no parameter, load the standard library interface
             initializeMenuMode();
         }
 
-        function initializeGameMode(filename) {
-            // Hide the UI elements
+        // Helper to determine real URL
+        function getGameUrl(filename) {
+            if (filename.startsWith("cl")) {
+                // Old games
+                return `${BASE_URL}${filename}?t=${Date.now()}`;
+            } else {
+                // New games (Full URL stored in file property)
+                return filename;
+            }
+        }
+
+        function initializeGameMode(filename, needsDecode) {
             sidebar.style.display = 'none';
             main.style.display = 'none';
             loader.style.display = 'flex';
             
-            // Decode the filename (handling spaces/symbols)
-            const decodedFilename = decodeURIComponent(filename);
-            const url = `${BASE_URL}${filename}?t=${Date.now()}`;
+            const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
+            const url = getGameUrl(realFilename);
 
             document.getElementById('loader-text').textContent = "Launching...";
 
@@ -77,8 +88,6 @@
                     return response.text();
                 })
                 .then(html => {
-                    // Overwrite the current document with the game content
-                    // This mimics the "about:blank" behavior but on the current URL
                     document.open();
                     document.write(html);
                     document.close();
@@ -86,7 +95,7 @@
                 .catch(err => {
                     loader.innerHTML = `<div style="text-align:center; padding:20px;">
                         <h2>Error Loading Game</h2>
-                        <p>Could not fetch: ${decodedFilename}</p>
+                        <p>Could not fetch game data.</p>
                         <button onclick="window.location.href = window.location.pathname" style="padding:10px; cursor:pointer; margin-top:10px;">Return to Menu</button>
                     </div>`;
                     console.error(err);
@@ -94,7 +103,6 @@
         }
 
         function initializeMenuMode() {
-            // Ensure loader is hidden
             loader.style.display = 'none';
 
             if (typeof GAME_DATA === 'undefined') {
@@ -102,12 +110,10 @@
                 return;
             }
 
-            // Separate categories into "Standard" (A-Z, #) and "Collections" (Consoles, Genres)
             const keys = Object.keys(GAME_DATA);
             const standardCats = keys.filter(k => k.length === 1).sort();
             const specialCats = keys.filter(k => k.length > 1).sort();
 
-            // Render Sidebar
             if (standardCats.length > 0) {
                 const label = document.createElement('div');
                 label.className = 'nav-label';
@@ -124,10 +130,8 @@
                 specialCats.forEach(cat => createNavBtn(cat));
             }
 
-            // Render Initial View
             renderGames();
 
-            // Search Listener
             searchInput.addEventListener('input', (e) => renderGames(e.target.value));
         }
 
@@ -184,8 +188,7 @@
                         const card = document.createElement('div');
                         card.className = 'game-card';
                         card.textContent = game.name;
-                        // NEW LAUNCHER LOGIC
-                        card.onclick = () => launchGame(game.file);
+                        card.onclick = () => launchGame(game.file, game.name);
                         grid.appendChild(card);
                     });
 
@@ -199,14 +202,44 @@
             }
         }
 
-        function launchGame(filename) {
-            // Updated Launch Logic:
-            // Open a new tab with the current URL + ?g=filename
-            const cleanName = filename.trim();
-            const encoded = encodeURIComponent(cleanName);
-            
-            // This re-opens index.html in a new tab, but with the search parameter
-            window.open(`?g=${encoded}`, '_blank');
+        // Logic to toggle between URL params and about:blank
+        function launchGame(filename, gamename) {
+            const isCloaked = cloakToggle.checked;
+
+            if (isCloaked) {
+                // 1. CLOAKED MODE (about:blank)
+                loader.style.display = 'flex';
+                document.getElementById('loader-text').textContent = "Cloaking...";
+                
+                const url = getGameUrl(filename);
+
+                fetch(url)
+                    .then(res => {
+                        if(!res.ok) throw new Error("Failed to fetch");
+                        return res.text();
+                    })
+                    .then(html => {
+                        loader.style.display = 'none';
+                        const win = window.open("about:blank", "_blank");
+                        if(!win) {
+                            alert("Pop-up blocked. Please allow popups.");
+                            return;
+                        }
+                        win.document.open();
+                        win.document.write(html);
+                        win.document.close();
+                    })
+                    .catch(err => {
+                        loader.style.display = 'none';
+                        alert("Error loading game code: " + err);
+                    });
+
+            } else {
+                // 2. STANDARD MODE (?g=...)
+                const cleanName = filename.trim();
+                const encoded = encodeURIComponent(cleanName);
+                window.open(`?g=${encoded}`, '_blank');
+            }
         }
     </script>
 </body>

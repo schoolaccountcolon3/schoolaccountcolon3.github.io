@@ -336,7 +336,8 @@
         {
           "name": "A LOT more games",
           "url": "./more-games/index.html",
-          "icon": "fas fa-exclamation"
+          "icon": "fas fa-exclamation",
+          "featured": true
         }
       ]
     }

@@ -427,8 +427,8 @@
                grid.className = 'games-grid';
 
                section.games.forEach(game => {
-                 const gameItem = document.createElement('div');
-                 gameItem.className = 'game-item';
+                const gameItem = document.createElement('div');
+                gameItem.className = 'game-item' + (game.featured ? ' featured' : '');
                  
                  const link = document.createElement('a');
                  link.href = game.url;
