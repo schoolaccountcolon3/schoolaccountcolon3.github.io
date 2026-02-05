@@ -10,9 +10,10 @@
 </head>
 <body>
 
+    <!-- Loader is visible by default when loading a specific game via URL -->
     <div id="loader">
         <div class="spinner"></div>
-        <div id="loader-text">Launching Game...</div>
+        <div id="loader-text">Loading...</div>
     </div>
 
     <div id="styleSwitcher"></div>
@@ -41,8 +42,61 @@
         const contentArea = document.getElementById('content-area');
         const searchInput = document.getElementById('search-input');
         const loader = document.getElementById('loader');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
 
-        function init() {
+        // Check for ?g= parameter immediately
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameParam = urlParams.get('g');
+
+        if (gameParam) {
+            // MODE 1: GAME LAUNCHER
+            // If a game parameter exists, hide the menu interface and load the game
+            initializeGameMode(gameParam);
+        } else {
+            // MODE 2: MAIN MENU
+            // If no parameter, load the standard library interface
+            initializeMenuMode();
+        }
+
+        function initializeGameMode(filename) {
+            // Hide the UI elements
+            sidebar.style.display = 'none';
+            main.style.display = 'none';
+            loader.style.display = 'flex';
+            
+            // Decode the filename (handling spaces/symbols)
+            const decodedFilename = decodeURIComponent(filename);
+            const url = `${BASE_URL}${filename}?t=${Date.now()}`;
+
+            document.getElementById('loader-text').textContent = "Launching...";
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error("File not found");
+                    return response.text();
+                })
+                .then(html => {
+                    // Overwrite the current document with the game content
+                    // This mimics the "about:blank" behavior but on the current URL
+                    document.open();
+                    document.write(html);
+                    document.close();
+                })
+                .catch(err => {
+                    loader.innerHTML = `<div style="text-align:center; padding:20px;">
+                        <h2>Error Loading Game</h2>
+                        <p>Could not fetch: ${decodedFilename}</p>
+                        <button onclick="window.location.href = window.location.pathname" style="padding:10px; cursor:pointer; margin-top:10px;">Return to Menu</button>
+                    </div>`;
+                    console.error(err);
+                });
+        }
+
+        function initializeMenuMode() {
+            // Ensure loader is hidden
+            loader.style.display = 'none';
+
             if (typeof GAME_DATA === 'undefined') {
                 contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js not found. Run convert.py first!</h2>';
                 return;
@@ -54,28 +108,23 @@
             const specialCats = keys.filter(k => k.length > 1).sort();
 
             // Render Sidebar
-
-            // 1. Standard A-Z
             if (standardCats.length > 0) {
                 const label = document.createElement('div');
                 label.className = 'nav-label';
                 label.textContent = 'Library';
                 navContainer.appendChild(label);
-
                 standardCats.forEach(cat => createNavBtn(cat));
             }
 
-            // 2. Collections (Emulators etc)
             if (specialCats.length > 0) {
                 const label = document.createElement('div');
                 label.className = 'nav-label';
                 label.textContent = 'Collections & Emulators';
                 navContainer.appendChild(label);
-
                 specialCats.forEach(cat => createNavBtn(cat));
             }
 
-            // Render Initial View (All Games)
+            // Render Initial View
             renderGames();
 
             // Search Listener
@@ -90,7 +139,6 @@
                 const el = document.getElementById(`cat-${category}`);
                 if (el) {
                     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // Flash effect
                     el.style.opacity = '0.5';
                     setTimeout(() => el.style.opacity = '1', 300);
                 }
@@ -102,7 +150,6 @@
             contentArea.innerHTML = '';
             const lowerFilter = filterText.toLowerCase();
 
-            // Sort order: #, A-Z, then Named Collections
             const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
                 const isASingle = a.length === 1;
                 const isBSingle = b.length === 1;
@@ -137,7 +184,8 @@
                         const card = document.createElement('div');
                         card.className = 'game-card';
                         card.textContent = game.name;
-                        card.onclick = () => launchGame(game.file, game.name);
+                        // NEW LAUNCHER LOGIC
+                        card.onclick = () => launchGame(game.file);
                         grid.appendChild(card);
                     });
 
@@ -151,38 +199,15 @@
             }
         }
 
-        function launchGame(filename, gamename) {
-            loader.style.display = 'flex';
-            document.getElementById('loader-text').textContent = `Loading ${gamename}...`;
-
+        function launchGame(filename) {
+            // Updated Launch Logic:
+            // Open a new tab with the current URL + ?g=filename
             const cleanName = filename.trim();
             const encoded = encodeURIComponent(cleanName);
-            const url = `${BASE_URL}${encoded}?t=${Date.now()}`;
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error("File not found");
-                    return response.text();
-                })
-                .then(text => {
-                    loader.style.display = 'none';
-                    const newWin = window.open("about:blank", "_blank");
-                    if (newWin) {
-                        newWin.document.open();
-                        newWin.document.write(text);
-                        newWin.document.close();
-                    } else {
-                        alert("Pop-up blocked! Please allow pop-ups for this site.");
-                    }
-                })
-                .catch(err => {
-                    loader.style.display = 'none';
-                    alert(`Failed to load ${gamename}. The file might be missing from the repository.`);
-                    console.error(err);
-                });
+            
+            // This re-opens index.html in a new tab, but with the search parameter
+            window.open(`?g=${encoded}`, '_blank');
         }
-
-        init();
     </script>
 </body>
 </html>
