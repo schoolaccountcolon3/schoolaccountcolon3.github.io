@@ -223,6 +223,10 @@ const GAME_DATA = {
       "file": "clantimatterdimensions.html"
     },
     {
+      "name": "Antonblast",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/711.html"
+    },
+    {
       "name": "Aquapark.io",
       "file": "claquaparkio.html"
     },
@@ -1457,6 +1461,10 @@ const GAME_DATA = {
       "file": "clfashionbattle.html"
     },
     {
+      "name": "Fear & Hunger",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/706-fix.html"
+    },
+    {
       "name": "Fears to Fathom: Home Alone",
       "file": "clfearstofathomhomealone.html"
     },
@@ -1519,6 +1527,10 @@ const GAME_DATA = {
     {
       "name": "Five Nights at Candy\u2019s 2",
       "file": "clfnac2.html"
+    },
+    {
+      "name": "Five Nights at Epstein's",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/710-fix.html"
     },
     {
       "name": "Five Nights at Freddy's",
@@ -2147,6 +2159,10 @@ const GAME_DATA = {
       "file": "clintothedeepweb.html"
     },
     {
+      "name": "Iron Lung",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/705-fix.html"
+    },
+    {
       "name": "Iron Snout",
       "file": "clironsnout.html"
     },
@@ -2215,6 +2231,10 @@ const GAME_DATA = {
     {
       "name": "Jsvecx",
       "file": "cljsvecx.html"
+    },
+    {
+      "name": "Jumbo Mario",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/712.html"
     },
     {
       "name": "Jumping Shell",
@@ -2687,6 +2707,10 @@ const GAME_DATA = {
     {
       "name": "Nazi Zombies: Portable",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/308.html"
+    },
+    {
+      "name": "Needy Streamer Overload",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/708-fix.html"
     },
     {
       "name": "Neon Blaster",
@@ -4155,6 +4179,10 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/407.html"
     },
     {
+      "name": "Survivor.io",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/709-fixagain.html"
+    },
+    {
       "name": "Sushi Roll",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/322.html"
     },
@@ -4439,6 +4467,10 @@ const GAME_DATA = {
     {
       "name": "Traffic Jam 3D",
       "file": "cltrafficjam3d.html"
+    },
+    {
+      "name": "Traffic Racer",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/707-fix.html"
     },
     {
       "name": "Traffic Rider",
@@ -5447,8 +5479,16 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/609-a.html"
     },
     {
+      "name": "Friday Night Funkin vs Tabi",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/714.html"
+    },
+    {
       "name": "Friday Night Funkin vs Undertale",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/657.html"
+    },
+    {
+      "name": "Friday Night Funkin vs Zardy",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/715.html"
     },
     {
       "name": "Friday Night Funkin Vs. BFDI 26",
