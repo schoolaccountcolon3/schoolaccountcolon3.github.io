@@ -338,6 +338,11 @@
           "url": "./more-games/index.html",
           "icon": "fas fa-exclamation",
           "featured": true
+        },
+        {
+          "name": "Replicube",
+          "url": "./more-games/custom/replicube.html",
+          "icon": "fas fa-cube"
         }
       ]
     }
