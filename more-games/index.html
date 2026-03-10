@@ -217,7 +217,7 @@
                         const card = document.createElement('div');
                         card.className = 'game-card';
                         card.textContent = game.name;
-                        card.onclick = () => launchGame(game.file, game.name);
+                        card.onclick = () => launchGame(game);
                         grid.appendChild(card);
                     });
 
@@ -231,8 +231,15 @@
             }
         }
 
-        function launchGame(filename, gamename) {
+        function launchGame(game) {
+            const filename = game.file;
+            const gamename = game.name;
             const isCloaked = cloakToggle.checked;
+
+            if (!isCloaked && game.openog === "true") {
+                window.open(getGameUrl(filename), '_blank');
+                return;
+            }
 
             if (isCloaked) {
                 loader.style.display = 'flex';

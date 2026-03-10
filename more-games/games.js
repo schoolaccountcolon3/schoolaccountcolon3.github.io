@@ -8747,6 +8747,11 @@ const GAME_DATA = {
     {
       "name": "Crulety Squad",
       "file": "./ported/cruletysquad.html"
+    },
+    {
+      "name": "Request A Game",
+      "file": "https://forms.gle/BS5LA2Mf3ZV2f2LY6",
+      "openog": "true"
     }
   ],
   "MS-DOS": [
