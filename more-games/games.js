@@ -10,7 +10,7 @@ const GAME_DATA = {
     },
     {
       "name": "10 Minutes Till Dawn",
-      "file": "cl10minutestildawn.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/430.html"
     },
     {
       "name": "10-103 Null Kevin",
@@ -18,11 +18,11 @@ const GAME_DATA = {
     },
     {
       "name": "12 Mini Battles",
-      "file": "cl12minibattles.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/295.html"
     },
     {
       "name": "1v1.lol",
-      "file": "cl1v1maybeidk.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/58.html"
     },
     {
       "name": "2-3-4 Player Games",
@@ -34,7 +34,7 @@ const GAME_DATA = {
     },
     {
       "name": "2048",
-      "file": "cl2048.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/114-f.html"
     },
     {
       "name": "2048 Cupcakes",
@@ -81,8 +81,12 @@ const GAME_DATA = {
       "file": "cl500calibercontractz.html"
     },
     {
+      "name": "64 in 1 NES",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/732.html"
+    },
+    {
       "name": "8 Ball Classic",
-      "file": "cl8ballclassic.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/146.html"
     },
     {
       "name": "9007199254740992",
@@ -90,7 +94,7 @@ const GAME_DATA = {
     },
     {
       "name": "99 Balls",
-      "file": "cl99balls.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/431.html"
     },
     {
       "name": "99 Nights In The Forest",
@@ -104,7 +108,7 @@ const GAME_DATA = {
     },
     {
       "name": "A Dance of Fire and Ice",
-      "file": "clADOFAI.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/59.html"
     },
     {
       "name": "A Dark Room",
@@ -123,8 +127,12 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/672-2.html"
     },
     {
+      "name": "A Game About Feeding A Black Hole",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/719.html"
+    },
+    {
       "name": "A Small World Cup",
-      "file": "clasmallworldcup.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/435.html"
     },
     {
       "name": "Advent Neon",
@@ -152,7 +160,7 @@ const GAME_DATA = {
     },
     {
       "name": "Ages of Conflict",
-      "file": "clagesofconflict.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/444.html"
     },
     {
       "name": "Ahoy Survival",
@@ -204,7 +212,7 @@ const GAME_DATA = {
     },
     {
       "name": "Angry Birds",
-      "file": "clangrybirds.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/63.html"
     },
     {
       "name": "Angry Birds Chrome",
@@ -216,7 +224,7 @@ const GAME_DATA = {
     },
     {
       "name": "Angry Birds Showdown",
-      "file": "clangrybirdsshowdown.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/147.html"
     },
     {
       "name": "Antimatter Dimensions",
@@ -228,11 +236,11 @@ const GAME_DATA = {
     },
     {
       "name": "Aquapark.io",
-      "file": "claquaparkio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/448.html"
     },
     {
       "name": "Archery World Tour",
-      "file": "clarcheryworldtour.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/148.html"
     },
     {
       "name": "Are We There Yet",
@@ -272,7 +280,7 @@ const GAME_DATA = {
     },
     {
       "name": "Aviamasters",
-      "file": "claviamastersbuggy.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/552.html"
     },
     {
       "name": "Battlezone",
@@ -338,7 +346,7 @@ const GAME_DATA = {
     },
     {
       "name": "Backrooms",
-      "file": "clbackrooms.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/64.html"
     },
     {
       "name": "Backrooms 2D",
@@ -346,7 +354,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bacon May Die",
-      "file": "clbaconmaydie.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/268.html"
     },
     {
       "name": "Bad Bodyguards",
@@ -354,7 +362,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bad Monday Simulator",
-      "file": "clbadmondaysimulator.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/522.html"
     },
     {
       "name": "Bad Parenting",
@@ -366,7 +374,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bad Time Simulator",
-      "file": "clbadtimesim.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/472.html"
     },
     {
       "name": "Baldi's Basics",
@@ -398,7 +406,7 @@ const GAME_DATA = {
     },
     {
       "name": "Ball Blast",
-      "file": "clballblast.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/149.html"
     },
     {
       "name": "Balls And Bricks",
@@ -418,7 +426,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bank Robbery 2",
-      "file": "clbankrobbery2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/439.html"
     },
     {
       "name": "Bank Robbery 3",
@@ -429,24 +437,28 @@ const GAME_DATA = {
       "file": "clbarryhasasecret.html"
     },
     {
+      "name": "Bart Blast",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/740.html"
+    },
+    {
       "name": "BAS",
       "file": "clbas.html"
     },
     {
       "name": "Baseball Bros",
-      "file": "clbaseballbros.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/547.html"
     },
     {
       "name": "Basket Battle",
-      "file": "clbasketbattle.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/25.html"
     },
     {
       "name": "Basket Bros",
-      "file": "clbasketbros.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/285.html"
     },
     {
       "name": "Basket Random",
-      "file": "clbasketrandom.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/66.html"
     },
     {
       "name": "Basket Slam Dunk 2",
@@ -454,7 +466,7 @@ const GAME_DATA = {
     },
     {
       "name": "Basketball FRVR",
-      "file": "clbasketballfrvr.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/28.html"
     },
     {
       "name": "Basketball Legends 2020",
@@ -462,7 +474,7 @@ const GAME_DATA = {
     },
     {
       "name": "Basketball Stars",
-      "file": "clbasketballstars.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/272.html"
     },
     {
       "name": "Basketball Superstars",
@@ -502,7 +514,7 @@ const GAME_DATA = {
     },
     {
       "name": "BERGENTRUCK 201x",
-      "file": "clbergentruck201x.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/455.html"
     },
     {
       "name": "BFDI Branches",
@@ -510,7 +522,7 @@ const GAME_DATA = {
     },
     {
       "name": "BFDIA 5b",
-      "file": "clbfdia5b.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/637-f.html"
     },
     {
       "name": "BFDIA 5b: 5*30",
@@ -522,11 +534,11 @@ const GAME_DATA = {
     },
     {
       "name": "Big Ice Tower Tiny Square",
-      "file": "clbigicetowertinysquare.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/69.html"
     },
     {
       "name": "Big Neon Tower Tiny Square",
-      "file": "clbigneontowertinysquare.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/68.html"
     },
     {
       "name": "Big Shot Boxing",
@@ -534,11 +546,11 @@ const GAME_DATA = {
     },
     {
       "name": "Big Tower Tiny Square",
-      "file": "clbtts.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/67-f.html"
     },
     {
       "name": "Big Tower Tiny Square 2",
-      "file": "clbtts2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/170.html"
     },
     {
       "name": "Binding of Issac: Wrath of the Lamb",
@@ -554,7 +566,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bitlife",
-      "file": "clbitlife.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/70.html"
     },
     {
       "name": "BitPlanes",
@@ -582,7 +594,7 @@ const GAME_DATA = {
     },
     {
       "name": "Block Blast",
-      "file": "clblockblast.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/6.html"
     },
     {
       "name": "Block Blast 2",
@@ -594,7 +606,7 @@ const GAME_DATA = {
     },
     {
       "name": "Blockpost",
-      "file": "clblockpost.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/273.html"
     },
     {
       "name": "Blocky Demolition Derby",
@@ -602,7 +614,7 @@ const GAME_DATA = {
     },
     {
       "name": "Blocky Snakes",
-      "file": "clblockysnakes.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/168.html"
     },
     {
       "name": "Blood Tournament",
@@ -642,11 +654,11 @@ const GAME_DATA = {
     },
     {
       "name": "Blumgi Rocket",
-      "file": "clblumgirocket.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/353.html"
     },
     {
       "name": "Bob the Robber 2",
-      "file": "clbobtherobber2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/76.html"
     },
     {
       "name": "Bob the Robber 5",
@@ -666,7 +678,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bottle Jump 3d",
-      "file": "clbottlejump3d.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/30.html"
     },
     {
       "name": "Bounce Back",
@@ -674,7 +686,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bouncemasters",
-      "file": "clbouncemasters.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/437.html"
     },
     {
       "name": "Bouncy Basketball",
@@ -690,11 +702,11 @@ const GAME_DATA = {
     },
     {
       "name": "Bowmasters",
-      "file": "clbowmaster.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/0.html"
     },
     {
       "name": "Boxing Random",
-      "file": "clboxingrandom.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/77.html"
     },
     {
       "name": "Brawl Guys.io",
@@ -705,8 +717,16 @@ const GAME_DATA = {
       "file": "clbrawlstars.html"
     },
     {
+      "name": "Breath of the Wild NDS",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/726.html"
+    },
+    {
       "name": "Bridge Race",
-      "file": "clbridgerace.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/14.html"
+    },
+    {
+      "name": "Brotato",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/723.html"
     },
     {
       "name": "BTD6 (scratch)",
@@ -734,7 +754,7 @@ const GAME_DATA = {
     },
     {
       "name": "BuildNow.GG",
-      "file": "clbuildnowgg.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/581.html"
     },
     {
       "name": "Bunnyland",
@@ -749,12 +769,16 @@ const GAME_DATA = {
       "file": "clburritobisonlaunchalibre.html"
     },
     {
+      "name": "Burrito Bison: Launcha Libre",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/78.html"
+    },
+    {
       "name": "Bust a Loop",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/521.html"
     },
     {
       "name": "Buster Jam",
-      "file": "clBusterJam.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/646-fixed.html"
     }
   ],
   "C": [
@@ -776,7 +800,7 @@ const GAME_DATA = {
     },
     {
       "name": "Cannon Balls 3D",
-      "file": "clcannonballs3d.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/150.html"
     },
     {
       "name": "Cannon Basketball",
@@ -840,7 +864,7 @@ const GAME_DATA = {
     },
     {
       "name": "Cave Story",
-      "file": "clcavestory.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/632-a.html"
     },
     {
       "name": "Celeste",
@@ -852,11 +876,11 @@ const GAME_DATA = {
     },
     {
       "name": "Celeste Pico",
-      "file": "clceleste.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/440.html"
     },
     {
       "name": "Cell Machine",
-      "file": "clcellmachine.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/730.html"
     },
     {
       "name": "Cell to Singularity",
@@ -876,7 +900,7 @@ const GAME_DATA = {
     },
     {
       "name": "Cheese Chompers 3D",
-      "file": "clcheesechompers3d.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/165.html"
     },
     {
       "name": "Cheshire In a Chatroom",
@@ -884,7 +908,7 @@ const GAME_DATA = {
     },
     {
       "name": "Chess Classic",
-      "file": "clchessclassic.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/151.html"
     },
     {
       "name": "Chicken Scream",
@@ -904,7 +928,11 @@ const GAME_DATA = {
     },
     {
       "name": "Choppy Orc",
-      "file": "clchoppyorc.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/464.html"
+    },
+    {
+      "name": "Christmas Massacre",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/734.html"
     },
     {
       "name": "CircloO",
@@ -912,7 +940,7 @@ const GAME_DATA = {
     },
     {
       "name": "CircloO 2",
-      "file": "clCircloO2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/275.html"
     },
     {
       "name": "City Defense",
@@ -932,7 +960,7 @@ const GAME_DATA = {
     },
     {
       "name": "Clash Of Vikings",
-      "file": "clclashofvikings.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/545.html"
     },
     {
       "name": "Class of '09",
@@ -951,8 +979,12 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/381.html"
     },
     {
+      "name": "Clover Pit",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/716-fix2.html"
+    },
+    {
       "name": "Cluster Rush",
-      "file": "clclusterrush.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/81.html"
     },
     {
       "name": "Coal LLC",
@@ -992,7 +1024,7 @@ const GAME_DATA = {
     },
     {
       "name": "Cookie Clicker",
-      "file": "clcookie-clicker.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/82-aa.html"
     },
     {
       "name": "Cool Cars Run 3D",
@@ -1008,7 +1040,7 @@ const GAME_DATA = {
     },
     {
       "name": "Count Masters: Stickman Games",
-      "file": "clcountmastersstickmangames.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/564.html"
     },
     {
       "name": "Counter Snipe",
@@ -1020,15 +1052,15 @@ const GAME_DATA = {
     },
     {
       "name": "Crazy Cars",
-      "file": "clcrazycars.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/331.html"
     },
     {
       "name": "Crazy Cattle 3D",
-      "file": "clcrazycattle3d.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/164-temp2.html"
     },
     {
       "name": "Crazy Chicken 3D",
-      "file": "clcrazychicken3D.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/255.html"
     },
     {
       "name": "Crazy Crash Landing",
@@ -1052,7 +1084,7 @@ const GAME_DATA = {
     },
     {
       "name": "Crossy Road",
-      "file": "clcrossyroad.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/24.html"
     },
     {
       "name": "Crush Cars 3D",
@@ -1076,15 +1108,15 @@ const GAME_DATA = {
     },
     {
       "name": "Cut the Rope",
-      "file": "clcuttherope.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/212-f.html"
     },
     {
       "name": "Cut the Rope: Holiday Gift",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/214.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/214-fi.html"
     },
     {
       "name": "Cut the Rope: Time Travel",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/213.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/213-f.html"
     },
     {
       "name": "Cyberbung Racing",
@@ -1094,7 +1126,7 @@ const GAME_DATA = {
   "D": [
     {
       "name": "Dadish",
-      "file": "cldadish.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/357.html"
     },
     {
       "name": "Dadish 2",
@@ -1118,7 +1150,7 @@ const GAME_DATA = {
     },
     {
       "name": "Dan The Man",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/520.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/520-fix.html"
     },
     {
       "name": "Dandy's World Clicker",
@@ -1142,7 +1174,7 @@ const GAME_DATA = {
     },
     {
       "name": "Dead Plate",
-      "file": "cldeadplate.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/462.html"
     },
     {
       "name": "Deadly Descent",
@@ -1170,7 +1202,7 @@ const GAME_DATA = {
     },
     {
       "name": "Deltatraveler",
-      "file": "cldeltatraveler.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/560.html"
     },
     {
       "name": "Demolition Derby Crash Racing",
@@ -1201,6 +1233,10 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/32.html"
     },
     {
+      "name": "Dimension Incident",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/727.html"
+    },
+    {
       "name": "Dire Decks",
       "file": "cldiredecks.html"
     },
@@ -1214,7 +1250,7 @@ const GAME_DATA = {
     },
     {
       "name": "Doge Miner",
-      "file": "cldogeminer.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/511.html"
     },
     {
       "name": "Doge Miner 2",
@@ -1266,7 +1302,7 @@ const GAME_DATA = {
     },
     {
       "name": "Draw Climber",
-      "file": "cldrawclimber.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/86.html"
     },
     {
       "name": "Draw Joust",
@@ -1278,7 +1314,7 @@ const GAME_DATA = {
     },
     {
       "name": "Draw the Line",
-      "file": "cldrawtheline.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/152.html"
     },
     {
       "name": "Dreader",
@@ -1286,15 +1322,15 @@ const GAME_DATA = {
     },
     {
       "name": "Dreadhead Parkour",
-      "file": "cldreadheadparkour.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/310.html"
     },
     {
       "name": "Drift Boss",
-      "file": "cldriftboss.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/276.html"
     },
     {
       "name": "Drift Hunters",
-      "file": "cldrifthuntersmerge.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/173.html"
     },
     {
       "name": "Drift Simulator",
@@ -1306,7 +1342,7 @@ const GAME_DATA = {
     },
     {
       "name": "Driven Wild",
-      "file": "cldrivenwild.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/43.html"
     },
     {
       "name": "Duck Life 8",
@@ -1335,6 +1371,10 @@ const GAME_DATA = {
     {
       "name": "Duke Nukem 3D",
       "file": "cldukenukem3d.html"
+    },
+    {
+      "name": "Dumb Ways to Die",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/738.html"
     },
     {
       "name": "Dungeon Deck",
@@ -1411,6 +1451,10 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/286.html"
     },
     {
+      "name": "Endoparasitic 2",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/724.html"
+    },
+    {
       "name": "Endroll",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/631-a.html"
     },
@@ -1420,15 +1464,19 @@ const GAME_DATA = {
     },
     {
       "name": "Escape Road",
-      "file": "clescaperoad.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/264.html"
     },
     {
       "name": "Escape Road 2",
-      "file": "clescaperoad-2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/265-fix.html"
+    },
+    {
+      "name": "Escape Road City 2",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/744.html"
     },
     {
       "name": "Evil Glitch",
-      "file": "clevilglitch.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/277.html"
     },
     {
       "name": "Evolution",
@@ -1458,19 +1506,23 @@ const GAME_DATA = {
     },
     {
       "name": "Fashion Battle",
-      "file": "clfashionbattle.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/127.html"
     },
     {
       "name": "Fear & Hunger",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/706-fix.html"
     },
     {
+      "name": "Fear Assessment",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/728.html"
+    },
+    {
       "name": "Fears to Fathom: Home Alone",
-      "file": "clfearstofathomhomealone.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/460.html"
     },
     {
       "name": "Final Earth 2",
-      "file": "clfinalearth2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/512.html"
     },
     {
       "name": "Final Fantasy VII",
@@ -1478,7 +1530,7 @@ const GAME_DATA = {
     },
     {
       "name": "Find The Alien",
-      "file": "clfindthealien.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/323.html"
     },
     {
       "name": "Fire and Frost Master",
@@ -1490,11 +1542,11 @@ const GAME_DATA = {
     },
     {
       "name": "Fireboy and Watergirl 2",
-      "file": "clfireboyandwatergirl2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/88.html"
     },
     {
       "name": "Fireboy and Watergirl 3",
-      "file": "clfireboyandwatergirl3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/89.html"
     },
     {
       "name": "Fish Eat Getting Big",
@@ -1573,12 +1625,16 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/704-fix.html"
     },
     {
+      "name": "Five Nights at Last Breath",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/750-u.html"
+    },
+    {
       "name": "Five Nights at Winston's",
-      "file": "clfnaw.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/204-a.html"
     },
     {
       "name": "Flappy Dunk",
-      "file": "clflappydunk.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/153.html"
     },
     {
       "name": "Flick Goal",
@@ -1634,7 +1690,7 @@ const GAME_DATA = {
     },
     {
       "name": "Football Bros",
-      "file": "clfootballbros.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/548.html"
     },
     {
       "name": "Football Legends",
@@ -1642,11 +1698,11 @@ const GAME_DATA = {
     },
     {
       "name": "Fork n Sausage",
-      "file": "clforknsausage.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/154.html"
     },
     {
       "name": "Fortzone Battle Royale",
-      "file": "clfortzone.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/120.html"
     },
     {
       "name": "Freegemas",
@@ -1658,7 +1714,11 @@ const GAME_DATA = {
     },
     {
       "name": "Fruit Ninja",
-      "file": "clfruitninja.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/261.html"
+    },
+    {
+      "name": "Fundamental Paper Novel",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/746.html"
     },
     {
       "name": "Funny Battle Simulator",
@@ -1675,12 +1735,20 @@ const GAME_DATA = {
     {
       "name": "Funny Shooter 2",
       "file": "clfunnyshooter22.html"
+    },
+    {
+      "name": "Fused 240",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/722.html"
     }
   ],
   "G": [
     {
+      "name": "game inside a game inside a game inside a game inside a game inside a game",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/729.html"
+    },
+    {
       "name": "Generic Fighter Maybe",
-      "file": "clgenericfightermaybe.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/519.html"
     },
     {
       "name": "Geometry Dash Lite",
@@ -1688,7 +1756,7 @@ const GAME_DATA = {
     },
     {
       "name": "Geometry Dash Lite (REMAKE)",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/27.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/27-f.html"
     },
     {
       "name": "Geometry Dash Scratch",
@@ -1724,11 +1792,11 @@ const GAME_DATA = {
     },
     {
       "name": "Get Yoked",
-      "file": "clgetyoked.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/625.html"
     },
     {
       "name": "Getaway Shootout",
-      "file": "clgetawayshootout.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/338.html"
     },
     {
       "name": "Getting Over It with Bennett Foddy",
@@ -1744,7 +1812,7 @@ const GAME_DATA = {
     },
     {
       "name": "Gladihoppers",
-      "file": "clgladdihoppers.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/4.html"
     },
     {
       "name": "GLFighters",
@@ -1756,7 +1824,7 @@ const GAME_DATA = {
     },
     {
       "name": "Gobble",
-      "file": "clgobble.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/37.html"
     },
     {
       "name": "Goblin Goopmaxxing",
@@ -1772,7 +1840,7 @@ const GAME_DATA = {
     },
     {
       "name": "Going Balls",
-      "file": "clgoingballs.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/662.html"
     },
     {
       "name": "Gold Digger FRVR",
@@ -1792,7 +1860,7 @@ const GAME_DATA = {
     },
     {
       "name": "Google Baseball",
-      "file": "clgooglebaseball.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/257.html"
     },
     {
       "name": "Google Dino",
@@ -1816,15 +1884,15 @@ const GAME_DATA = {
     },
     {
       "name": "Granny",
-      "file": "clgrannyy.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/90.html"
     },
     {
       "name": "Granny 2",
-      "file": "clgranny22.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/125.html"
     },
     {
       "name": "Granny 3",
-      "file": "clgranny3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/126.html"
     },
     {
       "name": "Granny Creepy",
@@ -1868,7 +1936,7 @@ const GAME_DATA = {
     },
     {
       "name": "Growden.io",
-      "file": "clgrowdenio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/603-aa.html"
     },
     {
       "name": "Growmi",
@@ -1880,7 +1948,7 @@ const GAME_DATA = {
     },
     {
       "name": "Guess Their Answer",
-      "file": "clguesstheiranswer.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/155.html"
     },
     {
       "name": "Gun Clone",
@@ -1914,7 +1982,7 @@ const GAME_DATA = {
   "H": [
     {
       "name": "Half Life",
-      "file": "clhalflife.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/262.html"
     },
     {
       "name": "Half Life: Opposing Force",
@@ -1950,7 +2018,7 @@ const GAME_DATA = {
     },
     {
       "name": "Harvest.io",
-      "file": "clharvestio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/156.html"
     },
     {
       "name": "Haunted School",
@@ -1986,7 +2054,7 @@ const GAME_DATA = {
     },
     {
       "name": "Hide n Seek",
-      "file": "clhidenseek.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/16.html"
     },
     {
       "name": "High Heels",
@@ -1998,7 +2066,7 @@ const GAME_DATA = {
     },
     {
       "name": "Highway Racer",
-      "file": "clhighwayracer2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/567.html"
     },
     {
       "name": "Highway Racer 2",
@@ -2014,7 +2082,7 @@ const GAME_DATA = {
     },
     {
       "name": "Hill Climb Racing Lite",
-      "file": "clhillclimbracinglite.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/157.html"
     },
     {
       "name": "HIT8OX",
@@ -2050,7 +2118,7 @@ const GAME_DATA = {
     },
     {
       "name": "House of Hazards",
-      "file": "clhouseofhazards.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/339.html"
     },
     {
       "name": "Hover Racer Drive",
@@ -2062,7 +2130,7 @@ const GAME_DATA = {
     },
     {
       "name": "Human Expenditure Program",
-      "file": "clhumanexpenditureprogram.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/482-2.html"
     },
     {
       "name": "Hungry Knight",
@@ -2074,7 +2142,7 @@ const GAME_DATA = {
     },
     {
       "name": "Hypper Sandbox",
-      "file": "clhyppersandbox.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/551.html"
     }
   ],
   "I": [
@@ -2088,7 +2156,7 @@ const GAME_DATA = {
     },
     {
       "name": "Ice Dodo",
-      "file": "clicedodo.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/5.html"
     },
     {
       "name": "Ice Fishing",
@@ -2100,11 +2168,11 @@ const GAME_DATA = {
     },
     {
       "name": "Idle Breakout",
-      "file": "clidlebreakout.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/362.html"
     },
     {
       "name": "Idle Dice",
-      "file": "clidledice.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/294.html"
     },
     {
       "name": "Idle Football Manager",
@@ -2189,8 +2257,12 @@ const GAME_DATA = {
       "file": "cljefflings.html"
     },
     {
+      "name": "Jeffrey Epstein Basics In Education And Kidnapping",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/751.html"
+    },
+    {
       "name": "Jelly Drift",
-      "file": "cljellydrift.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/543-a.html"
     },
     {
       "name": "Jelly Mario",
@@ -2210,7 +2282,7 @@ const GAME_DATA = {
     },
     {
       "name": "Jetpack Joyride",
-      "file": "cljetpackjoyride.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/7.html"
     },
     {
       "name": "Jetski Race",
@@ -2218,7 +2290,7 @@ const GAME_DATA = {
     },
     {
       "name": "Johnny Trigger",
-      "file": "cljohnnytrigger.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/93.html"
     },
     {
       "name": "Johnny Upgrade",
@@ -2226,7 +2298,7 @@ const GAME_DATA = {
     },
     {
       "name": "Journey Downhill",
-      "file": "cljourneydownhill.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/94.html"
     },
     {
       "name": "Jsvecx",
@@ -2234,7 +2306,7 @@ const GAME_DATA = {
     },
     {
       "name": "Jumbo Mario",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/712.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/712-f.html"
     },
     {
       "name": "Jumping Shell",
@@ -2254,7 +2326,7 @@ const GAME_DATA = {
     },
     {
       "name": "Justfall.lol",
-      "file": "cljustfalllol.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/365.html"
     }
   ],
   "K": [
@@ -2272,7 +2344,7 @@ const GAME_DATA = {
     },
     {
       "name": "Karlson",
-      "file": "clkarlson.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/542-a.html"
     },
     {
       "name": "Kart Bros",
@@ -2378,7 +2450,7 @@ const GAME_DATA = {
     },
     {
       "name": "Little Runmo",
-      "file": "cllittlerunmo.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/302.html"
     },
     {
       "name": "Lobotomy Dash",
@@ -2416,7 +2488,7 @@ const GAME_DATA = {
     },
     {
       "name": "Madalin Stunt Cars 2",
-      "file": "clmadstuntcars2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/278.html"
     },
     {
       "name": "Madalin Stunt Cars 3",
@@ -2504,7 +2576,7 @@ const GAME_DATA = {
     },
     {
       "name": "Melon Playground",
-      "file": "clmelonplayground.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/172.html"
     },
     {
       "name": "Merge Harvest",
@@ -2532,7 +2604,7 @@ const GAME_DATA = {
     },
     {
       "name": "Mindwave",
-      "file": "clmindwave.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/648-el.html"
     },
     {
       "name": "Mine Shooter",
@@ -2564,7 +2636,7 @@ const GAME_DATA = {
     },
     {
       "name": "Minesweeper Plus",
-      "file": "clminesweeperplus.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/604-a.html"
     },
     {
       "name": "Mini Crossword",
@@ -2592,7 +2664,7 @@ const GAME_DATA = {
     },
     {
       "name": "Money Rush",
-      "file": "clmoneyrush.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/400.html"
     },
     {
       "name": "Monkey Mart",
@@ -2608,7 +2680,7 @@ const GAME_DATA = {
     },
     {
       "name": "Monster Tracks",
-      "file": "clmonstertracks.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/36.html"
     },
     {
       "name": "Monster Truck Port Stunt",
@@ -2698,7 +2770,7 @@ const GAME_DATA = {
   "N": [
     {
       "name": "N-gon",
-      "file": "clngon.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/180.html"
     },
     {
       "name": "Nazi Zombies Portable (nzp)",
@@ -2864,11 +2936,11 @@ const GAME_DATA = {
     },
     {
       "name": "osu!",
-      "file": "closu.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/130.html"
     },
     {
       "name": "OVO",
-      "file": "clovofixed.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/1-fde.html"
     },
     {
       "name": "OvO 2",
@@ -2876,7 +2948,7 @@ const GAME_DATA = {
     },
     {
       "name": "OVO 3 Dimensions",
-      "file": "clovodimensions.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/3.html"
     },
     {
       "name": "\u00d6oo",
@@ -2894,7 +2966,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pac Man World 2",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/593.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/593-f.html"
     },
     {
       "name": "Pac-Man Superfast",
@@ -3002,7 +3074,11 @@ const GAME_DATA = {
     },
     {
       "name": "Parking Rush",
-      "file": "clparkingrush.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/159.html"
+    },
+    {
+      "name": "Peaks of Yore",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/717-fix2.html"
     },
     {
       "name": "Penguin Diner",
@@ -3086,7 +3162,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pizza Tower",
-      "file": "clpizzatower.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/267.html"
     },
     {
       "name": "Pizza Tower: Scoutdigo",
@@ -3118,7 +3194,7 @@ const GAME_DATA = {
     },
     {
       "name": "Plinko",
-      "file": "clplinko.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/544.html"
     },
     {
       "name": "Plonky",
@@ -3150,7 +3226,7 @@ const GAME_DATA = {
     },
     {
       "name": "Poly Track",
-      "file": "polytrackbutnotflagged.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/123-win.html"
     },
     {
       "name": "Poly Track old ver",
@@ -3186,7 +3262,7 @@ const GAME_DATA = {
     },
     {
       "name": "Postal",
-      "file": "clpostal.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/617-a.html"
     },
     {
       "name": "Pottery Master",
@@ -3195,6 +3271,10 @@ const GAME_DATA = {
     {
       "name": "Pou",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/23.html"
+    },
+    {
+      "name": "Power Hover",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/743.html"
     },
     {
       "name": "Praxis Fighter X",
@@ -3228,7 +3308,7 @@ const GAME_DATA = {
   "Q": [
     {
       "name": "Quake III Arena",
-      "file": "clquake3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/263.html"
     }
   ],
   "R": [
@@ -3246,7 +3326,7 @@ const GAME_DATA = {
     },
     {
       "name": "Ragdoll Archers",
-      "file": "clragdollarchers.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/186.html"
     },
     {
       "name": "Ragdoll Drop",
@@ -3254,7 +3334,7 @@ const GAME_DATA = {
     },
     {
       "name": "Ragdoll Hit",
-      "file": "clragdollhit.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/44.html"
     },
     {
       "name": "Ragdoll Runners",
@@ -3286,11 +3366,11 @@ const GAME_DATA = {
     },
     {
       "name": "Real Flight Simulator",
-      "file": "clrealflightsim.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/701.html"
     },
     {
       "name": "Recoil",
-      "file": "clrecoil.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/546.html"
     },
     {
       "name": "Red Ball 4",
@@ -3326,11 +3406,11 @@ const GAME_DATA = {
     },
     {
       "name": "Retro Bowl",
-      "file": "clretrobowl.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/33.html"
     },
     {
       "name": "Retro Bowl College",
-      "file": "clretrobowlcollege.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/34-fixed.html"
     },
     {
       "name": "Retro Highway",
@@ -3402,19 +3482,19 @@ const GAME_DATA = {
     },
     {
       "name": "Rolling Sky",
-      "file": "clrollingsky.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/553.html"
     },
     {
       "name": "Rolly Vortex",
-      "file": "clrollyvortex.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/208.html"
     },
     {
       "name": "Rooftop Snipers",
-      "file": "clrooftopsnipers.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/283.html"
     },
     {
       "name": "Rooftop Snipers 2",
-      "file": "clrooftopsnipers2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/490.html"
     },
     {
       "name": "Room Clicker",
@@ -3423,6 +3503,10 @@ const GAME_DATA = {
     {
       "name": "Room Sort",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/321.html"
+    },
+    {
+      "name": "Roulette Hero",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/720.html"
     },
     {
       "name": "Roulette Knight",
@@ -3442,7 +3526,7 @@ const GAME_DATA = {
     },
     {
       "name": "Run 3",
-      "file": "clrun3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/177.html"
     },
     {
       "name": "Running Fred",
@@ -3475,8 +3559,12 @@ const GAME_DATA = {
       "file": "clstealbrainrot.html"
     },
     {
+      "name": "Saihate Station (\u3055\u3044\u306f\u3066\u99c5)",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/737.html"
+    },
+    {
       "name": "Sandboxels",
-      "file": "clsandboxels.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/309.html"
     },
     {
       "name": "sandspiel",
@@ -3488,7 +3576,7 @@ const GAME_DATA = {
     },
     {
       "name": "Sandtris",
-      "file": "clsandtris.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/311.html"
     },
     {
       "name": "Santy",
@@ -3524,7 +3612,7 @@ const GAME_DATA = {
     },
     {
       "name": "Scrap Metal 3",
-      "file": "clscrapmetal3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/188e.html"
     },
     {
       "name": "Scuba Bear",
@@ -3563,6 +3651,10 @@ const GAME_DATA = {
       "file": "clshift2.html"
     },
     {
+      "name": "Shift at Midnight",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/721.html"
+    },
+    {
       "name": "Shipo.io",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/306.html"
     },
@@ -3592,11 +3684,11 @@ const GAME_DATA = {
     },
     {
       "name": "Shredsauce",
-      "file": "clshredsauce.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/725-ff.html"
     },
     {
       "name": "Side Effects",
-      "file": "clsideeffects.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/318.html"
     },
     {
       "name": "Silhouette Showdown",
@@ -3624,7 +3716,7 @@ const GAME_DATA = {
     },
     {
       "name": "Sky Riders",
-      "file": "clSkyRiders.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/576.html"
     },
     {
       "name": "Slender: The 8 Pages",
@@ -3632,7 +3724,7 @@ const GAME_DATA = {
     },
     {
       "name": "Slice It All",
-      "file": "clsliceitall.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/128.html"
     },
     {
       "name": "Slide in the Woods",
@@ -3652,11 +3744,11 @@ const GAME_DATA = {
     },
     {
       "name": "Slither.io",
-      "file": "clslitherio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/461.html"
     },
     {
       "name": "Slope",
-      "file": "clslopeplus.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/198.html"
     },
     {
       "name": "Slope 2",
@@ -3684,7 +3776,7 @@ const GAME_DATA = {
     },
     {
       "name": "Smash Karts",
-      "file": "clsmashkartsworking.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/370-f.html"
     },
     {
       "name": "Snakelike",
@@ -3700,7 +3792,7 @@ const GAME_DATA = {
     },
     {
       "name": "Snow Rider 3D",
-      "file": "clsnowrider.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/119.html"
     },
     {
       "name": "Snow Road",
@@ -3724,7 +3816,7 @@ const GAME_DATA = {
     },
     {
       "name": "Soccer Random",
-      "file": "clsoccerrandomgood.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/739.html"
     },
     {
       "name": "Solar Sandbox",
@@ -3732,7 +3824,7 @@ const GAME_DATA = {
     },
     {
       "name": "Solar Smash",
-      "file": "clsolarsmash.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/118.html"
     },
     {
       "name": "Sonic And The Falling Star",
@@ -3788,11 +3880,11 @@ const GAME_DATA = {
     },
     {
       "name": "Space Waves",
-      "file": "clspacewaves.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/117-fix.html"
     },
     {
       "name": "Spacebar Clicker",
-      "file": "clspacebarclicker.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/473.html"
     },
     {
       "name": "Speed Per Click",
@@ -3800,11 +3892,11 @@ const GAME_DATA = {
     },
     {
       "name": "Speed Stars",
-      "file": "clspeedstars.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/266-a.html"
     },
     {
       "name": "Spelunky Classic HD",
-      "file": "clspelunky.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/635.html"
     },
     {
       "name": "SpiderDoll",
@@ -3812,7 +3904,7 @@ const GAME_DATA = {
     },
     {
       "name": "Spiral Roll",
-      "file": "clspiralroll.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/349.html"
     },
     {
       "name": "SpongeBob SquarePants: Krabby Katch",
@@ -3856,7 +3948,7 @@ const GAME_DATA = {
     },
     {
       "name": "Sprunki",
-      "file": "clsprunki.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/9.html"
     },
     {
       "name": "Sprunki Clicker",
@@ -3880,11 +3972,11 @@ const GAME_DATA = {
     },
     {
       "name": "State.io",
-      "file": "clstateio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/161.html"
     },
     {
       "name": "Station 141",
-      "file": "clstation141.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/452.html"
     },
     {
       "name": "Station Meltdown",
@@ -3892,11 +3984,11 @@ const GAME_DATA = {
     },
     {
       "name": "Station Saturn",
-      "file": "clstationsaturn.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/453.html"
     },
     {
       "name": "Steal A Brainrot",
-      "file": "clsupitdept.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/479.html"
     },
     {
       "name": "Steal A Brainrot Duel",
@@ -3940,7 +4032,7 @@ const GAME_DATA = {
     },
     {
       "name": "Stick With It",
-      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/502.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/502-fixed.html"
     },
     {
       "name": "Stickjet Challenge",
@@ -3948,7 +4040,7 @@ const GAME_DATA = {
     },
     {
       "name": "Stickman and Guns",
-      "file": "clstickmanandguns.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/578.html"
     },
     {
       "name": "Stickman Boost",
@@ -3984,7 +4076,7 @@ const GAME_DATA = {
     },
     {
       "name": "Stickman Hook",
-      "file": "clstickmanhook.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/11.html"
     },
     {
       "name": "Stickman Kingdom Clash",
@@ -3996,7 +4088,7 @@ const GAME_DATA = {
     },
     {
       "name": "Stone Grass Mowing Simulator",
-      "file": "clgrassmowing.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/584.html"
     },
     {
       "name": "Strikeforce Kitty",
@@ -4131,8 +4223,16 @@ const GAME_DATA = {
       "file": "clsupermariobros.html"
     },
     {
+      "name": "Super Mario Bros. Remastered",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/736.html"
+    },
+    {
       "name": "Super Momos Crushers",
       "file": "clmomoscrushers.html"
+    },
+    {
+      "name": "Super Monkey Ball 1&2",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/749.html"
     },
     {
       "name": "Super Oliver World",
@@ -4148,7 +4248,7 @@ const GAME_DATA = {
     },
     {
       "name": "Superhot",
-      "file": "clsuperhot.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/233.html"
     },
     {
       "name": "Superhot Line Miami",
@@ -4168,7 +4268,7 @@ const GAME_DATA = {
     },
     {
       "name": "Survival Race",
-      "file": "clcarkingarena.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/122.html"
     },
     {
       "name": "Survival Race v2",
@@ -4222,7 +4322,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tag",
-      "file": "cltag-.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/627.html"
     },
     {
       "name": "Tag (coolmathgames)",
@@ -4238,7 +4338,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tall.io",
-      "file": "cltallio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/664.html"
     },
     {
       "name": "Tank Pixel",
@@ -4246,7 +4346,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tanuki Sunset",
-      "file": "cltanukisunset.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/305.html"
     },
     {
       "name": "Tap Road",
@@ -4286,7 +4386,7 @@ const GAME_DATA = {
     },
     {
       "name": "Temple Run 2",
-      "file": "cltemplerun2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/10.html"
     },
     {
       "name": "TEMPOVERDOSE",
@@ -4302,7 +4402,7 @@ const GAME_DATA = {
     },
     {
       "name": "Territorial.io",
-      "file": "clterritorialio.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/303.html"
     },
     {
       "name": "That's Not My Neighbor",
@@ -4310,7 +4410,7 @@ const GAME_DATA = {
     },
     {
       "name": "The Deadseat",
-      "file": "clthedeadseat.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/458.html"
     },
     {
       "name": "The Dude",
@@ -4362,7 +4462,7 @@ const GAME_DATA = {
     },
     {
       "name": "They Are Coming",
-      "file": "cltheyarecoming.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/348.html"
     },
     {
       "name": "This Is The Only Level 2",
@@ -4370,7 +4470,7 @@ const GAME_DATA = {
     },
     {
       "name": "Three Goblets",
-      "file": "clthreegoblets.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/620.html"
     },
     {
       "name": "Throw a Potato",
@@ -4394,7 +4494,7 @@ const GAME_DATA = {
     },
     {
       "name": "Time Shooter 2",
-      "file": "cltimeshooter2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/200.html"
     },
     {
       "name": "Time Shooter 3",
@@ -4410,7 +4510,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tiny Fishing",
-      "file": "cltinyfishing.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/108.html"
     },
     {
       "name": "To a Starling",
@@ -4422,7 +4522,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tomb of the Mask",
-      "file": "cltotm.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/109.html"
     },
     {
       "name": "Tomorrow And Yesterday",
@@ -4446,7 +4546,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tower Crash 3D",
-      "file": "cltowercrash3d.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/162.html"
     },
     {
       "name": "Tower Wizard",
@@ -4498,11 +4598,11 @@ const GAME_DATA = {
     },
     {
       "name": "Trivia Crack",
-      "file": "cltriviacrack.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/163.html"
     },
     {
       "name": "Tube Jumpers",
-      "file": "cltubejumpers.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/111.html"
     },
     {
       "name": "Tug of War with Cars",
@@ -4514,7 +4614,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tunnel Rush",
-      "file": "cltunnelrush.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/206.html"
     },
     {
       "name": "Turbo Stars",
@@ -4563,8 +4663,16 @@ const GAME_DATA = {
       "file": "clunderneath.html"
     },
     {
+      "name": "Undertale Last Breath PHASE THREE",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/748.html"
+    },
+    {
       "name": "Undertale Yellow",
-      "file": "clundertaleyellow.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/456.html"
+    },
+    {
+      "name": "Undertale: Last Breath",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/731.html"
     },
     {
       "name": "UNDERWHEELS",
@@ -4595,6 +4703,10 @@ const GAME_DATA = {
       "file": "cluntime.html"
     },
     {
+      "name": "Untitled Goose Game",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/718.html"
+    },
+    {
       "name": "UpSlash",
       "file": "clupslash.html"
     },
@@ -4618,43 +4730,43 @@ const GAME_DATA = {
     },
     {
       "name": "Vex 3",
-      "file": "clvex3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/47.html"
     },
     {
       "name": "Vex 3 Xmas",
-      "file": "clvex3xmas.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/48.html"
     },
     {
       "name": "Vex 4",
-      "file": "clvex4.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/49.html"
     },
     {
       "name": "Vex 5",
-      "file": "clvex5.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/50.html"
     },
     {
       "name": "Vex 6",
-      "file": "clvex6.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/51.html"
     },
     {
       "name": "Vex 7",
-      "file": "clvex7.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/52.html"
     },
     {
       "name": "Vex 8",
-      "file": "clvex8.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/53.html"
     },
     {
       "name": "Vex Challenges",
-      "file": "clvexchallenges.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/54.html"
     },
     {
       "name": "Vex x3m",
-      "file": "clvexx3m.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/55.html"
     },
     {
       "name": "Vex x3m 2",
-      "file": "clvexx3m2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/56.html"
     },
     {
       "name": "Villager",
@@ -4724,7 +4836,7 @@ const GAME_DATA = {
     },
     {
       "name": "We Become What We Behold",
-      "file": "clwebecomewhatwebehold.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/671.html"
     },
     {
       "name": "Weapon Craft Run",
@@ -4740,7 +4852,7 @@ const GAME_DATA = {
     },
     {
       "name": "Webfishing",
-      "file": "clwebfishing.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/423.html"
     },
     {
       "name": "Wermhole",
@@ -4768,11 +4880,15 @@ const GAME_DATA = {
     },
     {
       "name": "Wordle",
-      "file": "clwordle.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/112.html"
     },
     {
       "name": "World Box",
       "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/174.html"
+    },
+    {
+      "name": "Worst Time Simulator",
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/747.html"
     },
     {
       "name": "Wrassling",
@@ -4786,7 +4902,7 @@ const GAME_DATA = {
   "Y": [
     {
       "name": "Yandere Simulator",
-      "file": "clyanderesimulator.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/554.html"
     },
     {
       "name": "Yohoho.io",
@@ -4798,7 +4914,7 @@ const GAME_DATA = {
     },
     {
       "name": "Yume Nikki",
-      "file": "clyumenikki.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/433.html"
     }
   ],
   "Z": [
@@ -5016,7 +5132,7 @@ const GAME_DATA = {
     },
     {
       "name": "Soundboard",
-      "file": "clsoundboard.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/179.html"
     }
   ],
   "COLECOVISION": [
@@ -5118,11 +5234,11 @@ const GAME_DATA = {
     },
     {
       "name": "Minecraft 1.12.2",
-      "file": "Eaglercraft1.12.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/182.html"
     },
     {
       "name": "Minecraft 1.5.2",
-      "file": "eaglercraft.1.5.2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/297.html"
     },
     {
       "name": "Minecraft 1.7.3",
@@ -5138,15 +5254,15 @@ const GAME_DATA = {
     },
     {
       "name": "Minecraft Alpha 1.2.6",
-      "file": "Eaglercraft-Alpha-1.2.6-Offline.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/298.html"
     },
     {
       "name": "Minecraft Beta 1.3",
-      "file": "Eaglercraft-Beta-1.3-Offline.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/299.html"
     },
     {
       "name": "Minecraft Indev",
-      "file": "Eaglercraft-Indev-Offline.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/301.html"
     },
     {
       "name": "Nit Client",
@@ -5384,7 +5500,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin",
-      "file": "clfridaynightfunkin.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/8-wow.html"
     },
     {
       "name": "Friday Night Funkin - Akage",
@@ -5440,7 +5556,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin VS Impostor v4",
-      "file": "clfnfimposterv4.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/608.html"
     },
     {
       "name": "Friday Night Funkin VS Impostor: Desolation",
@@ -5464,7 +5580,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin vs Shaggy",
-      "file": "clshaggy.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/559.html"
     },
     {
       "name": "Friday Night Funkin vs Shaggy only 4 keys",
@@ -5500,7 +5616,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin Vs. Cyber Sensation",
-      "file": "clcybersensation.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/558.html"
     },
     {
       "name": "Friday Night Funkin Vs. Dave and Bambi v3",
@@ -5528,7 +5644,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin VS. KAPI",
-      "file": "clkapi.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/555.html"
     },
     {
       "name": "Friday Night Funkin Vs. Ourple Guy v2",
@@ -5568,7 +5684,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin' Drop and Roll, but Playable",
-      "file": "clfnfdropandroll.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/613.html"
     },
     {
       "name": "Friday Night Funkin' GameBreaker Bundle",
@@ -5652,7 +5768,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin': Indie Cross",
-      "file": "clfnfindiecross.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/489.html"
     },
     {
       "name": "Friday Night Funkin': INFERNAL BOUT",
@@ -5668,7 +5784,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin': Mario's Madness",
-      "file": "clmariomadness.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/582.html"
     },
     {
       "name": "Friday Night Funkin': Mario's Madness D-Side",
@@ -5692,11 +5808,11 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin': Pibby: Apocalypse",
-      "file": "clpibbyapocalypse.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/541.html"
     },
     {
       "name": "Friday Night Funkin': Rev-Mixed",
-      "file": "clfnfrevmixed.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/619.html"
     },
     {
       "name": "Friday Night Funkin': Sarvente's Mid-Fight Masses",
@@ -5828,7 +5944,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin\u2019 Soft",
-      "file": "clfnfsoft.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/509.html"
     },
     {
       "name": "Friday Night Funkin\u2019 The Holiday Mod",
@@ -5864,7 +5980,7 @@ const GAME_DATA = {
     },
     {
       "name": "Friday Night Funkin\u2019 Wednesday's Infidelity",
-      "file": "clfnfwednesday-infedility.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/616.html"
     },
     {
       "name": "Friday Night Funkin\u2019: Shaggy x Matt",
@@ -5938,7 +6054,7 @@ const GAME_DATA = {
     },
     {
       "name": "8 Ball Pool",
-      "file": "cl8ballpool.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/115.html"
     },
     {
       "name": "A Koopa\u2019s Revenge",
@@ -5950,7 +6066,7 @@ const GAME_DATA = {
     },
     {
       "name": "Abandoned",
-      "file": "clthanksforremindingmeihadtofixthis.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/432.html"
     },
     {
       "name": "Abandoned 3",
@@ -5966,15 +6082,15 @@ const GAME_DATA = {
     },
     {
       "name": "Achievement Unlocked",
-      "file": "clachievementunlocked.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/60.html"
     },
     {
       "name": "Achievement Unlocked 2",
-      "file": "clachievmentunlocked2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/61.html"
     },
     {
       "name": "Achievement Unlocked 3",
-      "file": "clachievmentunlocked3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/62.html"
     },
     {
       "name": "Achilles",
@@ -6062,11 +6178,11 @@ const GAME_DATA = {
     },
     {
       "name": "Awesome Tanks",
-      "file": "clawesometanks.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/436.html"
     },
     {
       "name": "Awesome Tanks 2",
-      "file": "clawesometanks2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/438.html"
     },
     {
       "name": "Backyard Baseball",
@@ -6074,15 +6190,15 @@ const GAME_DATA = {
     },
     {
       "name": "Bad Ice Cream",
-      "file": "clbadicecream.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/269.html"
     },
     {
       "name": "Bad Ice Cream 2",
-      "file": "clbadicecream2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/270.html"
     },
     {
       "name": "Bad Ice Cream 3",
-      "file": "clbadicecream3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/271.html"
     },
     {
       "name": "Bad Piggies",
@@ -6126,7 +6242,7 @@ const GAME_DATA = {
     },
     {
       "name": "Blackjack",
-      "file": "clblackjack.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/312.html"
     },
     {
       "name": "Blackjack Battle",
@@ -6174,7 +6290,7 @@ const GAME_DATA = {
     },
     {
       "name": "Bloxorz",
-      "file": "clbloxorz.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/169.html"
     },
     {
       "name": "Bob the Robber",
@@ -6454,7 +6570,7 @@ const GAME_DATA = {
     },
     {
       "name": "Doodle Jump",
-      "file": "cldoodlejumpgoober.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/470.html"
     },
     {
       "name": "Doom 2D",
@@ -6478,23 +6594,23 @@ const GAME_DATA = {
     },
     {
       "name": "Duck Life",
-      "file": "clducklife.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/234.html"
     },
     {
       "name": "Duck Life 2",
-      "file": "clducklife2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/235.html"
     },
     {
       "name": "Duck Life 3",
-      "file": "clducklife3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/236.html"
     },
     {
       "name": "Duck Life 4",
-      "file": "clducklife4.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/237.html"
     },
     {
       "name": "Duck Life 5",
-      "file": "clducklfe5.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/238.html"
     },
     {
       "name": "Dumpling",
@@ -6586,7 +6702,7 @@ const GAME_DATA = {
     },
     {
       "name": "Fancy Pants Adventure",
-      "file": "clfancypantsadventure.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/333.html"
     },
     {
       "name": "Fancy Pants Adventure - World 3",
@@ -6594,15 +6710,15 @@ const GAME_DATA = {
     },
     {
       "name": "Fancy Pants Adventure 2",
-      "file": "clfancypantsadventure2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/334.html"
     },
     {
       "name": "Fancy Pants Adventure 4 Part 1",
-      "file": "clfpa4p1.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/336.html"
     },
     {
       "name": "Fancy Pants Adventure 4 Part 2",
-      "file": "clfpa4p2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/337.html"
     },
     {
       "name": "Fancy Snowboarding",
@@ -6666,7 +6782,7 @@ const GAME_DATA = {
     },
     {
       "name": "Flappy Bird",
-      "file": "clflappybird.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/129.html"
     },
     {
       "name": "Flood Runner",
@@ -6750,7 +6866,7 @@ const GAME_DATA = {
     },
     {
       "name": "Happy Wheels",
-      "file": "clhappywheels.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/624.html"
     },
     {
       "name": "Haunt The House",
@@ -6786,27 +6902,27 @@ const GAME_DATA = {
     },
     {
       "name": "Hobo 2",
-      "file": "clhobo2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/674.html"
     },
     {
       "name": "Hobo 3",
-      "file": "clhobo3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/675.html"
     },
     {
       "name": "Hobo 4",
-      "file": "clhobo4.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/676.html"
     },
     {
       "name": "Hobo 5",
-      "file": "clhobo5.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/677.html"
     },
     {
       "name": "Hobo 6",
-      "file": "clhobo6.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/678.html"
     },
     {
       "name": "Hobo 7",
-      "file": "clhobo7.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/679.html"
     },
     {
       "name": "Hobo vs. Zombies",
@@ -6862,23 +6978,23 @@ const GAME_DATA = {
     },
     {
       "name": "Learn to Fly",
-      "file": "cllearntofly.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/340.html"
     },
     {
       "name": "Learn to Fly 2",
-      "file": "cllearntofly2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/341.html"
     },
     {
       "name": "Learn to Fly 3",
-      "file": "cllearntofly3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/342.html"
     },
     {
       "name": "Learn to Fly Idle",
-      "file": "cllearntoflyidle.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/343.html"
     },
     {
       "name": "Line Rider",
-      "file": "cllinerider.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/95.html"
     },
     {
       "name": "Lonewolf",
@@ -7026,7 +7142,7 @@ const GAME_DATA = {
     },
     {
       "name": "Newgrounds Rumble",
-      "file": "clnewgroundsrumble.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/587.html"
     },
     {
       "name": "Nickelodeon Super Brawl 2",
@@ -7050,7 +7166,7 @@ const GAME_DATA = {
     },
     {
       "name": "Orange Roulette",
-      "file": "clorangeroulette.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/659.html"
     },
     {
       "name": "Papa Louie Night Hunt 2",
@@ -7130,7 +7246,7 @@ const GAME_DATA = {
     },
     {
       "name": "Peggle",
-      "file": "clpeggle.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/688.html"
     },
     {
       "name": "Penalty kicks",
@@ -7202,11 +7318,11 @@ const GAME_DATA = {
     },
     {
       "name": "Raft Wars",
-      "file": "clraftwars.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/344.html"
     },
     {
       "name": "Raft Wars 2",
-      "file": "clraftwars2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/345.html"
     },
     {
       "name": "Ragdoll Achievement",
@@ -7250,19 +7366,19 @@ const GAME_DATA = {
     },
     {
       "name": "Red Ball",
-      "file": "clredball.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/239.html"
     },
     {
       "name": "Red Ball 2",
-      "file": "clredball2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/240.html"
     },
     {
       "name": "Red Ball 3",
-      "file": "clredball3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/241.html"
     },
     {
       "name": "Red Ball 4",
-      "file": "clredball4.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/242.html"
     },
     {
       "name": "Red Ball 4 vol.2",
@@ -7298,31 +7414,31 @@ const GAME_DATA = {
     },
     {
       "name": "Riddle School",
-      "file": "clriddleschool.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/287.html"
     },
     {
       "name": "Riddle School 2",
-      "file": "clriddleschool2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/288.html"
     },
     {
       "name": "Riddle School 3",
-      "file": "clriddleschool3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/289.html"
     },
     {
       "name": "Riddle School 4",
-      "file": "clriddleschool445544444$$444$444.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/290.html"
     },
     {
       "name": "Riddle School 5",
-      "file": "clicantbelievegoogleflaggedmeforthenameofthefilelol.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/291.html"
     },
     {
       "name": "Riddle Transfer",
-      "file": "clriddletransfer.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/292.html"
     },
     {
       "name": "Riddle Transfer 2",
-      "file": "clriddletransfer2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/293.html"
     },
     {
       "name": "Riddle University",
@@ -7330,7 +7446,7 @@ const GAME_DATA = {
     },
     {
       "name": "Road of Fury",
-      "file": "clroadoffury.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/42.html"
     },
     {
       "name": "Road of the Dead",
@@ -7354,7 +7470,7 @@ const GAME_DATA = {
     },
     {
       "name": "Run 2",
-      "file": "clrun-2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/176.html"
     },
     {
       "name": "Sands of the Coliseum",
@@ -7534,7 +7650,7 @@ const GAME_DATA = {
     },
     {
       "name": "Super Mario 63",
-      "file": "clsupermario63.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/314.html"
     },
     {
       "name": "Super Mario Crossover",
@@ -7542,7 +7658,7 @@ const GAME_DATA = {
     },
     {
       "name": "Super Smash Flash",
-      "file": "clsupersmashflash.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/647.html"
     },
     {
       "name": "Super Smash Flash 2",
@@ -7566,7 +7682,7 @@ const GAME_DATA = {
     },
     {
       "name": "Swords and Souls",
-      "file": "clswordsandsouls.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/178.html"
     },
     {
       "name": "Sydney Shark",
@@ -7614,7 +7730,7 @@ const GAME_DATA = {
     },
     {
       "name": "The Impossible Quiz",
-      "file": "climpossiblequiz.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/507.html"
     },
     {
       "name": "The Impossible Quiz 2",
@@ -7638,7 +7754,7 @@ const GAME_DATA = {
     },
     {
       "name": "This is the Only Level",
-      "file": "clthisistheonlylevel.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/106.html"
     },
     {
       "name": "This is the Only Level Too",
@@ -7646,7 +7762,7 @@ const GAME_DATA = {
     },
     {
       "name": "Toss the Turtle",
-      "file": "cltosstheturtle.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/110-f.html"
     },
     {
       "name": "Troll Face Quest 1",
@@ -7734,7 +7850,7 @@ const GAME_DATA = {
     },
     {
       "name": "Vex 2",
-      "file": "clvex2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/46.html"
     },
     {
       "name": "VVVVVV",
@@ -7762,35 +7878,35 @@ const GAME_DATA = {
     },
     {
       "name": "Wheely",
-      "file": "clwheely.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/245.html"
     },
     {
       "name": "Wheely 2",
-      "file": "clwheely2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/246.html"
     },
     {
       "name": "Wheely 3",
-      "file": "clwheely3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/247.html"
     },
     {
       "name": "Wheely 4",
-      "file": "clwheely4.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/248.html"
     },
     {
       "name": "Wheely 5",
-      "file": "clwheely5.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/249.html"
     },
     {
       "name": "Wheely 6",
-      "file": "clwheely6.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/250.html"
     },
     {
       "name": "Wheely 7",
-      "file": "clwheely7.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/251.html"
     },
     {
       "name": "Wheely 8",
-      "file": "clwheely8.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/252.html"
     },
     {
       "name": "Windows Doors",
@@ -7864,7 +7980,7 @@ const GAME_DATA = {
     },
     {
       "name": "Alien Hominid",
-      "file": "clalienhominidgba.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/304.html"
     },
     {
       "name": "Apotris",
@@ -8060,7 +8176,7 @@ const GAME_DATA = {
     },
     {
       "name": "Meatboy",
-      "file": "clmeatboy.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/689.html"
     },
     {
       "name": "Mega Man 2",
@@ -8196,7 +8312,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Emerald",
-      "file": "clpokemonemerald.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/506.html"
     },
     {
       "name": "Pokemon Emerald Crest",
@@ -8244,7 +8360,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Firered",
-      "file": "clpokemonfirered.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/694.html"
     },
     {
       "name": "Pokemon Firered Leafgreen Plus",
@@ -8627,6 +8743,12 @@ const GAME_DATA = {
       "file": "clwariowareinc.html"
     }
   ],
+  "Games I Ported": [
+    {
+      "name": "Crulety Squad",
+      "file": "./ported/cruletysquad.html"
+    }
+  ],
   "MS-DOS": [
     {
       "name": "Blood",
@@ -8642,7 +8764,7 @@ const GAME_DATA = {
     },
     {
       "name": "Doom 2",
-      "file": "cldoom2dos.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/602.html"
     },
     {
       "name": "Doom 2D",
@@ -8650,7 +8772,7 @@ const GAME_DATA = {
     },
     {
       "name": "Fallout",
-      "file": "clfallout.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/585.html"
     },
     {
       "name": "Hacx",
@@ -8674,7 +8796,7 @@ const GAME_DATA = {
     },
     {
       "name": "The Oregon Trail",
-      "file": "cloregontrail.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/586.html"
     },
     {
       "name": "Touhou 1 Touhou-Reiiden",
@@ -8890,7 +9012,7 @@ const GAME_DATA = {
     },
     {
       "name": "Resident Evil 2",
-      "file": "clresidentevil2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/742.html"
     },
     {
       "name": "Smash Remix",
@@ -8902,7 +9024,7 @@ const GAME_DATA = {
     },
     {
       "name": "Super Mario 64",
-      "file": "clsupermario64.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/588.html"
     },
     {
       "name": "Super Mario 64 Land",
@@ -8934,7 +9056,7 @@ const GAME_DATA = {
     },
     {
       "name": "The Legend of Zelda Ocarina of Time",
-      "file": "clocarinaoftime.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/611.html"
     },
     {
       "name": "Triple Play 2000",
@@ -9008,15 +9130,15 @@ const GAME_DATA = {
     },
     {
       "name": "Cooking Mama",
-      "file": "clcookingmama.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/681.html"
     },
     {
       "name": "Cooking Mama 2",
-      "file": "clcookingmama2.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/682.html"
     },
     {
       "name": "Cooking Mama 3",
-      "file": "clcookingmama3.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/683.html"
     },
     {
       "name": "Cory In The House",
@@ -9076,11 +9198,11 @@ const GAME_DATA = {
     },
     {
       "name": "FIFA 10",
-      "file": "clFIFA10.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/686.html"
     },
     {
       "name": "FIFA 11",
-      "file": "clFIFA11.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/685.html"
     },
     {
       "name": "FIFA Soccer 06",
@@ -9116,11 +9238,11 @@ const GAME_DATA = {
     },
     {
       "name": "Kirby Squeak Squad",
-      "file": "clkirbysqueaksquad.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/684.html"
     },
     {
       "name": "Kirby Super Star Ultra",
-      "file": "clkirbysuperstarultra.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/680.html"
     },
     {
       "name": "Legend of Zelda, The - Spirit Tracks",
@@ -9328,7 +9450,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tomodachi Collection",
-      "file": "cltomodachicollection.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/510.html"
     },
     {
       "name": "Ultimate Mortal Kombat",
@@ -9430,7 +9552,7 @@ const GAME_DATA = {
     },
     {
       "name": "Famidash",
-      "file": "clfamidash.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/735.html"
     },
     {
       "name": "Final Fantasy",
@@ -9558,7 +9680,7 @@ const GAME_DATA = {
     },
     {
       "name": "Super Mario Bros",
-      "file": "clsupermario.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/508.html"
     },
     {
       "name": "Super Mario Bros. 2",
@@ -9582,7 +9704,7 @@ const GAME_DATA = {
     },
     {
       "name": "Tetris",
-      "file": "cltetris.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/745.html"
     },
     {
       "name": "The Immortal",
@@ -9658,7 +9780,7 @@ const GAME_DATA = {
     },
     {
       "name": "Doom",
-      "file": "cldoomps.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/203-a.html"
     },
     {
       "name": "Final Fantasy Tactics",
@@ -9726,7 +9848,7 @@ const GAME_DATA = {
     },
     {
       "name": "Metal Gear Solid",
-      "file": "clmetalgearsolidps.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/599.html"
     },
     {
       "name": "Mortal Kombat 4",
@@ -9750,7 +9872,7 @@ const GAME_DATA = {
     },
     {
       "name": "Parappa the Rapper",
-      "file": "clparappatherapper.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/524.html"
     },
     {
       "name": "Pepsiman",
@@ -9774,7 +9896,7 @@ const GAME_DATA = {
     },
     {
       "name": "Resident Evil",
-      "file": "clresidentevil.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/741.html"
     },
     {
       "name": "Resident Evil 3",
@@ -9782,7 +9904,7 @@ const GAME_DATA = {
     },
     {
       "name": "Silent Hill",
-      "file": "clsilenthill.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/713.html"
     },
     {
       "name": "Super Puzzle Fighter II Turbo",
@@ -9816,7 +9938,7 @@ const GAME_DATA = {
   "SEGA CD": [
     {
       "name": "Sonic CD",
-      "file": "clsoniccd.html"
+      "file": "https://cdn.jsdelivr.net/gh/gn-math/html@latest/589.html"
     },
     {
       "name": "Sonic Megamix 4.0",

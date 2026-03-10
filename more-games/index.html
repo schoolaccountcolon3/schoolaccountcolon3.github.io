@@ -28,7 +28,6 @@
         <div id="topbar">
             <input type="text" id="search-input" placeholder="Search games...">
             
-            <!-- NEW CHECKBOX -->
             <label class="cloak-label">
                 <input type="checkbox" id="cloak-toggle"> 
                 Open in about:blank
@@ -51,25 +50,40 @@
         const main = document.getElementById('main');
         const cloakToggle = document.getElementById('cloak-toggle');
 
-        // Check for ?g= parameter immediately (Direct Link Mode)
         const urlParams = new URLSearchParams(window.location.search);
         const gameParam = urlParams.get('g');
 
         if (gameParam) {
-            initializeGameMode(gameParam, true); // True = decode name
+            initializeGameMode(gameParam, true);
         } else {
             initializeMenuMode();
         }
 
-        // Helper to determine real URL
         function getGameUrl(filename) {
             if (filename.startsWith("cl")) {
-                // Old games
                 return `${BASE_URL}${filename}?t=${Date.now()}`;
             } else {
-                // New games (Full URL stored in file property)
                 return filename;
             }
+        }
+
+        // NEW HELPER: Cleans the fetched HTML of any "sidebarad*" elements before rendering
+        function removeSidebarAds(htmlString) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            
+            // Finds any elements where the ID or Class starts with "sidebarad" (sidebarad1, sidebarad2, etc.)
+            const ads = doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]');
+            
+            // Remove them from the virtual DOM
+            ads.forEach(ad => ad.remove());
+            
+            // Reconstruct the HTML string
+            let doctype = "";
+            if (doc.doctype) {
+                doctype = `<!DOCTYPE ${doc.doctype.name}>\n`;
+            }
+            return doctype + doc.documentElement.outerHTML;
         }
 
         function initializeGameMode(filename, needsDecode) {
@@ -88,8 +102,11 @@
                     return response.text();
                 })
                 .then(html => {
+                    // Clean HTML before writing
+                    const cleanedHtml = removeSidebarAds(html);
+                    
                     document.open();
-                    document.write(html);
+                    document.write(cleanedHtml);
                     document.close();
                 })
                 .catch(err => {
@@ -111,8 +128,17 @@
             }
 
             const keys = Object.keys(GAME_DATA);
-            const standardCats = keys.filter(k => k.length === 1).sort();
-            const specialCats = keys.filter(k => k.length > 1).sort();
+            const portedKey = keys.find(k => k.toLowerCase() === "games i ported");
+            const standardCats = keys.filter(k => k.length === 1 && k !== portedKey).sort();
+            const specialCats = keys.filter(k => k.length > 1 && k !== portedKey).sort();
+
+            if (portedKey) {
+                const label = document.createElement('div');
+                label.className = 'nav-label';
+                label.textContent = 'Special';
+                navContainer.appendChild(label);
+                createNavBtn(portedKey);
+            }
 
             if (standardCats.length > 0) {
                 const label = document.createElement('div');
@@ -155,6 +181,9 @@
             const lowerFilter = filterText.toLowerCase();
 
             const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
+                if (a.toLowerCase() === "games i ported") return -1;
+                if (b.toLowerCase() === "games i ported") return 1;
+
                 const isASingle = a.length === 1;
                 const isBSingle = b.length === 1;
                 if (isASingle && !isBSingle) return -1;
@@ -202,12 +231,10 @@
             }
         }
 
-        // Logic to toggle between URL params and about:blank
         function launchGame(filename, gamename) {
             const isCloaked = cloakToggle.checked;
 
             if (isCloaked) {
-                // 1. CLOAKED MODE (about:blank)
                 loader.style.display = 'flex';
                 document.getElementById('loader-text').textContent = "Cloaking...";
                 
@@ -219,6 +246,9 @@
                         return res.text();
                     })
                     .then(html => {
+                        // Clean HTML before writing
+                        const cleanedHtml = removeSidebarAds(html);
+                        
                         loader.style.display = 'none';
                         const win = window.open("about:blank", "_blank");
                         if(!win) {
@@ -226,7 +256,7 @@
                             return;
                         }
                         win.document.open();
-                        win.document.write(html);
+                        win.document.write(cleanedHtml);
                         win.document.close();
                     })
                     .catch(err => {
@@ -235,7 +265,6 @@
                     });
 
             } else {
-                // 2. STANDARD MODE (?g=...)
                 const cleanName = filename.trim();
                 const encoded = encodeURIComponent(cleanName);
                 window.open(`?g=${encoded}`, '_blank');
