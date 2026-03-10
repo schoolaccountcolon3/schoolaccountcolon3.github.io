@@ -4,6 +4,7 @@
 <head>
 	<meta charset='utf-8' />
     <base href="https://cdn.jsdelivr.net/gh/lemonsky47/webports@main/cruletysquad/">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 	<meta name='viewport' content='width=device-width, user-scalable=no' />
 	<title>Cruelty Squad</title>
 	<style type='text/css'>
@@ -221,7 +222,7 @@
 				if (!chunkNames || chunkNames.length === 0) {
 					let partNum = 0;
 					while (true) {
-						const partName = `index.pck.gz.part${String(partNum).padStart(3, '0')}`;
+						const partName = `index.pck.part${String(partNum).padStart(3, '0')}`;
 						try {
 							progressCallback(`Downloading ${partName}...`);
 							const response = await fetch(partName);
@@ -249,28 +250,40 @@
 			},
 
 			async reassembleAndDecompress(chunks, progressCallback) {
-				progressCallback('Reassembling chunks...');
+              progressCallback('Reassembling chunks...');
 
-				// Combine all chunks
-				const totalSize = chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
-				const combined = new Uint8Array(totalSize);
-				let offset = 0;
-				for (const chunk of chunks) {
-					combined.set(new Uint8Array(chunk), offset);
-					offset += chunk.byteLength;
-				}
+              // 1. Calculate total size of the COMPRESSED parts
+              const totalCompressedSize = chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0);
+              const combinedCompressed = new Uint8Array(totalCompressedSize);
 
-				progressCallback('Decompressing...');
+              // 2. Concatenate them into one giant Uint8Array
+              let offset = 0;
+              for (const chunk of chunks) {
+                  combinedCompressed.set(new Uint8Array(chunk), offset);
+                  offset += chunk.byteLength;
+              }
 
-				// Decompress using DecompressionStream
-				const blob = new Blob([combined]);
-				const stream = blob.stream();
-				const decompressedStream = stream.pipeThrough(new DecompressionStream('gzip'));
-				const decompressedBlob = await new Response(decompressedStream).blob();
-				const decompressed = await decompressedBlob.arrayBuffer();
+              progressCallback('Decompressing with Pako...');
 
-				return decompressed;
-			},
+              try {
+                  // 3. Pako handles multi-member gzip files perfectly
+                  // This replaces the entire DecompressionStream logic
+                  const decompressed = pako.inflate(combinedCompressed);
+
+                  console.log("Decompression successful! Size:", decompressed.byteLength);
+
+                  // 4. Integrity check
+                  const expectedSize = GODOT_CONFIG.fileSizes["index.pck"];
+                  if (decompressed.byteLength !== expectedSize) {
+                      console.error(`SIZE MISMATCH: Expected ${expectedSize} but got ${decompressed.byteLength}`);
+                  }
+
+                  return decompressed.buffer;
+              } catch (err) {
+                  console.error("Pako decompression failed:", err);
+                  throw new Error("Decompression failed: " + err.message);
+              }
+          },
 
 			async checkAndUnpack(progressCallback) {
 				// Check if index.pck is accessible via fetch
@@ -413,7 +426,7 @@
 								return Promise.resolve(new Response(unpackedPckData, {
 									status: 200,
 									statusText: 'OK',
-									headers: { 'Content-Type': 'application/octet-stream' }
+									headers: { 'Content-Type': 'application/octet-stream', 'Content-Length': unpackedPckData.byteLength.toString() }
 								}));
 							}
 							return originalFetch.apply(this, arguments);
