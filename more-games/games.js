@@ -8745,8 +8745,12 @@ const GAME_DATA = {
   ],
   "Games I Ported": [
     {
-      "name": "Crulety Squad",
+      "name": "Cruelty Squad",
       "file": "./ported/cruletysquad.html"
+    },
+    {
+      "name": "Upload Labs",
+      "file": "./ported/uploadlabs.html"
     },
     {
       "name": "Request A Game",
