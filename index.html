@@ -1,575 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>def google classroom</title>
-      <link rel="icon" type="image/png" href="./favicon.png" />
-      <link rel="stylesheet" href="./styles/style.css" />
-      <script src="./theme.js"></script>
-      <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-      <!-- Font Awesome for icons -->
-      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/all.css"/>
-      <style>
-         /* Modal styles */
-         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-         }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
+    <link rel="stylesheet" href="/styles/style.css" />
+    <title>Google Classroom</title>
+</head>
+<body>
 
-         .modal-overlay.open {
-            display: flex;
-         }
+    <div id="loader">
+        <div class="spinner"></div>
+        <div id="loader-text">Loading...</div>
+    </div>
 
-         .modal-window {
-            background-color: var(--color-card-bg);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px var(--color-shadow);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: modalFadeIn 0.3s ease-out;
-         }
+    <div id="styleSwitcher"></div>
 
-         @keyframes modalFadeIn {
-            from {
-               opacity: 0;
-               transform: scale(0.9);
+    <nav id="sidebar">
+        <div class="sidebar-header">Not Games</div>
+        <div class="nav-scroll" id="nav-container">
+            <!-- Injected via JS -->
+        </div>
+    </nav>
+
+    <main id="main">
+        <div id="topbar">
+            <input type="text" id="search-input" placeholder="Search games...">
+            
+            <label class="cloak-label">
+                <input type="checkbox" id="cloak-toggle"> 
+                Open in about:blank
+            </label>
+        </div>
+        <div id="content-area">
+            <!-- Injected via JS -->
+        </div>
+    </main>
+
+    <script src="games.js"></script>
+    <script>
+        const BASE_URL = "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/";
+
+        const navContainer = document.getElementById('nav-container');
+        const contentArea = document.getElementById('content-area');
+        const searchInput = document.getElementById('search-input');
+        const loader = document.getElementById('loader');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+        const cloakToggle = document.getElementById('cloak-toggle');
+        let showHidden = false;
+        let keyBuffer = '';
+        const SECRET_CODE = 'secrethidden';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameParam = urlParams.get('g');
+
+        if (gameParam) {
+            initializeGameMode(gameParam, true);
+        } else {
+            initializeMenuMode();
+        }
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key.length !== 1) return;
+            keyBuffer = (keyBuffer + event.key.toLowerCase()).slice(-SECRET_CODE.length);
+            if (!showHidden && keyBuffer === SECRET_CODE) {
+                showHidden = true;
+                renderGames(searchInput.value);
             }
-            to {
-               opacity: 1;
-               transform: scale(1);
+        });
+
+        function getGameUrl(filename) {
+            if (filename.startsWith("cl")) {
+                return `${BASE_URL}${filename}?t=${Date.now()}`;
+            } else {
+                return filename;
             }
-         }
+        }
 
-         .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--color-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-         }
+        // NEW HELPER: Cleans the fetched HTML of any "sidebarad*" elements before rendering
+        function removeSidebarAds(htmlString) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            
+            // Finds any elements where the ID or Class starts with "sidebarad" (sidebarad1, sidebarad2, etc.)
+            const ads = doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]');
+            
+            // Remove them from the virtual DOM
+            ads.forEach(ad => ad.remove());
+            
+            // Reconstruct the HTML string
+            let doctype = "";
+            if (doc.doctype) {
+                doctype = `<!DOCTYPE ${doc.doctype.name}>\n`;
+            }
+            return doctype + doc.documentElement.outerHTML;
+        }
 
-         .modal-header h2 {
-            margin: 0;
-            color: var(--color-fg);
-            font-size: 1.5em;
-         }
+        function initializeGameMode(filename, needsDecode) {
+            sidebar.style.display = 'none';
+            main.style.display = 'none';
+            loader.style.display = 'flex';
+            
+            const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
+            const url = getGameUrl(realFilename);
 
-         .modal-close {
-            background: none;
-            border: none;
-            color: var(--color-fg);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-         }
+            document.getElementById('loader-text').textContent = "Launching...";
 
-         .modal-close:hover {
-            background-color: var(--color-button-hover);
-         }
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error("File not found");
+                    return response.text();
+                })
+                .then(html => {
+                    // Clean HTML before writing
+                    const cleanedHtml = removeSidebarAds(html);
+                    
+                    document.open();
+                    document.write(cleanedHtml);
+                    document.close();
+                })
+                .catch(err => {
+                    loader.innerHTML = `<div style="text-align:center; padding:20px;">
+                        <h2>Error Loading Game</h2>
+                        <p>Could not fetch game data.</p>
+                        <button onclick="window.location.href = window.location.pathname" style="padding:10px; cursor:pointer; margin-top:10px;">Return to Menu</button>
+                    </div>`;
+                    console.error(err);
+                });
+        }
 
-         .modal-content {
-            padding: 20px;
-         }
+        function initializeMenuMode() {
+            loader.style.display = 'none';
 
-         .modal-game-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            margin: 8px 0;
-            background: var(--color-bg);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-         }
+            if (typeof GAME_DATA === 'undefined') {
+                contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js not found. Run convert.py first!</h2>';
+                return;
+            }
 
-         .modal-game-item:hover {
-            background: var(--color-button-hover);
-            transform: translateX(5px);
-            border-color: var(--color-primary);
-         }
+            const keys = Object.keys(GAME_DATA);
+            const portedKey = keys.find(k => k.toLowerCase() === "games i ported");
+            const standardCats = keys.filter(k => k.length === 1 && k !== portedKey).sort();
+            const specialCats = keys.filter(k => k.length > 1 && k !== portedKey).sort();
 
-         .modal-game-item i {
-            font-size: 1.2em;
-            color: var(--color-primary);
-            width: 20px;
-            text-align: center;
-         }
+            if (portedKey) {
+                const label = document.createElement('div');
+                label.className = 'nav-label';
+                label.textContent = 'Special';
+                navContainer.appendChild(label);
+                createNavBtn(portedKey);
+            }
 
-         .modal-game-item a {
-            flex: 1;
-            color: var(--color-link);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-         }
+            if (standardCats.length > 0) {
+                const label = document.createElement('div');
+                label.className = 'nav-label';
+                label.textContent = 'Library';
+                navContainer.appendChild(label);
+                standardCats.forEach(cat => createNavBtn(cat));
+            }
 
-         .modal-game-item a:hover {
-            color: var(--color-link-hover);
-         }
-      </style>
-   </head>
-   <body>
-            <!-- Popup Notification -->
-               <div id="word-popup" style="display:none;position:fixed;right:32px;bottom:-300px;z-index:9999;transition:bottom 0.5s cubic-bezier(.4,2,.6,1);padding:0;margin:0;background:none;box-shadow:none;border-radius:18px 18px 0 0;">
-                  <img id="word-popup-img" src="" alt="Popup" style="max-width:220px;max-height:180px;cursor:pointer;display:block;" />
-               </div>
-      <div id="particles-js"></div>
-      <!-- Theme Switcher -->
-      <div id="styleSwitcher"></div>
+            if (specialCats.length > 0) {
+                const label = document.createElement('div');
+                label.className = 'nav-label';
+                label.textContent = 'Collections & Emulators';
+                navContainer.appendChild(label);
+                specialCats.forEach(cat => createNavBtn(cat));
+            }
 
-      <!-- Game Search Bar (moved to side)
-      <div id="game-search-bar" class="side-search-bar">
-         <input type="text" id="game-search-input" placeholder="Search games..." autocomplete="off" />
-         <i class="fas fa-search"></i>
-      </div>  -->
+            renderGames();
 
-      <!-- Modal Overlay -->
-      <div id="modal-overlay" class="modal-overlay">
-         <div class="modal-window">
-            <div class="modal-header">
-               <h2 id="modal-title"></h2>
-               <button class="modal-close" id="modal-close">&times;</button>
-            </div>
-            <div class="modal-content" id="modal-content"></div>
-         </div>
-      </div>
+            searchInput.addEventListener('input', (e) => renderGames(e.target.value));
+        }
 
-      <!-- Main Content -->
-      <div class="container">
-         <h1 class="main-title">
-            <i class="fas fa-gamepad"></i>
-            def google classroom
-         </h1>
+        function createNavBtn(category) {
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            btn.textContent = category;
+            btn.onclick = () => {
+                const el = document.getElementById(`cat-${category}`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    el.style.opacity = '0.5';
+                    setTimeout(() => el.style.opacity = '1', 300);
+                }
+            };
+            navContainer.appendChild(btn);
+        }
 
-         <!-- Games will be loaded here from JSON -->
-         <div id="games-container"></div>
+        function renderGames(filterText = '') {
+            contentArea.innerHTML = '';
+            const lowerFilter = filterText.toLowerCase();
+            const includeHidden = showHidden && filterText === '';
 
-         <!-- Action Buttons -->
-         <div class="action-buttons">
-            <button class="button-16" onclick="openInBlank()">
-               <i class="fas fa-external-link-alt"></i>
-               Open in about:blank
-            </button>
-         </div>
-      </div>
+            const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
+                if (a.toLowerCase() === "games i ported") return -1;
+                if (b.toLowerCase() === "games i ported") return 1;
 
-      <!-- JavaScript -->
-      <script>
-               // Popup trigger words and images
-                     const popupWords = {
-                        'test': {
-                           img: '/img/test.png'
+                const isASingle = a.length === 1;
+                const isBSingle = b.length === 1;
+                if (isASingle && !isBSingle) return -1;
+                if (!isASingle && isBSingle) return 1;
+                return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+            });
+
+            let hasResults = false;
+
+            allCategories.forEach(category => {
+                const games = GAME_DATA[category].filter(g => {
+                    if (g.hidden === "true" && !includeHidden) return false;
+                    return g.name.toLowerCase().includes(lowerFilter);
+                });
+
+                if (games.length > 0) {
+                    hasResults = true;
+
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+                    section.id = `cat-${category}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'category-title';
+                    title.textContent = category;
+                    section.appendChild(title);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'game-grid';
+
+                    games.forEach(game => {
+                        const card = document.createElement('div');
+                        card.className = 'game-card';
+                        card.textContent = game.name;
+                        card.onclick = () => launchGame(game);
+                        grid.appendChild(card);
+                    });
+
+                    section.appendChild(grid);
+                    contentArea.appendChild(section);
+                }
+            });
+
+            if (!hasResults) {
+                contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching "${filterText}"</div>`;
+            }
+        }
+
+        function launchGame(game) {
+            const filename = game.file;
+            const gamename = game.name;
+            const isCloaked = cloakToggle.checked;
+
+            if (!isCloaked && game.openog === "true") {
+                window.open(getGameUrl(filename), '_blank');
+                return;
+            }
+
+            if (isCloaked) {
+                loader.style.display = 'flex';
+                document.getElementById('loader-text').textContent = "Cloaking...";
+                
+                const url = getGameUrl(filename);
+
+                fetch(url)
+                    .then(res => {
+                        if(!res.ok) throw new Error("Failed to fetch");
+                        return res.text();
+                    })
+                    .then(html => {
+                        // Clean HTML before writing
+                        const cleanedHtml = removeSidebarAds(html);
+                        
+                        loader.style.display = 'none';
+                        const win = window.open("about:blank", "_blank");
+                        if(!win) {
+                            alert("Pop-up blocked. Please allow popups.");
+                            return;
                         }
-                        // Add more words here: 'word': { img: '...' }
-                     };
+                        win.document.open();
+                        win.document.write(cleanedHtml);
+                        win.document.close();
+                    })
+                    .catch(err => {
+                        loader.style.display = 'none';
+                        alert("Error loading game code: " + err);
+                    });
 
-               // Listen for typing anywhere on the main page
-               let popupBuffer = '';
-               document.addEventListener('keydown', function(e) {
-                  // Ignore if typing in an input/textarea
-                  if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || document.activeElement.isContentEditable)) return;
-                  // Only allow a-z, 0-9, space, backspace
-                  if (e.key.length === 1 && /[a-zA-Z0-9 ]/.test(e.key)) {
-                     popupBuffer += e.key.toLowerCase();
-                     if (popupBuffer.length > 20) popupBuffer = popupBuffer.slice(-20);
-                  } else if (e.key === 'Backspace') {
-                     popupBuffer = popupBuffer.slice(0, -1);
-                  } else {
-                     return;
-                  }
-                  // Check for any trigger word at the end
-                  for (const word in popupWords) {
-                     if (popupBuffer.endsWith(word)) {
-                        showWordPopup(word);
-                        popupBuffer = '';
-                        break;
-                     }
-                  }
-               });
-
-                     function showWordPopup(word) {
-                        const popup = document.getElementById('word-popup');
-                        const img = document.getElementById('word-popup-img');
-                        img.src = popupWords[word].img;
-                        popup.style.display = '';
-                        setTimeout(() => {
-                           popup.style.bottom = '0px';
-                        }, 10);
-                     }
-
-               // Hide popup on image click
-                     document.addEventListener('DOMContentLoaded', function() {
-                        const popup = document.getElementById('word-popup');
-                        const img = document.getElementById('word-popup-img');
-                        img.addEventListener('click', function() {
-                           popup.style.bottom = '-300px';
-                           setTimeout(() => { popup.style.display = 'none'; }, 500);
-                        });
-                     });
-         // Initialize particles.js with enhanced configuration
-         particlesJS('particles-js', {
-           particles: {
-             number: {
-               value: 100,
-               density: {
-                 enable: true,
-                 value_area: 800
-               }
-             },
-             color: {
-               value: '#ffffff'
-             },
-             shape: {
-               type: 'circle'
-             },
-             opacity: {
-               value: 0.15,
-               random: true,
-               anim: {
-                 enable: true,
-                 speed: 1.5,
-                 opacity_min: 0.05,
-                 sync: false
-               }
-             },
-             size: {
-               value: 3,
-               random: true
-             },
-             line_linked: {
-               enable: true,
-               distance: 150,
-               color: '#ffffff',
-               opacity: 0.15,
-               width: 1
-             },
-             move: {
-               enable: true,
-               speed: 1.2,
-               direction: 'none',
-               random: true,
-               straight: false,
-               out_mode: 'out',
-               bounce: false
-             }
-           },
-           interactivity: {
-             detect_on: 'canvas',
-             events: {
-               onhover: {
-                 enable: true,
-                 mode: 'grab'
-               },
-               onclick: {
-                 enable: true,
-                 mode: 'push'
-               },
-               resize: true
-             },
-             modes: {
-               grab: {
-                 distance: 140,
-                 line_linked: {
-                   opacity: 0.3
-                 }
-               },
-               push: {
-                 particles_nb: 4
-               }
-             }
-           },
-           retina_detect: true
-         });
-
-         function openInBlank() {
-           const win = window.open();
-           const iframe = win.document.createElement('iframe');
-           Object.assign(iframe.style, {
-             border: 'none',
-             width: '100%',
-             height: '100%',
-             margin: '0'
-           });
-           iframe.referrerPolicy = 'no-referrer';
-           iframe.allow = 'fullscreen';
-           iframe.src = document.URL;
-         
-           win.document.body.style.margin = '0';
-           win.document.body.style.height = '100vh';
-           win.document.body.appendChild(iframe);
-         }
-
-
-         // Game Search Functionality with auto-open dropdowns
-         const searchInput = document.getElementById('game-search-input');
-         if (searchInput) {
-           searchInput.addEventListener('input', function () {
-             const query = this.value.trim().toLowerCase();
-
-             document.querySelectorAll('.dropdown, .games-section').forEach(section => {
-               let anyVisible = false;
-               section.querySelectorAll('.game-item').forEach(item => {
-                 const text = item.textContent.toLowerCase();
-                 if (query === "" || text.includes(query)) {
-                   item.style.display = "";
-                   anyVisible = true;
-                 } else {
-                   item.style.display = "none";
-                 }
-               });
-               // Hide entire dropdown if no items match (for dropdowns)
-               const dropdownContent = section.querySelector('.dropdown-content');
-               if (dropdownContent) {
-                 dropdownContent.style.display = anyVisible ? "" : "none";
-                 // Auto-open dropdowns if searching
-                 const dropdown = section;
-                 if (typeof dropdown.openDropdown === "function") {
-                   if (query && anyVisible) {
-                     dropdown.openDropdown();
-                   } else if (!query) {
-                     dropdown.closeDropdown();
-                   }
-                 }
-               }
-             });
-           });
-         }
-
-         // Load games from JSON
-         async function loadGames() {
-           try {
-             const response = await fetch('./games.json');
-             if (!response.ok) throw new Error('Failed to load games');
-             const data = await response.json();
-             renderGames(data.sections);
-           } catch (error) {
-             console.error('Error loading games:', error);
-             document.getElementById('games-container').innerHTML = '<p>Error loading games. Please refresh the page.</p>';
-           }
-         }
-
-         function renderGames(sections) {
-           const container = document.getElementById('games-container');
-           container.innerHTML = '';
-
-           sections.forEach(section => {
-             if (section.type === 'dropdown') {
-               const dropdown = document.createElement('div');
-               dropdown.className = 'dropdown';
-               dropdown.setAttribute('data-section-id', section.id);
-
-               const header = document.createElement('div');
-               header.className = 'dropdown-header';
-               header.innerHTML = `<i class="${section.icon}"></i> ${section.name} <span class="arrow">&#9660;</span>`;
-
-               const content = document.createElement('div');
-               content.className = 'dropdown-content';
-
-               section.games.forEach((game, index) => {
-                 const gameItem = document.createElement('div');
-                 gameItem.className = 'game-item' + (game.featured ? ' featured' : '');
-                 
-                 const link = document.createElement('a');
-                 link.href = game.url;
-                 link.innerHTML = `<i class="${game.icon}"></i> ${game.name}`;
-                 
-                 if (game.special === 'combinedLink') {
-                   link.id = 'combinedLink';
-                   link.addEventListener('click', function(e) {
-                     e.preventDefault();
-                     // Add your flash emulator logic here if needed
-                   });
-                 }
-
-                 gameItem.appendChild(link);
-                 content.appendChild(gameItem);
-
-                 // Add separator after featured item if it's not the last
-                 if (game.featured && index < section.games.length - 1) {
-                   const hr = document.createElement('hr');
-                   hr.className = 'rounded';
-                   content.appendChild(hr);
-                 }
-               });
-
-               dropdown.appendChild(header);
-               dropdown.appendChild(content);
-               container.appendChild(dropdown);
-             } else if (section.type === 'grid') {
-               const gamesSection = document.createElement('div');
-               gamesSection.className = 'games-section';
-
-               const title = document.createElement('h2');
-               title.className = 'section-title';
-               title.innerHTML = `<i class="${section.icon}"></i> ${section.name}`;
-
-               const grid = document.createElement('div');
-               grid.className = 'games-grid';
-
-               section.games.forEach(game => {
-                const gameItem = document.createElement('div');
-                gameItem.className = 'game-item' + (game.featured ? ' featured' : '');
-                 
-                 const link = document.createElement('a');
-                 link.href = game.url;
-                 link.innerHTML = `<i class="${game.icon}"></i> ${game.name}`;
-                 
-                 // Check if this game should open a modal
-                 if (game.modal) {
-                   link.addEventListener('click', function(e) {
-                     e.preventDefault();
-                     openModalFromGame(game.modal);
-                   });
-                 }
-                 
-                 gameItem.appendChild(link);
-                 grid.appendChild(gameItem);
-               });
-
-               gamesSection.appendChild(title);
-               gamesSection.appendChild(grid);
-               container.appendChild(gamesSection);
-             }
-           });
-
-           // Initialize dropdown functionality after rendering
-           initializeDropdowns();
-         }
-
-         function initializeDropdowns() {
-           document.querySelectorAll('.dropdown').forEach(dropdown => {
-             const header = dropdown.querySelector('.dropdown-header');
-             const content = dropdown.querySelector('.dropdown-content');
-             let isOpen = false;
-
-             header.addEventListener('click', () => {
-               isOpen = !isOpen;
-
-               if (isOpen) {
-                 content.style.maxHeight = content.scrollHeight + 'px';
-                 dropdown.classList.add('open');
-               } else {
-                 content.style.maxHeight = content.scrollHeight + 'px';
-                 requestAnimationFrame(() => {
-                   content.style.maxHeight = '0';
-                   dropdown.classList.remove('open');
-                 });
-               }
-             });
-
-             // Expose methods for programmatic control
-             dropdown.openDropdown = function() {
-               isOpen = true;
-               content.style.maxHeight = content.scrollHeight + 'px';
-               dropdown.classList.add('open');
-             };
-             dropdown.closeDropdown = function() {
-               isOpen = false;
-               content.style.maxHeight = '0';
-               dropdown.classList.remove('open');
-             };
-           });
-         }
-
-         // Modal functions
-         function openModal(section) {
-           const overlay = document.getElementById('modal-overlay');
-           const title = document.getElementById('modal-title');
-           const content = document.getElementById('modal-content');
-           
-           title.innerHTML = `<i class="${section.icon}"></i> ${section.name}`;
-           content.innerHTML = '';
-           
-           section.games.forEach(game => {
-             const gameItem = document.createElement('div');
-             gameItem.className = 'modal-game-item';
-             
-             const link = document.createElement('a');
-             link.href = game.url;
-             link.target = '_blank';
-             link.innerHTML = `<i class="${game.icon}"></i> ${game.name}`;
-             
-             gameItem.appendChild(link);
-             content.appendChild(gameItem);
-           });
-           
-           overlay.classList.add('open');
-           document.body.style.overflow = 'hidden';
-         }
-
-         function openModalFromGame(modalData) {
-           const overlay = document.getElementById('modal-overlay');
-           const title = document.getElementById('modal-title');
-           const content = document.getElementById('modal-content');
-           
-           title.innerHTML = modalData.title;
-           content.innerHTML = '';
-           
-           modalData.games.forEach(game => {
-             const gameItem = document.createElement('div');
-             gameItem.className = 'modal-game-item';
-             
-             const link = document.createElement('a');
-             link.href = game.url;
-             link.target = '_blank';
-             link.innerHTML = `<i class="${game.icon}"></i> ${game.name}`;
-             
-             gameItem.appendChild(link);
-             content.appendChild(gameItem);
-           });
-           
-           overlay.classList.add('open');
-           document.body.style.overflow = 'hidden';
-         }
-
-         function closeModal() {
-           const overlay = document.getElementById('modal-overlay');
-           overlay.classList.remove('open');
-           document.body.style.overflow = '';
-         }
-
-         // Close modal on close button click
-         document.getElementById('modal-close').addEventListener('click', closeModal);
-
-         // Close modal on overlay click (outside modal)
-         document.getElementById('modal-overlay').addEventListener('click', function(e) {
-           if (e.target === this) {
-             closeModal();
-           }
-         });
-
-         // Close modal on Escape key
-         document.addEventListener('keydown', function(e) {
-           if (e.key === 'Escape') {
-             const overlay = document.getElementById('modal-overlay');
-             if (overlay.classList.contains('open')) {
-               closeModal();
-             }
-           }
-         });
-
-         // Load games on page load
-         document.addEventListener('DOMContentLoaded', loadGames);
-      </script>
-   </body>
+            } else {
+                const cleanName = filename.trim();
+                const encoded = encodeURIComponent(cleanName);
+                window.open(`?g=${encoded}`, '_blank');
+            }
+        }
+    </script>
+</body>
 </html>
