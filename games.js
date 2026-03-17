@@ -8761,6 +8761,10 @@ const GAME_DATA = {
       "file": "./ported/247freepoker.html"
     },
     {
+      "name": "Zombs Royale",
+      "file": "./ported/zombsroyale.html"
+    },
+    {
       "name": "Roommate",
       "file": "./ported/fb.html",
       "hidden": "true"
