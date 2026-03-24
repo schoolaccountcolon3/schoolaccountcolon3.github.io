@@ -26,9 +26,9 @@
     <main id="main">
         <div id="topbar">
             <input type="text" id="search-input" placeholder="Search games...">
-            
+
             <label class="cloak-label">
-                <input type="checkbox" id="cloak-toggle"> 
+                <input type="checkbox" id="cloak-toggle">
                 Open in about:blank
             </label>
         </div>
@@ -78,17 +78,55 @@
             }
         }
 
-        // NEW HELPER: Cleans the fetched HTML of any "sidebarad*" elements before rendering
-        function removeSidebarAds(htmlString) {
+        // Cleans fetched HTML of ads, trackers, and obfuscated scripts before rendering
+        function cleanGameHtml(htmlString) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlString, 'text/html');
-            
-            // Finds any elements where the ID or Class starts with "sidebarad" (sidebarad1, sidebarad2, etc.)
-            const ads = doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]');
-            
-            // Remove them from the virtual DOM
-            ads.forEach(ad => ad.remove());
-            
+
+            // --- Remove sidebar ad elements ---
+            doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]')
+               .forEach(el => el.remove());
+
+            // --- Remove Google Analytics / Tag Manager script tags ---
+            // Matches: googletagmanager.com, google-analytics.com, jsapi, imasdk, L7856P3VNT
+            const trackerPatterns = [
+                'googletagmanager.com',
+                'google-analytics.com',
+                'imasdk.googleapis.com',
+                'google.com/jsapi',
+                'L7856P3VNT',
+            ];
+            doc.querySelectorAll('script[src]').forEach(el => {
+                if (trackerPatterns.some(p => el.src.includes(p))) el.remove();
+            });
+
+            // --- Remove ad/monetization SDK script tags ---
+            const sdkPatterns = [
+                'gamemonetize',
+                'st39/sdk',
+                'ga.js',
+                'sdk.js',
+            ];
+            doc.querySelectorAll('script[src]').forEach(el => {
+                if (sdkPatterns.some(p => el.src.includes(p))) el.remove();
+            });
+
+            // --- Remove inline scripts that reference analytics or are obfuscated ---
+            doc.querySelectorAll('script:not([src])').forEach(el => {
+                const text = el.textContent || '';
+                const isAnalytics = text.includes('L7856P3VNT') ||
+                                    text.includes('dataLayer') ||
+                                    text.includes('gtag(') ||
+                                    text.includes('SDK_OPTIONS') ||
+                                    text.includes('gamemonetize') ||
+                                    text.includes('maeExportApis_');
+                // Obfuscated scripts: detect by high density of _0x hex identifiers
+                const obfuscatedMatches = (text.match(/_0x[0-9a-f]+/gi) || []).length;
+                const isObfuscated = obfuscatedMatches > 10;
+
+                if (isAnalytics || isObfuscated) el.remove();
+            });
+
             // Reconstruct the HTML string
             let doctype = "";
             if (doc.doctype) {
@@ -101,7 +139,7 @@
             sidebar.style.display = 'none';
             main.style.display = 'none';
             loader.style.display = 'flex';
-            
+
             const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
             const url = getGameUrl(realFilename);
 
@@ -114,8 +152,8 @@
                 })
                 .then(html => {
                     // Clean HTML before writing
-                    const cleanedHtml = removeSidebarAds(html);
-                    
+                    const cleanedHtml = cleanGameHtml(html);
+
                     document.open();
                     document.write(cleanedHtml);
                     document.close();
@@ -257,7 +295,7 @@
             if (isCloaked) {
                 loader.style.display = 'flex';
                 document.getElementById('loader-text').textContent = "Cloaking...";
-                
+
                 const url = getGameUrl(filename);
 
                 fetch(url)
@@ -267,8 +305,8 @@
                     })
                     .then(html => {
                         // Clean HTML before writing
-                        const cleanedHtml = removeSidebarAds(html);
-                        
+                        const cleanedHtml = cleanGameHtml(html);
+
                         loader.style.display = 'none';
                         const win = window.open("about:blank", "_blank");
                         if(!win) {
