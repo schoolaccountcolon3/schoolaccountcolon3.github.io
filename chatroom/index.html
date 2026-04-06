@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>def google classroom</title>
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="stylesheet" href="/styles/style.css">
-<link rel="stylesheet" href="/styles/chatroom.css">
-<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-<script type="module" src="main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/theme.js"></script>
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <title>def google classroom</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="/styles/style.css">
+  <link rel="stylesheet" href="/styles/chatroom.css">
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+  <script type="module" src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/theme.js"></script
 </head>
 <body>
   <div id="dm-sidebar" class="sidebar">
@@ -19,7 +19,6 @@
   </div>
 
   <div id="user-controls-container">
-      <button id="open-dm-sidebar" style="display: none;">&#9776;</button>
       <img id="current-user-pfp" src="" alt="My PFP">
       <button id="toggle-bio-editor-button" style="display: none;">Edit Profile</button>
   </div>
@@ -31,10 +30,7 @@
           <input type="file" id="pfp-upload-input" accept="image/*">
           <button id="pfp-upload-button">Choose Image</button>
       </div>
-      <div class="bio-section">
-          <label for="pronouns-input">Pronouns:</label>
-          <input type="text" id="pronouns-input" placeholder="e.g. he/him" maxlength="50">
-      </div>
+
       <div class="bio-section">
       <label for="bio-input">Your Bio:</label>
       <textarea id="bio-input" placeholder="Max 200 chars" maxlength="200" rows="3"></textarea>
@@ -49,7 +45,10 @@
   <div id="particles-js"></div>
   
   <div id="main-content">
-    <h1 id="chat-header">Chatroom</h1>
+    <div id="chat-header-container">
+      <button id="open-dm-sidebar" style="display: none;">&#9776;</button>
+      <h1 id="chat-header">Chatroom</h1>
+    </div>
 
     <div id="name-auth-area">
       <div id="auth-status" style="margin-bottom: 10px; font-weight: bold;">Please set your name and authenticate.</div>
@@ -76,10 +75,7 @@
         <h3 id="modal-username">User Bio</h3>
             <div class="user-tag">Member</div>
         </div>
-        <div class="bio-section">
-            <div class="bio-section-title">Pronouns</div>
-            <p id="modal-pronouns" class="empty-bio">No pronouns set</p>
-        </div>
+
         <div class="bio-section">
             <div class="bio-section-title">About Me</div>
         <p id="modal-bio-text">Loading...</p>
@@ -164,82 +160,5 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // Initialize particles.js
-    particlesJS('particles-js', {
-      particles: {
-        number: {
-          value: 80,
-          density: {
-            enable: true,
-            value_area: 800
-          }
-        },
-        color: {
-          value: '#ffffff'
-        },
-        shape: {
-          type: 'circle'
-        },
-        opacity: {
-          value: 0.1,
-          random: true,
-          anim: {
-            enable: true,
-            speed: 1,
-            opacity_min: 0.05,
-            sync: false
-          }
-        },
-        size: {
-          value: 3,
-          random: true
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: '#ffffff',
-          opacity: 0.1,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: 'none',
-          random: true,
-          straight: false,
-          out_mode: 'out',
-          bounce: false
-        }
-      },
-      interactivity: {
-        detect_on: 'canvas',
-        events: {
-          onhover: {
-            enable: true,
-            mode: 'grab'
-          },
-          onclick: {
-            enable: true,
-            mode: 'push'
-          },
-          resize: true
-        },
-        modes: {
-          grab: {
-            distance: 140,
-            line_linked: {
-              opacity: 0.2
-            }
-          },
-          push: {
-            particles_nb: 4
-          }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
 </body>
 </html>
