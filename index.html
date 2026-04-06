@@ -83,22 +83,28 @@
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlString, 'text/html');
 
+            // Transform githack URLs to jsdelivr
+            function transformGithackToJsdelivr(url) {
+                if (url.includes('rawcdn.githack.com')) {
+                    const match = url.match(/https:\/\/rawcdn\.githack\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.+)/);
+                    if (match) {
+                        const [, user, repo, branch, path] = match;
+                        return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
+                    }
+                }
+                return url;
+            }
+
+            // Transform URLs in src and href attributes
+            const elements = doc.querySelectorAll('[src], [href]');
+            elements.forEach(el => {
+                if (el.src) el.src = transformGithackToJsdelivr(el.src);
+                if (el.href) el.href = transformGithackToJsdelivr(el.href);
+            });
+
             // --- Remove sidebar ad elements ---
             doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]')
                .forEach(el => el.remove());
-
-            // --- Remove Google Analytics / Tag Manager script tags ---
-            // Matches: googletagmanager.com, google-analytics.com, jsapi, imasdk, L7856P3VNT
-            const trackerPatterns = [
-                'googletagmanager.com',
-                'google-analytics.com',
-                'imasdk.googleapis.com',
-                'google.com/jsapi',
-                'L7856P3VNT',
-            ];
-            doc.querySelectorAll('script[src]').forEach(el => {
-                if (trackerPatterns.some(p => el.src.includes(p))) el.remove();
-            });
 
             // --- Remove ad/monetization SDK script tags ---
             const sdkPatterns = [
@@ -111,20 +117,14 @@
                 if (sdkPatterns.some(p => el.src.includes(p))) el.remove();
             });
 
-            // --- Remove inline scripts that reference analytics or are obfuscated ---
+            // --- Remove inline scripts that are obfuscated ---
             doc.querySelectorAll('script:not([src])').forEach(el => {
                 const text = el.textContent || '';
-                const isAnalytics = text.includes('L7856P3VNT') ||
-                                    text.includes('dataLayer') ||
-                                    text.includes('gtag(') ||
-                                    text.includes('SDK_OPTIONS') ||
-                                    text.includes('gamemonetize') ||
-                                    text.includes('maeExportApis_');
                 // Obfuscated scripts: detect by high density of _0x hex identifiers
                 const obfuscatedMatches = (text.match(/_0x[0-9a-f]+/gi) || []).length;
                 const isObfuscated = obfuscatedMatches > 10;
 
-                if (isAnalytics || isObfuscated) el.remove();
+                if (isObfuscated) el.remove();
             });
 
             // Reconstruct the HTML string
