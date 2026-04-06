@@ -8765,9 +8765,25 @@ const GAME_DATA = {
       "file": "./ported/zombsroyale.html"
     },
     {
-      "name": "Unblocker",
-      "file": "https://storage.googleapis.com/khanacademy/index.html",
+      "name": "Unblocker ADS :(",
+      "file": "https://storage.googleapis.com/ooasf/index.html",
       "openog": "true"
+    },
+    {
+      "name": "Shell Shocked (WIP)",
+      "file": "./ported/shellshock.html"
+    },
+    {
+      "name": "Outhold",
+      "file": "./ported/outhold.html"
+    },
+    {
+      "name": "Horse Magnifier",
+      "file": "./ported/horsemag.html"
+    },
+    {
+      "name": "Processor Tycoon",
+      "file": "./ported/processortycoon.html"
     },
     {
       "name": "Roommate",
