@@ -37,6 +37,19 @@
         </div>
     </main>
 
+    <!-- Update Notification & Modal -->
+    <div id="update-notification" style="display: none;">
+        <span id="update-text">Update: April 18th</span>
+        <button id="close-update-btn" title="Dismiss">&times;</button>
+    </div>
+
+    <div id="update-modal">
+        <div id="update-modal-content">
+            <button id="update-modal-close" title="Close">&times;</button>
+            <div id="update-modal-text">Loading...</div>
+        </div>
+    </div>
+
     <script src="games.js"></script>
     <script>
         const BASE_URL = "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/";
@@ -328,6 +341,70 @@
                 window.open(`?g=${encoded}`, '_blank');
             }
         }
+
+        // --- Update Notification Logic ---
+        const updateNotification = document.getElementById('update-notification');
+        const updateTextSpan = document.getElementById('update-text');
+        const closeUpdateBtn = document.getElementById('close-update-btn');
+        const updateModal = document.getElementById('update-modal');
+        const updateModalClose = document.getElementById('update-modal-close');
+        const updateModalText = document.getElementById('update-modal-text');
+
+        let fetchedUpdateDate = null;
+        let fetchedUpdateContent = "";
+
+        // Fetch newly added games on load
+        fetch('new_added_games.txt')
+            .then(res => {
+                if (!res.ok) throw new Error("Could not load updates file");
+                return res.text();
+            })
+            .then(text => {
+                fetchedUpdateContent = text;
+                const lines = text.split('\n');
+                if (lines.length > 0 && lines[0].startsWith('Update:')) {
+                    fetchedUpdateDate = lines[0].trim();
+                    updateTextSpan.textContent = fetchedUpdateDate;
+                    
+                    // Remove the first two lines (the Update line and the empty line after it)
+                    fetchedUpdateContent = lines.slice(2).join('\n').trim();
+
+                    // Show if not dismissed
+                    if (localStorage.getItem('updateClosed') !== fetchedUpdateDate) {
+                        updateNotification.style.display = 'flex';
+                    }
+                }
+            })
+            .catch(err => {
+                console.error("Error loading new games: ", err);
+            });
+
+        // Close small notification
+        closeUpdateBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent opening the modal
+            updateNotification.style.display = 'none';
+            if (fetchedUpdateDate) {
+                localStorage.setItem('updateClosed', fetchedUpdateDate);
+            }
+        });
+
+        // Open modal when clicking the notification
+        updateNotification.addEventListener('click', () => {
+            updateModal.style.display = 'flex';
+            updateModalText.textContent = fetchedUpdateContent;
+        });
+
+        // Close modal
+        updateModalClose.addEventListener('click', () => {
+            updateModal.style.display = 'none';
+        });
+
+        // Click outside modal to close
+        updateModal.addEventListener('click', (e) => {
+            if (e.target === updateModal) {
+                updateModal.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
