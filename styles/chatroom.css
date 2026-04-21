@@ -96,8 +96,8 @@ body.sidebar-open #main-content {
 }
 
 #chatbox p.same-sender .pfp-container {
-    opacity: 0;
-    pointer-events: none;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* === User Controls === */
@@ -300,7 +300,8 @@ body.sidebar-open #main-content {
     left: 0;
     top: 0;
     height: 100vh;
-    width: 240px;
+    width: 0;
+    overflow: hidden; /* Hide inner text when closed */
     background: var(--color-card-bg);
     border-right: 1px solid var(--color-border);
     transition: 0.3s;
@@ -313,6 +314,16 @@ body.sidebar-open #main-content {
     padding: 20px;
     margin: 0;
     border-bottom: 1px solid var(--color-border);
+    display: none; /* Hidden when sidebar is closed */
+}
+
+body.sidebar-open #dm-sidebar {
+    width: 240px;
+    overflow: visible;
+}
+
+body.sidebar-open #dm-sidebar h3 {
+    display: block; /* Show header when sidebar is open */
 }
 
 .closebtn {
@@ -413,6 +424,16 @@ body.sidebar-open #main-content {
     border-radius: 50%;
     border: 2px solid var(--color-bg);
 }
+
+/* Compact messages (subsequent messages in a run): hide avatar/presence but keep bubble spacing */
+.message-compact .pfp-container {
+    /* keep the avatar column width to preserve alignment, but hide its contents */
+    width: 40px;
+    min-width: 40px;
+    visibility: hidden;
+}
+.message-compact .presence-indicator { display: none; }
+.message-compact .message-content-wrapper { max-width: calc(100% - 60px); }
 
 /* === Modals === */
 .modal {

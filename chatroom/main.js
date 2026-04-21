@@ -64,6 +64,16 @@ function generateDefaultPfpDataUrl(username) {
   return `data:image/svg+xml;base64,${btoa(svg)}`;
 }
 
+function normalizePfpData(pfp) {
+  if (!pfp) return pfp;
+  if (typeof pfp !== 'string') return pfp;
+  const trimmed = pfp.trim();
+  if (trimmed.startsWith('data:')) return trimmed;
+  if (trimmed.startsWith('http') || trimmed.startsWith('/')) return trimmed;
+  // Assume stored raw base64 without data prefix — default to PNG
+  return 'data:image/png;base64,' + trimmed;
+}
+
 try {
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
@@ -338,18 +348,21 @@ try {
       if (snapshot.exists()) {
         const userData = snapshot.val();
         // Prioritize new URL, fallback to old Base64, then to default
-        const pfpData = userData.pfpUrl || userData.pfpBase64 || defaultPfp;
+        let pfpData = userData.pfpUrl || userData.pfpBase64 || defaultPfp;
+        pfpData = normalizePfpData(pfpData);
         pfpCache.set(userNameForPfp, pfpData);
         return pfpData;
       } else {
         // User not found in credentials, use default
-        pfpCache.set(userNameForPfp, defaultPfp);
-        return defaultPfp;
+        const normalized = normalizePfpData(defaultPfp);
+        pfpCache.set(userNameForPfp, normalized);
+        return normalized;
       }
     } catch (error) {
       console.warn(`Could not fetch PFP for ${userNameForPfp}:`, error);
-      pfpCache.set(userNameForPfp, defaultPfp); // Cache default on error
-      return defaultPfp;
+      const normalized = normalizePfpData(defaultPfp);
+      pfpCache.set(userNameForPfp, normalized); // Cache default on error
+      return normalized;
     }
   }
 
@@ -357,7 +370,7 @@ try {
     const pfpImagesInChat = document.querySelectorAll(`#chatbox img.message-pfp`);
     pfpImagesInChat.forEach(img => {
       if (img.getAttribute('data-pfp-for-user') === targetUserName) {
-        img.src = newPfpDataUrl;
+        img.src = normalizePfpData(newPfpDataUrl);
       }
     });
 
@@ -399,6 +412,7 @@ try {
       bioInput.value = '';
     }
     updateBioCharCount();
+    closeNav();
   }
 
   async function saveUserProfile() {
@@ -988,6 +1002,7 @@ try {
       if (pfpPreviewImg) pfpPreviewImg.src = generateDefaultPfpDataUrl('loggedout');
 
       updateBioCharCount();
+    closeNav();
       pfpCache.clear();
 
       if (imageUrlButton) { imageUrlButton.disabled = true; imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }
@@ -1095,6 +1110,10 @@ try {
     let shouldGroupWithNext = false;
     let nextMessage = null;
     let prevMessage = null;
+    // Determine whether to hide the header (username/timestamp/controls)
+    // and whether to hide the avatar/presence for this message
+    let showHeader = true;
+    let showAvatar = true;
 
     if (!prepend && chatbox.lastChild) {
       prevMessage = chatbox.lastChild;
@@ -1102,7 +1121,12 @@ try {
       const prevMessageTime = new Date(prevMessage.getAttribute('data-timestamp'));
       const timeDiff = (ts - prevMessageTime) / 1000;
 
-      shouldGroupWithPrev = prevMessageName === msg.name && timeDiff < 300;
+      // If previous message is from same user and within 5 minutes, hide repeated header and avatar
+      if (prevMessageName === msg.name && timeDiff < 300) {
+        showHeader = false;
+        showAvatar = false;
+      }
+      shouldGroupWithPrev = false; // keep separate bubbles
     }
 
     if (prepend && chatbox.firstChild) {
@@ -1111,7 +1135,13 @@ try {
       const nextMessageTime = new Date(nextMessage.getAttribute('data-timestamp'));
       const timeDiff = (nextMessageTime - ts) / 1000;
 
-      shouldGroupWithNext = nextMessageName === msg.name && timeDiff < 300;
+      // For prepended messages, if the next (older) message is from same user within 5 minutes,
+      // we will hide the header and avatar on this one to avoid repetition.
+      if (nextMessageName === msg.name && timeDiff < 300) {
+        showHeader = false;
+        showAvatar = false;
+      }
+      shouldGroupWithNext = false; // keep separate bubbles
     }
 
     if (shouldGroupWithPrev) {
@@ -1151,7 +1181,8 @@ try {
       wrapper.setAttribute('data-message-key', msg.key);
       wrapper.setAttribute('data-timestamp', msg.timestamp);
       const p = document.createElement('p');
-      if (msg.name === userName) p.classList.add('same-sender');
+      if (!showAvatar) p.classList.add('message-compact');
+      if (!showHeader) p.classList.add('same-sender');
 
       const pfpContainer = document.createElement('div');
       pfpContainer.classList.add('pfp-container');
@@ -1264,7 +1295,8 @@ try {
     wrapper.setAttribute('data-message-key', msg.key);
     wrapper.setAttribute('data-timestamp', msg.timestamp);
     const p = document.createElement('p');
-    if (msg.name === userName) p.classList.add('same-sender');
+    if (!showAvatar) p.classList.add('message-compact');
+    if (!showHeader) p.classList.add('same-sender');
 
     if (window._lastTs && !prepend) {
       const diffMin = (ts - window._lastTs) / 60000;
@@ -1302,39 +1334,41 @@ try {
 
     const contentWrapper = document.createElement('div');
     contentWrapper.classList.add('message-content-wrapper');
+    // Only show header (username/timestamp/controls) if `showHeader` is true
+    if (showHeader) {
+      const messageHeader = document.createElement('div');
+      messageHeader.classList.add('message-header');
 
-    const messageHeader = document.createElement('div');
-    messageHeader.classList.add('message-header');
+      const nameStrong = document.createElement('strong');
+      nameStrong.textContent = msg.name;
+      nameStrong.classList.add('message-username');
+      nameStrong.addEventListener('click', (e) => { e.stopPropagation(); showBioModal(msg.name); });
+      messageHeader.appendChild(nameStrong);
 
-    const nameStrong = document.createElement('strong');
-    nameStrong.textContent = msg.name;
-    nameStrong.classList.add('message-username');
-    nameStrong.addEventListener('click', (e) => { e.stopPropagation(); showBioModal(msg.name); });
-    messageHeader.appendChild(nameStrong);
+      const timestampSpan = document.createElement('span');
+      timestampSpan.classList.add('timestamp');
+      timestampSpan.textContent = formatted;
+      messageHeader.appendChild(timestampSpan);
 
-    const timestampSpan = document.createElement('span');
-    timestampSpan.classList.add('timestamp');
-    timestampSpan.textContent = formatted;
-    messageHeader.appendChild(timestampSpan);
+      const messageControls = document.createElement('div');
+      messageControls.classList.add('message-controls');
 
-    const messageControls = document.createElement('div');
-    messageControls.classList.add('message-controls');
-
-    if (msg.name === userName) {
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.classList.add('delete-button');
-      deleteButton.addEventListener('click', () => {
-        if (confirm(`Are you sure you want to delete this message?`)) {
-          remove(ref(database, `messages/${msg.key}`))
-            .then(() => { console.log('Message deleted successfully!'); })
-            .catch(error => { console.error('Error deleting message:', error); showCustomAlert('Error deleting message. Please try again.', 'Delete Error'); });
-        }
-      });
-      messageControls.appendChild(deleteButton);
+      if (msg.name === userName) {
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('delete-button');
+        deleteButton.addEventListener('click', () => {
+          if (confirm(`Are you sure you want to delete this message?`)) {
+            remove(ref(database, `messages/${msg.key}`))
+              .then(() => { console.log('Message deleted successfully!'); })
+              .catch(error => { console.error('Error deleting message:', error); showCustomAlert('Error deleting message. Please try again.', 'Delete Error'); });
+          }
+        });
+        messageControls.appendChild(deleteButton);
+      }
+      messageHeader.appendChild(messageControls);
+      contentWrapper.appendChild(messageHeader);
     }
-    messageHeader.appendChild(messageControls);
-    contentWrapper.appendChild(messageHeader);
 
     const messageBody = document.createElement('div');
     messageBody.classList.add('message-body');
@@ -1572,6 +1606,8 @@ try {
 
     updateChatHeader();
     updateUIBasedOnAuthState(); updateBioCharCount();
+    closeNav();
+    closeNav();
   }
 
   initializeAppAsync();

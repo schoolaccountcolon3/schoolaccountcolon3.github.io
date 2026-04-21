@@ -919,10 +919,6 @@ const GAME_DATA = {
       "file": "clchaosfaction2.html"
     },
     {
-      "name": "Chat Bot (A.|.I)",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/253.html"
-    },
-    {
       "name": "Chat Bot AI (A.I GPT)",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/253-update.html"
     },
@@ -8943,6 +8939,11 @@ const GAME_DATA = {
     {
       "name": "Jumping Shell",
       "file": "./ported/jumping-shell.html"
+    },
+    {
+      "name": "Chatroom",
+      "file": "./chatroom/index.html",
+      "openog": "true"
     },
     {
       "name": "Request A Game",
