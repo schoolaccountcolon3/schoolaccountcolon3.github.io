@@ -1,40 +1,6 @@
-Update: 2026-04-17
+Update: 2026-04-20
 
 Newly Added Games
 -----------------
-- Added Apes vs Helium
-- Added Bart Bash
-- Added BeatBlock
-- Added Brawl Simulator 3D
-- Added Breaklock
-- Added CaseOh's Basics in Eating and Fast Food
-- Added Chat Bot AI (A.I GPT)
-- Added Cheese Rolling
-- Added Command & Conquer
-- Added Dice a Million
-- Added Escape Road 3
-- Added Fear & Hunger 2: Termina
-- Added FISH
-- Added Five Night's at Shrek's Hotel
-- Added Flying Gorilla 3D
-- Added Gabriel's Awesome Schoolhouse (GASH)
-- Added Geometry Dash
-- Added Helltaker
-- Added Hollow Knight: Silksong
-- Added I Have No Mouth, and I Must Scream
-- Added Lethal Ape
-- Added Minecraft Pocket Edition
-- Added Overburden
-- Added Sam & Max Hit the Road
-- Added Scary Shawarma Kiosk: the ANOMALY
-- Added Scratch Inc
-- Added Serial Experiments Lain
-- Added Sonic Robo Blast 2
-- Added Stardew Valley
-- Added Thing-Thing Arena 3
-- Added Ultrapool
-- Added Vib-Robbin
-- Added Who's Your Daddy
-- Added Witch's Heart
-- Added Your Only Move Is HUSTLE
-- Added Mario 63
+- Removed People Playground (It was already here)
+- Fixed Outhold

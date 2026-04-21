@@ -8937,10 +8937,6 @@ const GAME_DATA = {
       "file": "./ported/zombsroyale.html"
     },
     {
-      "name": "People Playground",
-      "file": "./ported/peopleplayground.html"
-    },
-    {
       "name": "Mario 63",
       "file": "./flash/mario63.html"
     },
