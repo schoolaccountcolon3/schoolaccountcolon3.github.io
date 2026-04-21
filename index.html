@@ -6,6 +6,15 @@
     <link rel="icon" type="image/x-icon" href="/favicon.png">
     <link rel="stylesheet" href="/styles/style.css" />
     <title>Google Classroom</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPP231DLCZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CPP231DLCZ');
+    </script>
 </head>
 <body>
 
@@ -299,6 +308,11 @@
             const filename = game.file;
             const gamename = game.name;
             const isCloaked = cloakToggle.checked;
+            
+            // Track game play event
+            gtag('event', 'game_played', {
+                game_name: gamename
+            });
 
             if (!isCloaked && game.openog === "true") {
                 window.open(getGameUrl(filename), '_blank');
