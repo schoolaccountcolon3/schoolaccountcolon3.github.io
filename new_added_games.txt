@@ -2,5 +2,5 @@ Update: 2026-04-20
 
 Newly Added Games
 -----------------
-- Removed People Playground (It was already here)
-- Fixed Outhold
+- Readded Chatroom
+- Fixed Outhold again

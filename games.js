@@ -8899,7 +8899,7 @@ const GAME_DATA = {
     },
     {
       "name": "Outhold",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/777.html"
+      "file": "./ported/outhold.html"
     },
     {
       "name": "Processor Tycoon",
