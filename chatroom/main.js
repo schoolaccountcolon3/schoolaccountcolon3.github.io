@@ -379,7 +379,6 @@ try {
     }
 
     pfpCache.set(targetUserName, newPfpDataUrl);
-    savePfpCache();
   }
 
   async function hashPassword(password) {
@@ -522,8 +521,7 @@ try {
           modalBioText.className = 'empty-bio';
         }
 
-        modalPfpImg.src = userData.pfpBase64 || generateDefaultPfpDataUrl(clickedUserName);
-        pfpCache.set(clickedUserName, modalPfpImg.src);
+        modalPfpImg.src = await getPfpDataForUser(clickedUserName);
       } else {
         modalBioText.textContent = "No bio yet";
         modalBioText.className = 'empty-bio';
@@ -1002,7 +1000,7 @@ try {
       if (pfpPreviewImg) pfpPreviewImg.src = generateDefaultPfpDataUrl('loggedout');
 
       updateBioCharCount();
-    closeNav();
+      closeNav();
       pfpCache.clear();
 
       if (imageUrlButton) { imageUrlButton.disabled = true; imageUrlButton.innerHTML = '🔗'; imageUrlButton.title = "Send Image from URL"; }
