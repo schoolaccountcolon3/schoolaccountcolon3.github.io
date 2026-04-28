@@ -654,6 +654,7 @@ try {
 
         const presenceIndicator = document.createElement('span');
         presenceIndicator.classList.add('presence-indicator', userData.status);
+        presenceIndicator.setAttribute('data-status-for-user', userData.sanitized);
 
         const pfpImg = document.createElement('img');
         pfpImg.src = userData.pfp;
@@ -687,13 +688,10 @@ try {
       if (!snapshot.exists()) return;
       const statuses = snapshot.val();
       Object.entries(statuses).forEach(([sanitizedName, status]) => {
-        const userElement = document.querySelector(`.user-item[data-username="${sanitizedName}"]`);
-        if (userElement) {
-          const indicator = userElement.querySelector('.presence-indicator');
-          if (indicator) {
-            indicator.className = `presence-indicator ${status}`;
-          }
-        }
+        const indicators = document.querySelectorAll(`[data-status-for-user="${sanitizedName}"]`);
+        indicators.forEach(indicator => {
+          indicator.className = `presence-indicator ${status}`;
+        });
       });
     });
   }
@@ -1200,6 +1198,7 @@ try {
       // 4. Create the indicator dot
       const presenceIndicator = document.createElement('span');
       presenceIndicator.classList.add('presence-indicator', userStatus);
+      presenceIndicator.setAttribute('data-status-for-user', sanitizedName);
 
       // 5. Append everything in the correct order
       pfpContainer.appendChild(pfpImg);
@@ -1324,6 +1323,7 @@ try {
     // 4. Create the indicator dot
     const presenceIndicator = document.createElement('span');
     presenceIndicator.classList.add('presence-indicator', userStatus);
+    presenceIndicator.setAttribute('data-status-for-user', sanitizedName);
 
     // 5. Append everything in the correct order
     pfpContainer.appendChild(pfpImg);
