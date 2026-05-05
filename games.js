@@ -3298,7 +3298,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Red",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/505.html"
+      "file": "./ported/red.html"
     },
     {
       "name": "Pokey Ball",
