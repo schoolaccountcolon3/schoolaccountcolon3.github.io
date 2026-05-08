@@ -29,6 +29,10 @@ const GAME_DATA = {
       "file": "cl234playergame.html"
     },
     {
+      "name": "20 Minutes Till Dawn",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/819-fix.html"
+    },
+    {
       "name": "20 Small Mazes",
       "file": "cl20smallmazes.html"
     },
@@ -135,6 +139,10 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/435.html"
     },
     {
+      "name": "Ace Attorney Investigations - Miles Edgeworth",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/823-fix.html"
+    },
+    {
       "name": "Advent Neon",
       "file": "cladventneon.html"
     },
@@ -237,6 +245,10 @@ const GAME_DATA = {
     {
       "name": "Apes vs Helium",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/783.html"
+    },
+    {
+      "name": "Apollo Justice - Ace Attorney",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/821-fix.html"
     },
     {
       "name": "Aquapark.io",
@@ -394,7 +406,7 @@ const GAME_DATA = {
     },
     {
       "name": "Baldi's Basics The Ultra Decompile",
-      "file": "clbaldidecomp.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/815.html"
     },
     {
       "name": "Baldi\u2019s Basics",
@@ -523,6 +535,10 @@ const GAME_DATA = {
     {
       "name": "Bendy and the Ink Machine",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/215.html"
+    },
+    {
+      "name": "Bendy and the Ink Machine: ALL CHAPTERS",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/803-fix.html"
     },
     {
       "name": "BERGENTRUCK 201x",
@@ -1020,7 +1036,7 @@ const GAME_DATA = {
     },
     {
       "name": "Code Editor",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/429.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/429-f.html"
     },
     {
       "name": "Coffee Maker",
@@ -1132,7 +1148,7 @@ const GAME_DATA = {
     },
     {
       "name": "Cuphead",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/465.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/465-fix.html"
     },
     {
       "name": "Curse of the Lich King",
@@ -1554,7 +1570,7 @@ const GAME_DATA = {
     },
     {
       "name": "Fear & Hunger 2: Termina",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/794.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/794-fixed.html"
     },
     {
       "name": "Fear Assessment",
@@ -1563,6 +1579,10 @@ const GAME_DATA = {
     {
       "name": "Fears to Fathom: Home Alone",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/460.html"
+    },
+    {
+      "name": "Fih",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/797.html"
     },
     {
       "name": "Final Earth 2",
@@ -1675,6 +1695,10 @@ const GAME_DATA = {
     {
       "name": "Five Nights at Freddy's: World Refreshed",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/704-fix.html"
+    },
+    {
+      "name": "Five Nights at Frickbear's 3",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/813-f2.html"
     },
     {
       "name": "Five Nights at Last Breath",
@@ -1812,7 +1836,7 @@ const GAME_DATA = {
     },
     {
       "name": "Geometry Dash",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/785-upd.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/785-upd2.html"
     },
     {
       "name": "Geometry Dash Lite",
@@ -2210,7 +2234,11 @@ const GAME_DATA = {
     },
     {
       "name": "Hungry Lamu",
-      "file": "clhungrylamu.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/798.html"
+    },
+    {
+      "name": "Hungry Lamu 2",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/799-fix.html"
     },
     {
       "name": "Hypper Sandbox",
@@ -2739,6 +2767,10 @@ const GAME_DATA = {
       "file": "clminitooth.html"
     },
     {
+      "name": "MiSide",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/814.html"
+    },
+    {
       "name": "Mob Control HTML5",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/22.html"
     },
@@ -2863,6 +2895,18 @@ const GAME_DATA = {
     {
       "name": "Nazi Zombies: Portable",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/308.html"
+    },
+    {
+      "name": "Need For Speed: Carbon",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/810-fix.html"
+    },
+    {
+      "name": "Need For Speed: Most Wanted",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/811.html"
+    },
+    {
+      "name": "Need For Speed: Underground 2",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/812.html"
     },
     {
       "name": "Needy Streamer Overload",
@@ -3273,6 +3317,10 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/597-a.html"
     },
     {
+      "name": "Plauge Inc",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/805.html"
+    },
+    {
       "name": "Play!.js",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/296.html"
     },
@@ -3545,6 +3593,10 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/403.html"
     },
     {
+      "name": "Rocket Goal.io",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/800-fix.html"
+    },
+    {
       "name": "Rocket League",
       "file": "clrocketleague.html"
     },
@@ -3687,6 +3739,10 @@ const GAME_DATA = {
       "file": "clsausageflip.html"
     },
     {
+      "name": "Scampton The Great",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/802.html"
+    },
+    {
       "name": "Scampton The Great Fight Recreate",
       "file": "clScamptonTheGreatFightRecreate.html"
     },
@@ -3827,6 +3883,18 @@ const GAME_DATA = {
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/451.html"
     },
     {
+      "name": "Slendytubbies 1",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/796.html"
+    },
+    {
+      "name": "Slendytubbies 2",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/806.html"
+    },
+    {
+      "name": "Slendytubbies 2D",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/807.html"
+    },
+    {
       "name": "Slice It All",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/128.html"
     },
@@ -3944,7 +4012,7 @@ const GAME_DATA = {
     },
     {
       "name": "Sonic Robo Blast 2",
-      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/770.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/770-update.html"
     },
     {
       "name": "Sonic the Hedgehog 2: Community's Cut",
@@ -3993,6 +4061,10 @@ const GAME_DATA = {
     {
       "name": "Spacebar Clicker",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/473.html"
+    },
+    {
+      "name": "Spaceflight Simulator",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/808.html"
     },
     {
       "name": "Speed Per Click",
@@ -4709,6 +4781,10 @@ const GAME_DATA = {
       "file": "cltrechoroustrialspart2.html"
     },
     {
+      "name": "Trees Hate You",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/801-fix.html"
+    },
+    {
       "name": "Triachnid",
       "file": "cltriachnid.html"
     },
@@ -4747,6 +4823,10 @@ const GAME_DATA = {
     {
       "name": "Two Ball 3D",
       "file": "cltwoball3d.html"
+    },
+    {
+      "name": "t\u00b3 (T cubed)",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/818.html"
     }
   ],
   "U": [
@@ -4831,6 +4911,10 @@ const GAME_DATA = {
       "file": "clupslash.html"
     },
     {
+      "name": "UvuvwevwevweOnyetenvewveUgwemubwemOssas",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/795.html"
+    },
+    {
       "name": "UZG",
       "file": "clUZG.html"
     }
@@ -4838,7 +4922,7 @@ const GAME_DATA = {
   "V": [
     {
       "name": "Vampire Survivors",
-      "file": "clvampiresurvivors.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/804.html"
     },
     {
       "name": "Vapor Trails",
@@ -4887,6 +4971,10 @@ const GAME_DATA = {
     {
       "name": "Vex x3m 2",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/56.html"
+    },
+    {
+      "name": "Vib-Ribbon",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/788.html"
     },
     {
       "name": "Vib-Robbin",
@@ -8668,7 +8756,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Too Many Types 2",
-      "file": "clpoketoomanytypes2.html"
+      "file": "./ported/pokemontoomanytypes2.html"
     },
     {
       "name": "Pokemon Ultimate Fusion",
@@ -9026,6 +9114,14 @@ const GAME_DATA = {
     }
   ],
   "Misc": [
+    {
+      "name": "-3",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/816.html"
+    },
+    {
+      "name": "-b",
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/817-f.html"
+    },
     {
       "name": "[!] COMMENTS",
       "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/596-fixx.html"
@@ -9516,15 +9612,15 @@ const GAME_DATA = {
     },
     {
       "name": "Phoenix wright - Ace Attorney",
-      "file": "claceattorernefgsdg.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/820-fix.html"
     },
     {
       "name": "Phoenix wright - Ace Attorney - Justice For All",
-      "file": "clpheonixjusticeforall.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/822.html"
     },
     {
       "name": "Phoenix wright - Ace Attorney - Trials and Tribulations",
-      "file": "clpheonixtrialsandyear.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/824.html"
     },
     {
       "name": "Pokemon - Diamond Version",
@@ -9588,7 +9684,7 @@ const GAME_DATA = {
     },
     {
       "name": "Rhythm Heaven",
-      "file": "clrhythymymheaven.html"
+      "file": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/809.html"
     },
     {
       "name": "Ridge Racer",
