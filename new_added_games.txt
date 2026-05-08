@@ -1,5 +1,5 @@
-Update: 2026-05-04
+Update: 2026-05-08
 
 Newly Added Games
 -----------------
-- Maybe fixed Pokemon Red? im not sure tbh
+- fixed unblocker
