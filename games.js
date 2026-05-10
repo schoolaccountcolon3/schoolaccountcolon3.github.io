@@ -8732,7 +8732,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Silver",
-      "file": "clpokemonsilver.html"
+      "file": "./ported/pokemonsilver.html"
     },
     {
       "name": "Pokemon Stunning Steel",
