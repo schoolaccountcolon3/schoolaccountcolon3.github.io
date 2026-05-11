@@ -1,28 +1,10 @@
-Update: 2026-05-08
+Update: 2026-05-10
 
 Newly Added Games
 -----------------
-- Added 20 Minutes Till Dawn
-- Added Ace Attorney Investigations - Miles Edgeworth
-- Added Apollo Justice - Ace Attorney
-- Added Bendy and the Ink Machine: ALL CHAPTERS
-- Added Fih
-- Added Five Nights at Frickbear's 3
-- Added Hungry Lamu 2
-- Added MiSide
-- Added Need For Speed: Carbon
-- Added Need For Speed: Most Wanted
-- Added Need For Speed: Underground 2
-- Added Plauge Inc
-- Added Rocket Goal.io
-- Added Scampton The Great
-- Added Slendytubbies 1
-- Added Slendytubbies 2
-- Added Slendytubbies 2D
-- Added Spaceflight Simulator
-- Added Trees Hate You
-- Added t\u00b3 (T cubed)
-- Added UvuvwevwevweOnyetenvewveUgwemubwemOssas
-- Added Vib-Ribbon
-- Added -3
-- Added -b
+- Added Pokemon Lazarus
+- Added Pokemon Dark Fire
+- Added Cobb Can Move
+- Added Pinkbike
+
+Also im prob going to be redoing the main page and add tags to find games easier but theres a LOT of games and im lazy so we will see

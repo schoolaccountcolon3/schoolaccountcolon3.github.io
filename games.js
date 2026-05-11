@@ -3346,7 +3346,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Red",
-      "file": "./ported/red.html"
+      "file": "./ported/pokemon/pokemonred.html"
     },
     {
       "name": "Pokey Ball",
@@ -8628,7 +8628,11 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Lazarus",
-      "file": "clpokemonlazarus.html"
+      "file": "./ported/pokemon/pokemonlazarus.html"
+    },
+    {
+      "name": "Pokemon Dark Fire",
+      "file": "./ported/pokemon/pokemondarkfire.html"
     },
     {
       "name": "Pokemon Leaf Green",
@@ -8732,7 +8736,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Silver",
-      "file": "./ported/pokemonsilver.html"
+      "file": "./ported/pokemon/pokemonsilver.html"
     },
     {
       "name": "Pokemon Stunning Steel",
@@ -8756,7 +8760,7 @@ const GAME_DATA = {
     },
     {
       "name": "Pokemon Too Many Types 2",
-      "file": "./ported/pokemontoomanytypes2.html"
+      "file": "./ported/pokemon/pokemontoomanytypes2.html"
     },
     {
       "name": "Pokemon Ultimate Fusion",
@@ -9027,6 +9031,14 @@ const GAME_DATA = {
     {
       "name": "Jumping Shell",
       "file": "./ported/jumping-shell.html"
+    },
+    {
+      "name": "PinkBike",
+      "file": "./ported/pinkbike.html"
+    },
+    {
+      "name": "Cobb Can Move",
+      "file": "./ported/cobbcanmove.html"
     },
     {
       "name": "Chatroom",
