@@ -36,14 +36,14 @@
     <script>
 (async () => {
   
-      var baseURL = "./";
+      var baseURL = "";
       var buildUrl = baseURL+"/Build";
       var loaderUrl = buildUrl + "/TheGrimDonutGame.loader.js?v=1.04";
       var config = {
           dataUrl: buildUrl + "/TheGrimDonutGame.data",
           frameworkUrl: buildUrl + "/TheGrimDonutGame.framework.js",
           codeUrl: buildUrl + "/TheGrimDonutGame.wasm",
-          streamingAssetsUrl: baseURL+"/StreamingAssets",
+          streamingAssetsUrl: "StreamingAssets"
           companyName: "ASBO Interactive",
           productName: "The Grim Donut Game",
           productVersion: "1.04",
