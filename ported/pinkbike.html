@@ -11,95 +11,212 @@
         <link rel="shortcut icon" href="https://es.pinkbike.org/246/sprt/i/favicon.ico" />
         <link rel="alternate" type="application/rss+xml" title="Pinkbike - Biking News" href="https://www.pinkbike.com/pinkbike_xml_feed.php" />
 
-        
         <meta property="og:image" content="https://es.pinkbike.org/246/sprt/i/share/grimdonutgame.jpg"/>
 
-
-        
-                    <meta property="og:type" content="website"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:type" content="website"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>
-    body,ul{margin:0}html{color:#000;background:#bcbec0;font-family:Arial,Verdana,sans-serif;font-size:13px}a{text-decoration:none}ul{padding:0}#nav-container{height:22px;padding-top:6px;margin-bottom:12px;background-color:#1c2e40;border-top:1px solid #14202e;border-bottom:1px solid #14202e}#login li,#nav li,#outside-header-links{visibility:hidden}#outside-header{height:56px;background-color:#fff}#outside-header-items{display:flex;align-items:center;height:56px;margin:0 0 0 36px}#login-container{height:30px;width:100%;text-align:right;background:#000}#header a{height:95px}#takeover_ad_top{height:189px}#outer-container{background-position: center 188px!important;}#takeover_ad_top div{background-color: transparent!important;}@media screen and (max-width:768px){#outside-header{height:40px;background-color:#fff}#outside-header-items{margin:0 0 0 4px;height:40px}#outside-header-menu{background-color:#fdd20a;color:#000;border-radius:10px;display:inline-block;width:20px;height:20px;margin-left:5px;position:relative}#alert,#buysellreports,#dev-links,#forumreports,#outside-header-links{display:none}#login-container{height:40px}#nav-container{height:27px;padding-top:11px}}
-</style>
-    <div id="unity-container">
-        <canvas id="unity-canvas" width=1000 height=563></canvas>
-        <div id="unity-loading-bar">
-            <div id="unity-logo"></div>
-            <div id="unity-progress-bar-empty">
-                <div id="unity-progress-bar-full"></div>
+            body,ul{margin:0}html{color:#000;background:#bcbec0;font-family:Arial,Verdana,sans-serif;font-size:13px}a{text-decoration:none}ul{padding:0}#nav-container{height:22px;padding-top:6px;margin-bottom:12px;background-color:#1c2e40;border-top:1px solid #14202e;border-bottom:1px solid #14202e}#login li,#nav li,#outside-header-links{visibility:hidden}#outside-header{height:56px;background-color:#fff}#outside-header-items{display:flex;align-items:center;height:56px;margin:0 0 0 36px}#login-container{height:30px;width:100%;text-align:right;background:#000}#header a{height:95px}#takeover_ad_top{height:189px}#outer-container{background-position: center 188px!important;}#takeover_ad_top div{background-color: transparent!important;}@media screen and (max-width:768px){#outside-header{height:40px;background-color:#fff}#outside-header-items{margin:0 0 0 4px;height:40px}#outside-header-menu{background-color:#fdd20a;color:#000;border-radius:10px;display:inline-block;width:20px;height:20px;margin-left:5px;position:relative}#alert,#buysellreports,#dev-links,#forumreports,#outside-header-links{display:none}#login-container{height:40px}#nav-container{height:27px;padding-top:11px}}
+        </style>
+    </head>
+    <body>
+        <div id="unity-container">
+            <canvas id="unity-canvas" width=1000 height=563></canvas>
+            <div id="unity-loading-bar">
+                <div id="unity-logo"></div>
+                <div id="unity-progress-bar-empty">
+                    <div id="unity-progress-bar-full"></div>
+                </div>
             </div>
+            <div id="unity-mobile-warning" style="display: none;">Mobile mode unsupported</div>
+            <div id="unity-fullscreen-button"></div>
         </div>
-    </div>
-</div>
 
-<script src="Build/chunk_loader.js"></script>
-    <script>
-(async () => {
-  
-      var baseURL = "";
-      var buildUrl = baseURL+"/Build";
-      var loaderUrl = buildUrl + "/TheGrimDonutGame.loader.js?v=1.04";
-      var config = {
-          dataUrl: buildUrl + "/TheGrimDonutGame.data",
-          frameworkUrl: buildUrl + "/TheGrimDonutGame.framework.js",
-          codeUrl: buildUrl + "/TheGrimDonutGame.wasm",
-          streamingAssetsUrl: "StreamingAssets"
-          companyName: "ASBO Interactive",
-          productName: "The Grim Donut Game",
-          productVersion: "1.04",
-      };
-  
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var mobileWarning = document.querySelector("#unity-mobile-warning");
-  
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-  
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-          container.className = "unity-mobile";
-          // Avoid draining fillrate performance on mobile devices,
-          // and default/override low DPI mode on mobile browsers.
-          config.devicePixelRatio = 1;
-          mobileWarning.style.display = "block";
-          setTimeout(() => {
-              mobileWarning.style.display = "none";
-          }, 5000);
-      } else {
-          canvas.style.width = "100%";
-          var height = window.innerHeight - (98 + 50);
-          canvas.style.height = height+"px";
-      }
-      loadingBar.style.display = "block";
-  
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = async () => {
-                  // chunk_loader: resolve chunked asset URLs before engine starts
-          config.dataUrl      = await chunkLoad(config.dataUrl);
-          config.codeUrl      = await chunkLoad(config.codeUrl);
-          createUnityInstance(canvas, config, (progress) => {
-              progressBarFull.style.width = 100 * progress + "%";
-          }).then((unityInstance) => {
-              loadingBar.style.display = "none";
-              fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-              };
-          }).catch((message) => {
-  
-          });
-      };
-      document.body.appendChild(script);
-  
-})();
-</script>
+        <!-- --- NETWORK INTERCEPTOR SCRIPT --- -->
+        <!-- Intercepts Unity's runtime HTTP requests to stitch chunked StreamingAssets together -->
+        <script>
+            (function() {
+                const TARGET_ASSET = 'shared_scene_assets';
+                const TOTAL_CHUNKS = 4; // Because you have .part000 up to .part003
 
+                const originalFetch = window.fetch;
+                const OriginalXHR = window.XMLHttpRequest;
+
+                // Fetches parts, merges them, and un-gzips them if needed
+                async function fetchAndStitch(url, init) {
+                    const urlWithoutQuery = url.split('?')[0];
+                    const queryString = url.includes('?') ? ('?' + url.split('?')[1]) : '';
+
+                    const fetchPromises =[];
+                    for (let i = 0; i < TOTAL_CHUNKS; i++) {
+                        const ext = '.part' + i.toString().padStart(3, '0');
+                        const partUrl = urlWithoutQuery + ext + queryString;
+                        fetchPromises.push(originalFetch(partUrl, init).then(res => {
+                            if (!res.ok) throw new Error(`Missing chunk: ${partUrl}`);
+                            return res.arrayBuffer();
+                        }));
+                    }
+
+                    const buffers = await Promise.all(fetchPromises);
+
+                    // Stitch buffers side-by-side
+                    const totalLen = buffers.reduce((acc, buf) => acc + buf.byteLength, 0);
+                    const combined = new Uint8Array(totalLen);
+                    let offset = 0;
+                    for (const buf of buffers) {
+                        combined.set(new Uint8Array(buf), offset);
+                        offset += buf.byteLength;
+                    }
+
+                    let finalBuffer = combined.buffer;
+
+                    // Check for GZIP magic bytes (1F 8B) in case you applied gzip before splitting
+                    if (combined.length > 2 && combined[0] === 0x1F && combined[1] === 0x8B) {
+                        try {
+                            const ds = new DecompressionStream("gzip");
+                            const writer = ds.writable.getWriter();
+                            writer.write(combined);
+                            writer.close();
+                            finalBuffer = await new Response(ds.readable).arrayBuffer();
+                        } catch (e) {
+                            console.warn("Gzip compression detected, but decompression failed.", e);
+                        }
+                    }
+                    return finalBuffer;
+                }
+
+                // 1. Monkey-Patch Fetch API (Modern Unity)
+                window.fetch = async function(resource, init) {
+                    const url = typeof resource === 'string' ? resource : (resource instanceof Request ? resource.url : '');
+
+                    // Trigger ONLY for 'shared_scene_assets' without the '.part' extension
+                    if (url.includes(TARGET_ASSET) && !url.includes('.part')) {
+                        console.log("[Network Interceptor] Stitching fetch request for:", url);
+                        try {
+                            const combinedBuffer = await fetchAndStitch(url, init);
+                            const response = new Response(combinedBuffer, {
+                                status: 200,
+                                statusText: 'OK',
+                                headers: new Headers({
+                                    'Content-Type': 'application/octet-stream',
+                                    'Content-Length': combinedBuffer.byteLength.toString()
+                                })
+                            });
+                            Object.defineProperty(response, 'url', { value: url });
+                            return response;
+                        } catch (e) {
+                            console.error("[Network Interceptor] Failed to stitch chunked asset:", e);
+                        }
+                    }
+                    return originalFetch.apply(this, arguments);
+                };
+
+                // 2. Monkey-Patch XMLHttpRequest (Fallback / Older Unity versions)
+                window.XMLHttpRequest = function() {
+                    const xhr = new OriginalXHR();
+                    const originalOpen = xhr.open;
+                    const originalSend = xhr.send;
+                    let isIntercepted = false;
+                    let interceptedUrl = '';
+
+                    xhr.open = function(method, url) {
+                        if (typeof url === 'string' && url.includes(TARGET_ASSET) && !url.includes('.part')) {
+                            isIntercepted = true;
+                            interceptedUrl = url;
+                        }
+                        return originalOpen.apply(this, arguments);
+                    };
+
+                    xhr.send = function() {
+                        if (isIntercepted) {
+                            console.log("[Network Interceptor] Stitching XHR request for:", interceptedUrl);
+                            fetchAndStitch(interceptedUrl).then(combinedBuffer => {
+                                Object.defineProperty(xhr, 'readyState', { value: 4 });
+                                Object.defineProperty(xhr, 'status', { value: 200 });
+                                Object.defineProperty(xhr, 'statusText', { value: 'OK' });
+                                Object.defineProperty(xhr, 'responseURL', { value: interceptedUrl });
+
+                                if (xhr.responseType === 'arraybuffer' || xhr.responseType === '') {
+                                    Object.defineProperty(xhr, 'response', { value: combinedBuffer });
+                                } else if (xhr.responseType === 'blob') {
+                                    Object.defineProperty(xhr, 'response', { value: new Blob([combinedBuffer]) });
+                                }
+
+                                if (xhr.onload) xhr.onload({ target: xhr });
+                                xhr.dispatchEvent(new Event('load'));
+                                xhr.dispatchEvent(new Event('readystatechange'));
+                            }).catch(err => {
+                                console.error("[Network Interceptor] XHR Intercept failed:", err);
+                                if (xhr.onerror) xhr.onerror(err);
+                                xhr.dispatchEvent(new Event('error'));
+                            });
+                            return;
+                        }
+                        return originalSend.apply(this, arguments);
+                    };
+
+                    return xhr;
+                };
+            })();
+        </script>
+        <!-- --- END NETWORK INTERCEPTOR --- -->
+
+        <script src="Build/chunk_loader.js"></script>
+        <script>
+        (async () => {
+            var baseURL = ".";
+            var buildUrl = baseURL+"/Build";
+            var loaderUrl = buildUrl + "/TheGrimDonutGame.loader.js?v=1.04";
+            var config = {
+                dataUrl: buildUrl + "/TheGrimDonutGame.data",
+                frameworkUrl: buildUrl + "/TheGrimDonutGame.framework.js",
+                codeUrl: buildUrl + "/TheGrimDonutGame.wasm",
+                streamingAssetsUrl: "https://cdn.jsdelivr.net/gh/lemonsky47/webports@main/grimdonutgame2021/StreamingAssets",
+                companyName: "ASBO Interactive",
+                productName: "The Grim Donut Game",
+                productVersion: "1.04",
+            };
+
+            var container = document.querySelector("#unity-container");
+            var canvas = document.querySelector("#unity-canvas");
+            var loadingBar = document.querySelector("#unity-loading-bar");
+            var progressBarFull = document.querySelector("#unity-progress-bar-full");
+            var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+            var mobileWarning = document.querySelector("#unity-mobile-warning");
+
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                container.className = "unity-mobile";
+                config.devicePixelRatio = 1;
+                mobileWarning.style.display = "block";
+                setTimeout(() => {
+                    mobileWarning.style.display = "none";
+                }, 5000);
+            } else {
+                canvas.style.width = "100%";
+                var height = window.innerHeight - (98 + 50);
+                canvas.style.height = height+"px";
+            }
+            loadingBar.style.display = "block";
+
+            var script = document.createElement("script");
+            script.src = loaderUrl;
+            script.onload = async () => {
+                // chunk_loader: resolve chunked asset URLs before engine starts
+                config.dataUrl = await chunkLoad(config.dataUrl);
+                config.codeUrl = await chunkLoad(config.codeUrl);
+                createUnityInstance(canvas, config, (progress) => {
+                    progressBarFull.style.width = 100 * progress + "%";
+                }).then((unityInstance) => {
+                    loadingBar.style.display = "none";
+                    if(fullscreenButton){
+                        fullscreenButton.onclick = () => {
+                            unityInstance.SetFullscreen(1);
+                        };
+                    }
+                }).catch((message) => {});
+            };
+            document.body.appendChild(script);
+        })();
+        </script>
     </body>
 </html>
