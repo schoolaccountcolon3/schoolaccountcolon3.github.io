@@ -177,6 +177,13 @@ gap: 28px;
   border-color: var(--color-primary);
 }
 
+.game-card canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
 .cloak-label {
   display: flex;
   align-items: center;

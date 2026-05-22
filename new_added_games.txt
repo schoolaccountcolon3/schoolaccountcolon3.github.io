@@ -1,10 +1,8 @@
-Update: 2026-05-10
+Update: 2026-05-22
 
 Newly Added Games
 -----------------
-- Added Pokemon Lazarus
-- Added Pokemon Dark Fire
-- Added Cobb Can Move
-- Added Pinkbike
+- Hopefully fixed goguardian blocks
+- removed chatroom
 
-Also im prob going to be redoing the main page and add tags to find games easier but theres a LOT of games and im lazy so we will see
+good luck on finals guys

@@ -227,7 +227,12 @@
                 specialCats.forEach(cat => createNavBtn(cat));
             }
 
-            renderGames();
+            const runInitialRender = () => renderGames();
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(runInitialRender);
+            } else {
+                runInitialRender();
+            }
 
             searchInput.addEventListener('input', (e) => renderGames(e.target.value));
         }
@@ -287,17 +292,95 @@
                     grid.className = 'game-grid';
 
                     games.forEach(game => {
-                        const card = document.createElement('div');
-                        card.className = 'game-card';
-                        card.textContent = game.name;
-                        card.onclick = () => launchGame(game);
-                        grid.appendChild(card);
-                    });
+                            const card = document.createElement('div');
+                            card.className = 'game-card';
+                            
+                            // Create a canvas element instead of text
+                            const canvas = document.createElement('canvas');
+                            const font = '400 16px "Source Sans 3", Helvetica, Arial, sans-serif';
+                            const lineHeight = 24;
+                            const horizontalPadding = 0;
+                            const topPadding = 4;
+                            const bottomPadding = 0;
+
+                            // Add the canvas to the card instead of text
+                            card.appendChild(canvas);
+                            card.onclick = () => launchGame(game);
+                            grid.appendChild(card);
+
+                            const dpr = window.devicePixelRatio || 1;
+                            const cardStyles = window.getComputedStyle(card);
+                            const padLeft = parseFloat(cardStyles.paddingLeft) || 0;
+                            const padRight = parseFloat(cardStyles.paddingRight) || 0;
+                            const cardPadX = padLeft + padRight;
+                            const renderedCardWidth = Math.round(card.getBoundingClientRect().width) || 180;
+                            const contentWidth = renderedCardWidth - cardPadX;
+                            const cssWidth = Math.max(120, Math.floor(contentWidth));
+                            const measureCanvas = document.createElement('canvas');
+                            const measureCtx = measureCanvas.getContext('2d');
+                            measureCtx.font = font;
+                            const maxWidth = cssWidth - horizontalPadding * 2;
+                            const words = game.name.split(/\s+/).filter(Boolean);
+                            const lines = [];
+                            let currentLine = '';
+
+                            const pushBrokenWord = (word) => {
+                                let chunk = '';
+                                for (const ch of word) {
+                                    const candidate = chunk + ch;
+                                    if (measureCtx.measureText(candidate).width <= maxWidth) {
+                                        chunk = candidate;
+                                    } else {
+                                        if (chunk) lines.push(chunk);
+                                        chunk = ch;
+                                    }
+                                }
+                                if (chunk) lines.push(chunk);
+                            };
+
+                            words.forEach((word) => {
+                                const candidate = currentLine ? `${currentLine} ${word}` : word;
+                                if (measureCtx.measureText(candidate).width <= maxWidth) {
+                                    currentLine = candidate;
+                                    return;
+                                }
+                                if (currentLine) lines.push(currentLine);
+
+                                if (measureCtx.measureText(word).width <= maxWidth) {
+                                    currentLine = word;
+                                } else {
+                                    pushBrokenWord(word);
+                                    currentLine = '';
+                                }
+                            });
+
+                            if (currentLine) lines.push(currentLine);
+                            if (lines.length === 0) lines.push(game.name);
+
+                            const cssHeight = Math.max(24, lines.length * lineHeight + topPadding + bottomPadding);
+                            canvas.style.width = `${cssWidth}px`;
+                            canvas.style.height = `${cssHeight}px`;
+                            canvas.width = Math.round(cssWidth * dpr);
+                            canvas.height = Math.round(cssHeight * dpr);
+
+                            const ctx = canvas.getContext('2d');
+                            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                            ctx.font = font;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.textAlign = 'left';
+                            ctx.textBaseline = 'top';
+
+                            let y = topPadding;
+                            lines.forEach((line) => {
+                                ctx.fillText(line, horizontalPadding, y);
+                                y += lineHeight;
+                            });
+                        });
 
                     section.appendChild(grid);
                     contentArea.appendChild(section);
-                }
-            });
+                    }
+                });
 
             if (!hasResults) {
                 contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching "${filterText}"</div>`;

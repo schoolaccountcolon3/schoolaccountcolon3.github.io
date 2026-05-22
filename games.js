@@ -9041,11 +9041,6 @@ const GAME_DATA = {
       "file": "./ported/cobbcanmove.html"
     },
     {
-      "name": "Chatroom",
-      "file": "./chatroom/index.html",
-      "openog": "true"
-    },
-    {
       "name": "Request A Game",
       "file": "https://forms.gle/BS5LA2Mf3ZV2f2LY6",
       "openog": "true"
