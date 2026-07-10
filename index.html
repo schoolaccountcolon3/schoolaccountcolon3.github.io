@@ -26,7 +26,7 @@
     <div id="styleSwitcher"></div>
 
     <nav id="sidebar">
-        <div class="sidebar-header">Not Games</div>
+        <div class="sidebar-header">Apps</div>
         <div class="nav-scroll" id="nav-container">
             <!-- Injected via JS -->
         </div>
@@ -34,12 +34,16 @@
 
     <main id="main">
         <div id="topbar">
-            <input type="text" id="search-input" placeholder="Search games...">
-
-            <label class="cloak-label">
-                <input type="checkbox" id="cloak-toggle">
-                Open in about:blank
-            </label>
+            <div class="topbar-controls">
+                <input type="text" id="search-input" placeholder="Search games...">
+                <label class="cloak-label">
+                    <input type="checkbox" id="cloak-toggle">
+                    Open in about:blank
+                </label>
+            </div>
+            <div id="tags-container">
+                <!-- Tags injected via JS -->
+            </div>
         </div>
         <div id="content-area">
             <!-- Injected via JS -->
@@ -59,28 +63,60 @@
         </div>
     </div>
 
-    <script src="games.js"></script>
     <script>
-        const BASE_URL = "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/";
+        const PROVIDER_URLS = {
+            "math": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/",
+            "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/"
+        };
 
         const navContainer = document.getElementById('nav-container');
         const contentArea = document.getElementById('content-area');
         const searchInput = document.getElementById('search-input');
+        const tagsContainer = document.getElementById('tags-container');
         const loader = document.getElementById('loader');
         const sidebar = document.getElementById('sidebar');
         const main = document.getElementById('main');
         const cloakToggle = document.getElementById('cloak-toggle');
+        
         let showHidden = false;
         let keyBuffer = '';
         const SECRET_CODE = 'secrethidden';
+        let activeTag = null; 
 
         const urlParams = new URLSearchParams(window.location.search);
         const gameParam = urlParams.get('g');
+        const providerParam = urlParams.get('p');
 
+        // Lazy load canvases using IntersectionObserver
+        const canvasObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const canvas = entry.target;
+                    const gameName = canvas.getAttribute('data-name');
+                    if (gameName && !canvas.rendered) {
+                        renderCanvasText(canvas, gameName);
+                        canvas.rendered = true;
+                    }
+                    observer.unobserve(canvas);
+                }
+            });
+        }, { rootMargin: '150px' });
+
+        // Conditional loading flow: Bypass downloading games.js if opening a game
         if (gameParam) {
-            initializeGameMode(gameParam, true);
+            initializeGameMode(gameParam, providerParam, true);
         } else {
-            initializeMenuMode();
+            // Home page: dynamically load games.js, then build the menu
+            const script = document.createElement('script');
+            script.src = 'games.js';
+            script.onload = () => {
+                initializeMenuMode();
+            };
+            script.onerror = () => {
+                loader.style.display = 'none';
+                contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js failed to load.</h2>';
+            };
+            document.body.appendChild(script);
         }
 
         document.addEventListener('keyup', (event) => {
@@ -92,20 +128,39 @@
             }
         });
 
-        function getGameUrl(filename) {
-            if (filename.startsWith("cl")) {
-                return `${BASE_URL}${filename}?t=${Date.now()}`;
-            } else {
-                return filename;
+        // Searches the list if available (fallback for direct URL hits without &p parameter)
+        function findGameByFile(filename) {
+            if (typeof GAME_DATA === 'undefined') return null;
+            for (const category in GAME_DATA) {
+                const found = GAME_DATA[category].find(g => g.file === filename);
+                if (found) return found;
             }
+            return null;
         }
 
-        // Cleans fetched HTML of ads, trackers, and obfuscated scripts before rendering
+        function getGameUrl(filename, provider) {
+            // Keep local/relative assets and absolute external URLs unchanged
+            if (filename.startsWith("http://") || filename.startsWith("https://") || filename.startsWith("./") || filename.startsWith("/")) {
+                return filename;
+            }
+
+            // Fallback lookup if provider was not explicitly passed in URL
+            if (!provider) {
+                const game = findGameByFile(filename);
+                if (game) {
+                    provider = game.provider;
+                }
+            }
+
+            // Match base URL or default to UGS if provider remains unmatched
+            const baseUrl = PROVIDER_URLS[provider] || PROVIDER_URLS["ugs"];
+            return `${baseUrl}${filename}?t=${Date.now()}`;
+        }
+
         function cleanGameHtml(htmlString) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlString, 'text/html');
 
-            // Transform githack URLs to jsdelivr
             function transformGithackToJsdelivr(url) {
                 if (url.includes('rawcdn.githack.com')) {
                     const match = url.match(/https:\/\/rawcdn\.githack\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.+)/);
@@ -117,39 +172,26 @@
                 return url;
             }
 
-            // Transform URLs in src and href attributes
             const elements = doc.querySelectorAll('[src], [href]');
             elements.forEach(el => {
                 if (el.src) el.src = transformGithackToJsdelivr(el.src);
                 if (el.href) el.href = transformGithackToJsdelivr(el.href);
             });
 
-            // --- Remove sidebar ad elements ---
             doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]')
                .forEach(el => el.remove());
 
-            // --- Remove ad/monetization SDK script tags ---
-            const sdkPatterns = [
-                'gamemonetize',
-                'st39/sdk',
-                'ga.js',
-                'sdk.js',
-            ];
+            const sdkPatterns = ['gamemonetize', 'st39/sdk', 'ga.js', 'sdk.js'];
             doc.querySelectorAll('script[src]').forEach(el => {
                 if (sdkPatterns.some(p => el.src.includes(p))) el.remove();
             });
 
-            // --- Remove inline scripts that are obfuscated ---
             doc.querySelectorAll('script:not([src])').forEach(el => {
                 const text = el.textContent || '';
-                // Obfuscated scripts: detect by high density of _0x hex identifiers
                 const obfuscatedMatches = (text.match(/_0x[0-9a-f]+/gi) || []).length;
-                const isObfuscated = obfuscatedMatches > 10;
-
-                if (isObfuscated) el.remove();
+                if (obfuscatedMatches > 10) el.remove();
             });
 
-            // Reconstruct the HTML string
             let doctype = "";
             if (doc.doctype) {
                 doctype = `<!DOCTYPE ${doc.doctype.name}>\n`;
@@ -157,13 +199,14 @@
             return doctype + doc.documentElement.outerHTML;
         }
 
-        function initializeGameMode(filename, needsDecode) {
+        function initializeGameMode(filename, provider, needsDecode) {
             sidebar.style.display = 'none';
             main.style.display = 'none';
             loader.style.display = 'flex';
 
             const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
-            const url = getGameUrl(realFilename);
+            const realProvider = needsDecode && provider ? decodeURIComponent(provider) : provider;
+            const url = getGameUrl(realFilename, realProvider);
 
             document.getElementById('loader-text').textContent = "Launching...";
 
@@ -173,9 +216,7 @@
                     return response.text();
                 })
                 .then(html => {
-                    // Clean HTML before writing
                     const cleanedHtml = cleanGameHtml(html);
-
                     document.open();
                     document.write(cleanedHtml);
                     document.close();
@@ -189,6 +230,29 @@
                     console.error(err);
                 });
         }
+        
+        function renderTagCanvas(canvas, text, isActive) {
+            const font = '400 13px "Source Sans 3", Helvetica, Arial, sans-serif';
+            const ctx = canvas.getContext('2d');
+            ctx.font = font;
+            
+            const metrics = ctx.measureText(text);
+            const width = Math.max(1, Math.ceil(metrics.width));
+            const height = 16; 
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.font = font;
+            ctx.textBaseline = 'top';
+            
+            ctx.fillStyle = isActive ? '#121212' : '#aaa';
+            ctx.fillText(text, 0, 1);
+        }
 
         function initializeMenuMode() {
             loader.style.display = 'none';
@@ -198,34 +262,59 @@
                 return;
             }
 
+            const allTagsSet = new Set();
+            Object.values(GAME_DATA).forEach(games => {
+                games.forEach(g => {
+                    if (g.tags) {
+                        g.tags.forEach(t => {
+                            if (t.toLowerCase() !== 'hidden') {
+                                allTagsSet.add(t);
+                            }
+                        });
+                    }
+                });
+            });
+
+            tagsContainer.innerHTML = '';
+            Array.from(allTagsSet).sort().forEach(tag => {
+                const tagBtn = document.createElement('button');
+                tagBtn.className = 'tag-btn';
+                
+                const canvas = document.createElement('canvas');
+                canvas.setAttribute('data-tag', tag);
+                tagBtn.appendChild(canvas);
+                
+                renderTagCanvas(canvas, tag, false);
+                
+                tagBtn.onclick = () => {
+                    if (activeTag === tag) {
+                        activeTag = null;
+                        tagBtn.classList.remove('active');
+                        renderTagCanvas(canvas, tag, false);
+                    } else {
+                        document.querySelectorAll('.tag-btn').forEach(b => {
+                            if (b.classList.contains('active')) {
+                                b.classList.remove('active');
+                                const c = b.querySelector('canvas');
+                                if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
+                            }
+                        });
+                        
+                        activeTag = tag;
+                        tagBtn.classList.add('active');
+                        renderTagCanvas(canvas, tag, true);
+                    }
+                    renderGames(searchInput.value);
+                };
+                tagsContainer.appendChild(tagBtn);
+            });
+
             const keys = Object.keys(GAME_DATA);
-            const portedKey = keys.find(k => k.toLowerCase() === "games i ported");
-            const standardCats = keys.filter(k => k.length === 1 && k !== portedKey).sort();
-            const specialCats = keys.filter(k => k.length > 1 && k !== portedKey).sort();
+            const standardCats = keys.filter(k => k.length === 1).sort();
+            const specialCats = keys.filter(k => k.length > 1).sort();
 
-            if (portedKey) {
-                const label = document.createElement('div');
-                label.className = 'nav-label';
-                label.textContent = 'Special';
-                navContainer.appendChild(label);
-                createNavBtn(portedKey);
-            }
-
-            if (standardCats.length > 0) {
-                const label = document.createElement('div');
-                label.className = 'nav-label';
-                label.textContent = 'Library';
-                navContainer.appendChild(label);
-                standardCats.forEach(cat => createNavBtn(cat));
-            }
-
-            if (specialCats.length > 0) {
-                const label = document.createElement('div');
-                label.className = 'nav-label';
-                label.textContent = 'Collections & Emulators';
-                navContainer.appendChild(label);
-                specialCats.forEach(cat => createNavBtn(cat));
-            }
+            if (standardCats.length > 0) standardCats.forEach(cat => createNavBtn(cat));
+            if (specialCats.length > 0) specialCats.forEach(cat => createNavBtn(cat));
 
             const runInitialRender = () => renderGames();
             if (document.fonts && document.fonts.ready) {
@@ -237,30 +326,69 @@
             searchInput.addEventListener('input', (e) => renderGames(e.target.value));
         }
 
+        function scrollToCategory(category) {
+            const el = document.getElementById(`cat-${category}`);
+            if (el) {
+                const topbar = document.getElementById('topbar');
+                const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
+                
+                const targetY = el.getBoundingClientRect().top + window.scrollY - topbarHeight - 20;
+                
+                window.scrollTo({ top: targetY, behavior: 'smooth' });
+                el.style.opacity = '0.5';
+                setTimeout(() => el.style.opacity = '1', 300);
+            }
+        }
+
         function createNavBtn(category) {
             const btn = document.createElement('button');
             btn.className = 'nav-btn';
-            btn.textContent = category;
+            
+            btn.textContent = category.charAt(0).toUpperCase();
+            btn.title = category;
+            
             btn.onclick = () => {
-                const el = document.getElementById(`cat-${category}`);
-                if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    el.style.opacity = '0.5';
-                    setTimeout(() => el.style.opacity = '1', 300);
+                let needsRender = false;
+                
+                if (activeTag) {
+                    activeTag = null;
+                    document.querySelectorAll('.tag-btn').forEach(b => {
+                        b.classList.remove('active');
+                        const c = b.querySelector('canvas');
+                        if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
+                    });
+                    needsRender = true;
+                }
+
+                if (needsRender) {
+                    renderGames(searchInput.value);
+                    setTimeout(() => scrollToCategory(category), 50);
+                } else {
+                    scrollToCategory(category);
                 }
             };
             navContainer.appendChild(btn);
         }
 
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.onclick = () => launchGame(game);
+            
+            const canvas = document.createElement('canvas');
+            canvas.setAttribute('data-name', game.name);
+            
+            card.appendChild(canvas);
+            canvasObserver.observe(canvas);
+            
+            return card;
+        }
+
         function renderGames(filterText = '') {
             contentArea.innerHTML = '';
             const lowerFilter = filterText.toLowerCase();
-            const includeHidden = showHidden && filterText === '';
 
             const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
-                if (a.toLowerCase() === "games i ported") return -1;
-                if (b.toLowerCase() === "games i ported") return 1;
-
                 const isASingle = a.length === 1;
                 const isBSingle = b.length === 1;
                 if (isASingle && !isBSingle) return -1;
@@ -268,11 +396,53 @@
                 return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
             });
 
-            let hasResults = false;
+            // If a tag is active, consolidate all matching games into ONE category block
+            if (activeTag) {
+                let matchingGames = [];
 
+                allCategories.forEach(category => {
+                    const games = GAME_DATA[category].filter(g => {
+                        const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
+                        if (isSecretGame && !showHidden) return false;
+                        if (!g.tags || !g.tags.includes(activeTag)) return false;
+                        return g.name.toLowerCase().includes(lowerFilter);
+                    });
+                    matchingGames.push(...games);
+                });
+
+                if (matchingGames.length > 0) {
+                    matchingGames.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true, sensitivity: 'base'}));
+
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+
+                    const title = document.createElement('div');
+                    title.className = 'category-title';
+                    title.textContent = `Tag: ${activeTag}`;
+                    section.appendChild(title);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'game-grid';
+
+                    matchingGames.forEach(game => {
+                        grid.appendChild(createGameCard(game));
+                    });
+
+                    section.appendChild(grid);
+                    contentArea.appendChild(section);
+                } else {
+                    contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
+                }
+                return; 
+            }
+
+            // Normal rendering (No active tag)
+            let hasResults = false;
+            
             allCategories.forEach(category => {
                 const games = GAME_DATA[category].filter(g => {
-                    if (g.hidden === "true" && !includeHidden) return false;
+                    const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
+                    if (isSecretGame && !showHidden) return false;
                     return g.name.toLowerCase().includes(lowerFilter);
                 });
 
@@ -292,99 +462,93 @@
                     grid.className = 'game-grid';
 
                     games.forEach(game => {
-                            const card = document.createElement('div');
-                            card.className = 'game-card';
-                            
-                            // Create a canvas element instead of text
-                            const canvas = document.createElement('canvas');
-                            const font = '400 16px "Source Sans 3", Helvetica, Arial, sans-serif';
-                            const lineHeight = 24;
-                            const horizontalPadding = 0;
-                            const topPadding = 4;
-                            const bottomPadding = 0;
-
-                            // Add the canvas to the card instead of text
-                            card.appendChild(canvas);
-                            card.onclick = () => launchGame(game);
-                            grid.appendChild(card);
-
-                            const dpr = window.devicePixelRatio || 1;
-                            const cardStyles = window.getComputedStyle(card);
-                            const padLeft = parseFloat(cardStyles.paddingLeft) || 0;
-                            const padRight = parseFloat(cardStyles.paddingRight) || 0;
-                            const cardPadX = padLeft + padRight;
-                            const renderedCardWidth = Math.round(card.getBoundingClientRect().width) || 180;
-                            const contentWidth = renderedCardWidth - cardPadX;
-                            const cssWidth = Math.max(120, Math.floor(contentWidth));
-                            const measureCanvas = document.createElement('canvas');
-                            const measureCtx = measureCanvas.getContext('2d');
-                            measureCtx.font = font;
-                            const maxWidth = cssWidth - horizontalPadding * 2;
-                            const words = game.name.split(/\s+/).filter(Boolean);
-                            const lines = [];
-                            let currentLine = '';
-
-                            const pushBrokenWord = (word) => {
-                                let chunk = '';
-                                for (const ch of word) {
-                                    const candidate = chunk + ch;
-                                    if (measureCtx.measureText(candidate).width <= maxWidth) {
-                                        chunk = candidate;
-                                    } else {
-                                        if (chunk) lines.push(chunk);
-                                        chunk = ch;
-                                    }
-                                }
-                                if (chunk) lines.push(chunk);
-                            };
-
-                            words.forEach((word) => {
-                                const candidate = currentLine ? `${currentLine} ${word}` : word;
-                                if (measureCtx.measureText(candidate).width <= maxWidth) {
-                                    currentLine = candidate;
-                                    return;
-                                }
-                                if (currentLine) lines.push(currentLine);
-
-                                if (measureCtx.measureText(word).width <= maxWidth) {
-                                    currentLine = word;
-                                } else {
-                                    pushBrokenWord(word);
-                                    currentLine = '';
-                                }
-                            });
-
-                            if (currentLine) lines.push(currentLine);
-                            if (lines.length === 0) lines.push(game.name);
-
-                            const cssHeight = Math.max(24, lines.length * lineHeight + topPadding + bottomPadding);
-                            canvas.style.width = `${cssWidth}px`;
-                            canvas.style.height = `${cssHeight}px`;
-                            canvas.width = Math.round(cssWidth * dpr);
-                            canvas.height = Math.round(cssHeight * dpr);
-
-                            const ctx = canvas.getContext('2d');
-                            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                            ctx.font = font;
-                            ctx.fillStyle = '#ffffff';
-                            ctx.textAlign = 'left';
-                            ctx.textBaseline = 'top';
-
-                            let y = topPadding;
-                            lines.forEach((line) => {
-                                ctx.fillText(line, horizontalPadding, y);
-                                y += lineHeight;
-                            });
-                        });
+                        grid.appendChild(createGameCard(game));
+                    });
 
                     section.appendChild(grid);
                     contentArea.appendChild(section);
-                    }
-                });
+                }
+            });
 
             if (!hasResults) {
-                contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching "${filterText}"</div>`;
+                contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
             }
+        }
+
+        function renderCanvasText(canvas, name) {
+            const font = '400 16px "Source Sans 3", Helvetica, Arial, sans-serif';
+            const lineHeight = 24;
+            const horizontalPadding = 0;
+            const topPadding = 4;
+            const bottomPadding = 0;
+
+            const card = canvas.parentElement;
+            const dpr = window.devicePixelRatio || 1;
+            const cardStyles = window.getComputedStyle(card);
+            const padLeft = parseFloat(cardStyles.paddingLeft) || 0;
+            const padRight = parseFloat(cardStyles.paddingRight) || 0;
+            const renderedCardWidth = Math.round(card.getBoundingClientRect().width) || 180;
+            const contentWidth = renderedCardWidth - (padLeft + padRight);
+            const cssWidth = Math.max(120, Math.floor(contentWidth));
+            
+            const measureCtx = document.createElement('canvas').getContext('2d');
+            measureCtx.font = font;
+            const maxWidth = cssWidth - horizontalPadding * 2;
+            const words = name.split(/\s+/).filter(Boolean);
+            const lines = [];
+            let currentLine = '';
+
+            const pushBrokenWord = (word) => {
+                let chunk = '';
+                for (const ch of word) {
+                    const candidate = chunk + ch;
+                    if (measureCtx.measureText(candidate).width <= maxWidth) {
+                        chunk = candidate;
+                    } else {
+                        if (chunk) lines.push(chunk);
+                        chunk = ch;
+                    }
+                }
+                if (chunk) lines.push(chunk);
+            };
+
+            words.forEach((word) => {
+                const candidate = currentLine ? `${currentLine} ${word}` : word;
+                if (measureCtx.measureText(candidate).width <= maxWidth) {
+                    currentLine = candidate;
+                    return;
+                }
+                if (currentLine) lines.push(currentLine);
+
+                if (measureCtx.measureText(word).width <= maxWidth) {
+                    currentLine = word;
+                } else {
+                    pushBrokenWord(word);
+                    currentLine = '';
+                }
+            });
+
+            if (currentLine) lines.push(currentLine);
+            if (lines.length === 0) lines.push(name);
+
+            const cssHeight = Math.max(24, lines.length * lineHeight + topPadding + bottomPadding);
+            canvas.style.width = `${cssWidth}px`;
+            canvas.style.height = `${cssHeight}px`;
+            canvas.width = Math.round(cssWidth * dpr);
+            canvas.height = Math.round(cssHeight * dpr);
+
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.font = font;
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+
+            let y = topPadding;
+            lines.forEach((line) => {
+                ctx.fillText(line, horizontalPadding, y);
+                y += lineHeight;
+            });
         }
 
         function launchGame(game) {
@@ -392,13 +556,12 @@
             const gamename = game.name;
             const isCloaked = cloakToggle.checked;
             
-            // Track game play event
             gtag('event', 'game_played', {
                 game_name: gamename
             });
 
             if (!isCloaked && game.openog === "true") {
-                window.open(getGameUrl(filename), '_blank');
+                window.open(getGameUrl(filename, game.provider), '_blank');
                 return;
             }
 
@@ -406,7 +569,7 @@
                 loader.style.display = 'flex';
                 document.getElementById('loader-text').textContent = "Cloaking...";
 
-                const url = getGameUrl(filename);
+                const url = getGameUrl(filename, game.provider);
 
                 fetch(url)
                     .then(res => {
@@ -414,7 +577,6 @@
                         return res.text();
                     })
                     .then(html => {
-                        // Clean HTML before writing
                         const cleanedHtml = cleanGameHtml(html);
 
                         loader.style.display = 'none';
@@ -435,11 +597,12 @@
             } else {
                 const cleanName = filename.trim();
                 const encoded = encodeURIComponent(cleanName);
-                window.open(`?g=${encoded}`, '_blank');
+                const provider = game.provider ? encodeURIComponent(game.provider.trim()) : 'ugs';
+                window.open(`?g=${encoded}&p=${provider}`, '_blank');
             }
         }
 
-        // --- Update Notification Logic ---
+        // Update Notification Logic
         const updateNotification = document.getElementById('update-notification');
         const updateTextSpan = document.getElementById('update-text');
         const closeUpdateBtn = document.getElementById('close-update-btn');
@@ -450,7 +613,6 @@
         let fetchedUpdateDate = null;
         let fetchedUpdateContent = "";
 
-        // Fetch newly added games on load
         fetch('new_added_games.txt')
             .then(res => {
                 if (!res.ok) throw new Error("Could not load updates file");
@@ -463,10 +625,8 @@
                     fetchedUpdateDate = lines[0].trim();
                     updateTextSpan.textContent = fetchedUpdateDate;
                     
-                    // Remove the first two lines (the Update line and the empty line after it)
                     fetchedUpdateContent = lines.slice(2).join('\n').trim();
 
-                    // Show if not dismissed
                     if (localStorage.getItem('updateClosed') !== fetchedUpdateDate) {
                         updateNotification.style.display = 'flex';
                     }
@@ -476,27 +636,23 @@
                 console.error("Error loading new games: ", err);
             });
 
-        // Close small notification
         closeUpdateBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent opening the modal
+            e.stopPropagation();
             updateNotification.style.display = 'none';
             if (fetchedUpdateDate) {
                 localStorage.setItem('updateClosed', fetchedUpdateDate);
             }
         });
 
-        // Open modal when clicking the notification
         updateNotification.addEventListener('click', () => {
             updateModal.style.display = 'flex';
             updateModalText.textContent = fetchedUpdateContent;
         });
 
-        // Close modal
         updateModalClose.addEventListener('click', () => {
             updateModal.style.display = 'none';
         });
 
-        // Click outside modal to close
         updateModal.addEventListener('click', (e) => {
             if (e.target === updateModal) {
                 updateModal.style.display = 'none';
