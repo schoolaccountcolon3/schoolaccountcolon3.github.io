@@ -4,5 +4,6 @@ Newly Added Games
 -----------------
 - a lot of stuff
 - redid the site
+- added a somewhat decent proxy (sandstone)
 
 welcome back from summer
