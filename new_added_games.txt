@@ -1,9 +1,8 @@
-Update: 2026-07-09
+Update: 2026-08-30
 
 Newly Added Games
 -----------------
-- a lot of stuff
-- redid the site
-- added a somewhat decent proxy (sandstone)
+- site got blocked :(
+- im working on making new ways to get on so look out for those ill make a google doc / site at some point
 
-welcome back from summer
+schools security sucks
