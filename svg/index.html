@@ -1,4 +1,9 @@
-const COMPRESSED_GAME_DATA = {
+<!DOCTYPE html><html lang="en"><head><script>window.__INLINED_FILES__ = {};</script><script>(function(){if(window.parent&&window.parent!==window){var origOpen=window.open;window.open=function(url,target,features){if(!url||url==='about:blank'){try{return origOpen.call(window,url,target,features);}catch(e){}}window.parent.postMessage({type:'open_url',url:url},'*');return null;};}var search=window.__SVG_SEARCH__||'';if(search){var origURLSearchParams=window.URLSearchParams;window.URLSearchParams=function(init){if(init===undefined||init===window.location.search){init=search;}return new origURLSearchParams(init);};}if(window.fetch){var origFetch=window.fetch;window.fetch=function(input,init){var url=(typeof input==='string')?input:(input&&input.url?input.url:'');if(url){var cleanUrl=url.split('?')[0].split('#')[0];var filename=cleanUrl.split('/').pop().toLowerCase();if(window.__INLINED_FILES__&&window.__INLINED_FILES__[filename]!==undefined){var content=window.__INLINED_FILES__[filename];return Promise.resolve(new Response(content,{status:200,statusText:'OK',headers:{'Content-Type':'text/plain'}}));}}return origFetch.apply(this,arguments);};}})();</script><base href="https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/x-icon" href="/favicon.png"><style>:root{--color-bg:#121212;--color-fg:#e0e0e0;--color-card-bg:#1e1e1e;--color-border:#333;--color-input-bg:#121212;--color-primary:#f1f1f1;--color-primary-hover:#c0c0c0;--color-link:var(--color-primary);--color-button-hover:#2c2c2c;--color-shadow:rgba(0,0,0,0.3);--color-fg-muted:#aaa;--font-main:"Source Sans 3",Helvetica,Arial,sans-serif;color-scheme:dark}body{margin:0;min-height:100vh;font-family:var(--font-main);background-color:var(--color-bg);color:var(--color-fg);line-height:1.6;user-select:none}#loader{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:2000;font-weight:600;backdrop-filter:blur(4px)}.spinner{width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,0.1);border-left-color:var(--color-primary);animation:spin 1s cubic-bezier(0.4,0,0.2,1)infinite}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}#sidebar{position:fixed;top:0;left:0;width:70px;height:100vh;background:var(--color-card-bg);border-right:1px solid var(--color-border);box-shadow:4px 0 14px var(--color-shadow);padding:18px 10px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:12px}.sidebar-header{font-size:0.75em;font-weight:700;color:var(--color-fg);padding:8px 0 12px 0;border-bottom:1px solid var(--color-border);text-align:center;width:100%}.nav-scroll{overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;-ms-overflow-style:none;scrollbar-width:none}.nav-scroll::-webkit-scrollbar{display:none}.nav-label{display:none}.nav-btn{width:42px;height:42px;display:flex;align-items:center;justify-content:center;padding:0;background:var(--color-bg);border:1px solid var(--color-border);border-radius:12px;color:var(--color-fg);font-weight:bold;font-size:1.1em;cursor:pointer;transition:all 0.2s ease;flex-shrink:0}.nav-btn:hover{background:var(--color-button-hover);border-color:var(--color-primary);transform:translateY(-2px)}#main{margin-left:70px;min-height:100vh;padding:28px 32px 40px 32px;box-sizing:border-box}#topbar{position:sticky;top:0;z-index:100;padding:14px 0 18px 0;background:var(--color-bg)}.topbar-controls{display:flex;align-items:center;gap:16px}#search-input{flex:1;padding:12px 16px;border:1px solid var(--color-border);border-radius:10px;background:var(--color-card-bg);color:var(--color-fg);box-sizing:border-box}.cloak-label{display:flex;align-items:center;cursor:pointer;color:var(--color-fg-muted);font-size:0.95em;white-space:nowrap}.cloak-label input{margin-right:10px;accent-color:var(--color-primary);cursor:pointer}#tags-container{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.tag-btn{display:flex;align-items:center;justify-content:center;background:var(--color-card-bg);border:1px solid var(--color-border);padding:6px 14px;border-radius:16px;cursor:pointer;transition:all 0.2s ease}.tag-btn canvas{pointer-events:none;transition:filter 0.2s ease}.tag-btn:hover{border-color:var(--color-fg)}.tag-btn:hover canvas{filter:brightness(1.3)}.tag-btn.active{background:var(--color-primary);border-color:var(--color-primary)}.tag-btn.active:hover canvas{filter:none}#content-area{display:flex;flex-direction:column;gap:28px}.category-section{background:var(--color-card-bg);border:1px solid var(--color-border);border-radius:12px;padding:20px}.category-title{font-size:1.1em;font-weight:700;padding-bottom:10px;border-bottom:1px solid var(--color-border);margin-bottom:16px}.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.game-card{padding:12px 14px;background:var(--color-bg);border:1px solid var(--color-border);border-radius:10px;cursor:pointer;transition:background-color 0.2s ease,border-color 0.2s ease;min-height:48px}.game-card:hover{background:var(--color-button-hover);border-color:var(--color-primary)}.game-card canvas{display:block;width:100%;height:auto;min-height:24px;pointer-events:none}@media(max-width:900px){#sidebar{position:static;width:100%;height:70px;border-right:none;border-bottom:1px solid var(--color-border);flex-direction:row;padding:0 10px;overflow-x:auto;justify-content:flex-start}.sidebar-header{display:none}.nav-scroll{flex-direction:row;align-items:center;width:auto;gap:8px}#main{margin-left:0;padding:20px}.topbar-controls{flex-direction:column;align-items:flex-start}#search-input{width:100%}}#update-notification{position:fixed;bottom:20px;right:20px;background:var(--color-bg);border:1px solid var(--color-border);color:var(--color-fg);padding:12px 20px;border-radius:8px;box-shadow:0 4px 12px var(--color-shadow);display:flex;align-items:center;gap:12px;z-index:1000;cursor:pointer;transition:background-color 0.2s ease,border-color 0.2s ease}#update-notification[style*="display:none"]{display:none !important}#update-notification:hover{background:var(--color-button-hover);border-color:var(--color-primary)}#close-update-btn{background:transparent;border:none;color:var(--color-fg);font-size:1.4em;cursor:pointer;padding:0;line-height:1;transition:color 0.2s ease}#close-update-btn:hover{color:var(--color-primary)}#update-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:2000}#update-modal-content{background:var(--color-card-bg);color:var(--color-fg);padding:24px;border-radius:12px;border:1px solid var(--color-border);width:90%;max-width:500px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 24px var(--color-shadow);position:relative}#update-modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--color-fg);font-size:1.5em;cursor:pointer;line-height:1}#update-modal-text{white-space:pre-wrap;font-family:var(--font-main);margin-top:16px;line-height:1.4;color:var(--color-fg-muted)}</style><title>Google Classroom</title><script async src="https://www.googletagmanager.com/gtag/js?id=G-CPP231DLCZ"></script><script>window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CPP231DLCZ');</script></head><body><div id="loader"><div class="spinner"></div><div id="loader-text">Loading...</div></div><div id="styleSwitcher"></div><nav id="sidebar"><div class="sidebar-header">Apps</div><div class="nav-scroll" id="nav-container"></div></nav><main id="main"><div id="topbar"><div class="topbar-controls"><input type="text" id="search-input" placeholder="Search games..."><label class="cloak-label"><input type="checkbox" id="cloak-toggle">
+                    Open in about:blank
+                </label></div><div id="tags-container"></div></div><div id="content-area"></div></main><div id="update-notification" style="display: none;"><span id="update-text">Update: April 18th</span><button id="close-update-btn" title="Dismiss">&times;</button></div><div id="update-modal"><div id="update-modal-content"><button id="update-modal-close" title="Close">&times;</button><div id="update-modal-text">Loading...</div></div></div><script>window.COMPRESSED_GAME_DATA = {
   "#": [
     ["-3", "816.html", ["Misc", "Port"], "math"],
     ["-b", "817-f.html", ["Misc", "Port"], "math"],
@@ -3324,7 +3329,7 @@ const COMPRESSED_GAME_DATA = {
 };
 
 // Unpack compressed data back into the original object format for frontend compatibility
-const GAME_DATA = Object.fromEntries(
+window.GAME_DATA = Object.fromEntries(
   Object.entries(COMPRESSED_GAME_DATA).map(([category, games]) => [
     category,
     games.map(([name, file, tags, provider]) => ({
@@ -3336,8 +3341,588 @@ const GAME_DATA = Object.fromEntries(
   ])
 );
 
-const BLACKLISTED_GAMES = [
+window.BLACKLISTED_GAMES = [
   "Sandstone Proxy",
   "sandstone",
   "[!] COMMENTS"
-];
+];</script><script>const PROVIDER_URLS = {
+            "math": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/",
+            "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/"
+        };
+
+        const navContainer = document.getElementById('nav-container');
+        const contentArea = document.getElementById('content-area');
+        const searchInput = document.getElementById('search-input');
+        const tagsContainer = document.getElementById('tags-container');
+        const loader = document.getElementById('loader');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+        const cloakToggle = document.getElementById('cloak-toggle');
+        
+        let showHidden = false;
+        let keyBuffer = '';
+        const SECRET_CODE = 'secrethidden';
+        let activeTag = null; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameParam = urlParams.get('g');
+        const providerParam = urlParams.get('p');
+
+        // Lazy load canvases using IntersectionObserver
+        const canvasObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const canvas = entry.target;
+                    const gameName = canvas.getAttribute('data-name');
+                    if (gameName && !canvas.rendered) {
+                        renderCanvasText(canvas, gameName);
+                        canvas.rendered = true;
+                    }
+                    observer.unobserve(canvas);
+                }
+            });
+        }, { rootMargin: '150px' });
+
+        // Conditional loading flow: Bypass downloading games.js if opening a game
+        if (gameParam) {
+            initializeGameMode(gameParam, providerParam, true);
+        } else {
+            // Home page: dynamically load games.js, then build the menu
+            initializeMenuMode();
+        }
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key.length !== 1) return;
+            keyBuffer = (keyBuffer + event.key.toLowerCase()).slice(-SECRET_CODE.length);
+            if (!showHidden && keyBuffer === SECRET_CODE) {
+                showHidden = true;
+                renderGames(searchInput.value);
+            }
+        });
+
+        // Searches the list if available (fallback for direct URL hits without &p parameter)
+        function findGameByFile(filename) {
+            if (typeof GAME_DATA === 'undefined') return null;
+            for (const category in GAME_DATA) {
+                const found = GAME_DATA[category].find(g => g.file === filename);
+                if (found) return found;
+            }
+            return null;
+        }
+
+        function getGameUrl(filename, provider) {
+            // Keep local/relative assets and absolute external URLs unchanged
+            if (filename.startsWith("http://") || filename.startsWith("https://") || filename.startsWith("./") || filename.startsWith("/")) {
+                return filename;
+            }
+
+            // Fallback lookup if provider was not explicitly passed in URL
+            if (!provider) {
+                const game = findGameByFile(filename);
+                if (game) {
+                    provider = game.provider;
+                }
+            }
+
+            // Match base URL or default to UGS if provider remains unmatched
+            const baseUrl = PROVIDER_URLS[provider] || PROVIDER_URLS["ugs"];
+            return `${baseUrl}${filename}?t=${Date.now()}`;
+        }
+
+        function cleanGameHtml(htmlString) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+
+            function transformGithackToJsdelivr(url) {
+                if (url.includes('rawcdn.githack.com')) {
+                    const match = url.match(/https:\/\/rawcdn\.githack\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.+)/);
+                    if (match) {
+                        const [, user, repo, branch, path] = match;
+                        return `https://cdn.jsdelivr.net/gh/${user}/${repo}@${branch}/${path}`;
+                    }
+                }
+                return url;
+            }
+
+            const elements = doc.querySelectorAll('[src], [href]');
+            elements.forEach(el => {
+                if (el.src) el.src = transformGithackToJsdelivr(el.src);
+                if (el.href) el.href = transformGithackToJsdelivr(el.href);
+            });
+
+            doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]')
+               .forEach(el => el.remove());
+
+            const sdkPatterns = ['gamemonetize', 'st39/sdk', 'ga.js', 'sdk.js'];
+            doc.querySelectorAll('script[src]').forEach(el => {
+                if (sdkPatterns.some(p => el.src.includes(p))) el.remove();
+            });
+
+            doc.querySelectorAll('script:not([src])').forEach(el => {
+                const text = el.textContent || '';
+                const obfuscatedMatches = (text.match(/_0x[0-9a-f]+/gi) || []).length;
+                if (obfuscatedMatches > 10) el.remove();
+            });
+
+            let doctype = "";
+            if (doc.doctype) {
+                doctype = `<!DOCTYPE ${doc.doctype.name}>\n`;
+            }
+            return doctype + doc.documentElement.outerHTML;
+        }
+
+        function initializeGameMode(filename, provider, needsDecode) {
+            sidebar.style.display = 'none';
+            main.style.display = 'none';
+            loader.style.display = 'flex';
+
+            const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
+            const realProvider = needsDecode && provider ? decodeURIComponent(provider) : provider;
+            const url = getGameUrl(realFilename, realProvider);
+
+            document.getElementById('loader-text').textContent = "Launching...";
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error("File not found");
+                    return response.text();
+                })
+                .then(html => {
+                    const cleanedHtml = cleanGameHtml(html);
+                    document.open();
+                    document.write(cleanedHtml);
+                    document.close();
+                })
+                .catch(err => {
+                    loader.innerHTML = `<div style="text-align:center; padding:20px;"><h2>Error Loading Game</h2><p>Could not fetch game data.</p><button onclick="window.location.href = window.location.pathname" style="padding:10px; cursor:pointer; margin-top:10px;">Return to Menu</button></div>`;
+                    console.error(err);
+                });
+        }
+        
+        function renderTagCanvas(canvas, text, isActive) {
+            const font = '400 13px "Source Sans 3", Helvetica, Arial, sans-serif';
+            const ctx = canvas.getContext('2d');
+            ctx.font = font;
+            
+            const metrics = ctx.measureText(text);
+            const width = Math.max(1, Math.ceil(metrics.width));
+            const height = 16; 
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.font = font;
+            ctx.textBaseline = 'top';
+            
+            ctx.fillStyle = isActive ? '#121212' : '#aaa';
+            ctx.fillText(text, 0, 1);
+        }
+
+        function initializeMenuMode() {
+            loader.style.display = 'none';
+
+            if (typeof GAME_DATA === 'undefined') {
+                contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js not found. Run convert.py first!</h2>';
+                return;
+            }
+
+            const allTagsSet = new Set();
+            Object.values(GAME_DATA).forEach(games => {
+                games.forEach(g => {
+                    if (g.tags) {
+                        g.tags.forEach(t => {
+                            if (t.toLowerCase() !== 'hidden') {
+                                allTagsSet.add(t);
+                            }
+                        });
+                    }
+                });
+            });
+
+            tagsContainer.innerHTML = '';
+            Array.from(allTagsSet).sort().forEach(tag => {
+                const tagBtn = document.createElement('button');
+                tagBtn.className = 'tag-btn';
+                
+                const canvas = document.createElement('canvas');
+                canvas.setAttribute('data-tag', tag);
+                tagBtn.appendChild(canvas);
+                
+                renderTagCanvas(canvas, tag, false);
+                
+                tagBtn.onclick = () => {
+                    if (activeTag === tag) {
+                        activeTag = null;
+                        tagBtn.classList.remove('active');
+                        renderTagCanvas(canvas, tag, false);
+                    } else {
+                        document.querySelectorAll('.tag-btn').forEach(b => {
+                            if (b.classList.contains('active')) {
+                                b.classList.remove('active');
+                                const c = b.querySelector('canvas');
+                                if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
+                            }
+                        });
+                        
+                        activeTag = tag;
+                        tagBtn.classList.add('active');
+                        renderTagCanvas(canvas, tag, true);
+                    }
+                    renderGames(searchInput.value);
+                };
+                tagsContainer.appendChild(tagBtn);
+            });
+
+            const keys = Object.keys(GAME_DATA);
+            const standardCats = keys.filter(k => k.length === 1).sort();
+            const specialCats = keys.filter(k => k.length > 1).sort();
+
+            if (standardCats.length > 0) standardCats.forEach(cat => createNavBtn(cat));
+            if (specialCats.length > 0) specialCats.forEach(cat => createNavBtn(cat));
+
+            const runInitialRender = () => renderGames();
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(runInitialRender);
+            } else {
+                runInitialRender();
+            }
+
+            searchInput.addEventListener('input', (e) => renderGames(e.target.value));
+        }
+
+        function scrollToCategory(category) {
+            const el = document.getElementById(`cat-${category}`);
+            if (el) {
+                const topbar = document.getElementById('topbar');
+                const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
+                
+                const targetY = el.getBoundingClientRect().top + window.scrollY - topbarHeight - 20;
+                
+                window.scrollTo({ top: targetY, behavior: 'smooth' });
+                el.style.opacity = '0.5';
+                setTimeout(() => el.style.opacity = '1', 300);
+            }
+        }
+
+        function createNavBtn(category) {
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            
+            btn.textContent = category.charAt(0).toUpperCase();
+            btn.title = category;
+            
+            btn.onclick = () => {
+                let needsRender = false;
+                
+                if (activeTag) {
+                    activeTag = null;
+                    document.querySelectorAll('.tag-btn').forEach(b => {
+                        b.classList.remove('active');
+                        const c = b.querySelector('canvas');
+                        if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
+                    });
+                    needsRender = true;
+                }
+
+                if (needsRender) {
+                    renderGames(searchInput.value);
+                    setTimeout(() => scrollToCategory(category), 50);
+                } else {
+                    scrollToCategory(category);
+                }
+            };
+            navContainer.appendChild(btn);
+        }
+
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.onclick = () => launchGame(game);
+            
+            const canvas = document.createElement('canvas');
+            canvas.setAttribute('data-name', game.name);
+            
+            card.appendChild(canvas);
+            canvasObserver.observe(canvas);
+            
+            return card;
+        }
+
+        function renderGames(filterText = '') {
+            contentArea.innerHTML = '';
+            const lowerFilter = filterText.toLowerCase();
+
+            const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
+                const isASingle = a.length === 1;
+                const isBSingle = b.length === 1;
+                if (isASingle && !isBSingle) return -1;
+                if (!isASingle && isBSingle) return 1;
+                return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+            });
+
+            // If a tag is active, consolidate all matching games into ONE category block
+            if (activeTag) {
+                let matchingGames = [];
+
+                allCategories.forEach(category => {
+                    const games = GAME_DATA[category].filter(g => {
+                        const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
+                        if (isSecretGame && !showHidden) return false;
+                        if (!g.tags || !g.tags.includes(activeTag)) return false;
+                        return g.name.toLowerCase().includes(lowerFilter);
+                    });
+                    matchingGames.push(...games);
+                });
+
+                if (matchingGames.length > 0) {
+                    matchingGames.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true, sensitivity: 'base'}));
+
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+
+                    const title = document.createElement('div');
+                    title.className = 'category-title';
+                    title.textContent = `Tag: ${activeTag}`;
+                    section.appendChild(title);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'game-grid';
+
+                    matchingGames.forEach(game => {
+                        grid.appendChild(createGameCard(game));
+                    });
+
+                    section.appendChild(grid);
+                    contentArea.appendChild(section);
+                } else {
+                    contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
+                }
+                return; 
+            }
+
+            // Normal rendering (No active tag)
+            let hasResults = false;
+            
+            allCategories.forEach(category => {
+                const games = GAME_DATA[category].filter(g => {
+                    const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
+                    if (isSecretGame && !showHidden) return false;
+                    return g.name.toLowerCase().includes(lowerFilter);
+                });
+
+                if (games.length > 0) {
+                    hasResults = true;
+
+                    const section = document.createElement('div');
+                    section.className = 'category-section';
+                    section.id = `cat-${category}`;
+
+                    const title = document.createElement('div');
+                    title.className = 'category-title';
+                    title.textContent = category;
+                    section.appendChild(title);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'game-grid';
+
+                    games.forEach(game => {
+                        grid.appendChild(createGameCard(game));
+                    });
+
+                    section.appendChild(grid);
+                    contentArea.appendChild(section);
+                }
+            });
+
+            if (!hasResults) {
+                contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
+            }
+        }
+
+        function renderCanvasText(canvas, name) {
+            const font = '400 16px "Source Sans 3", Helvetica, Arial, sans-serif';
+            const lineHeight = 24;
+            const horizontalPadding = 0;
+            const topPadding = 4;
+            const bottomPadding = 0;
+
+            const card = canvas.parentElement;
+            const dpr = window.devicePixelRatio || 1;
+            const cardStyles = window.getComputedStyle(card);
+            const padLeft = parseFloat(cardStyles.paddingLeft) || 0;
+            const padRight = parseFloat(cardStyles.paddingRight) || 0;
+            const renderedCardWidth = Math.round(card.getBoundingClientRect().width) || 180;
+            const contentWidth = renderedCardWidth - (padLeft + padRight);
+            const cssWidth = Math.max(120, Math.floor(contentWidth));
+            
+            const measureCtx = document.createElement('canvas').getContext('2d');
+            measureCtx.font = font;
+            const maxWidth = cssWidth - horizontalPadding * 2;
+            const words = name.split(/\s+/).filter(Boolean);
+            const lines = [];
+            let currentLine = '';
+
+            const pushBrokenWord = (word) => {
+                let chunk = '';
+                for (const ch of word) {
+                    const candidate = chunk + ch;
+                    if (measureCtx.measureText(candidate).width <= maxWidth) {
+                        chunk = candidate;
+                    } else {
+                        if (chunk) lines.push(chunk);
+                        chunk = ch;
+                    }
+                }
+                if (chunk) lines.push(chunk);
+            };
+
+            words.forEach((word) => {
+                const candidate = currentLine ? `${currentLine} ${word}` : word;
+                if (measureCtx.measureText(candidate).width <= maxWidth) {
+                    currentLine = candidate;
+                    return;
+                }
+                if (currentLine) lines.push(currentLine);
+
+                if (measureCtx.measureText(word).width <= maxWidth) {
+                    currentLine = word;
+                } else {
+                    pushBrokenWord(word);
+                    currentLine = '';
+                }
+            });
+
+            if (currentLine) lines.push(currentLine);
+            if (lines.length === 0) lines.push(name);
+
+            const cssHeight = Math.max(24, lines.length * lineHeight + topPadding + bottomPadding);
+            canvas.style.width = `${cssWidth}px`;
+            canvas.style.height = `${cssHeight}px`;
+            canvas.width = Math.round(cssWidth * dpr);
+            canvas.height = Math.round(cssHeight * dpr);
+
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.font = font;
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+
+            let y = topPadding;
+            lines.forEach((line) => {
+                ctx.fillText(line, horizontalPadding, y);
+                y += lineHeight;
+            });
+        }
+
+        function launchGame(game) {
+            const filename = game.file;
+            const gamename = game.name;
+            const isCloaked = cloakToggle.checked;
+            
+            gtag('event', 'game_played', {
+                game_name: gamename
+            });
+
+            if (!isCloaked && game.openog === "true") {
+                window.open(getGameUrl(filename, game.provider), '_blank');
+                return;
+            }
+
+            if (isCloaked) {
+                loader.style.display = 'flex';
+                document.getElementById('loader-text').textContent = "Cloaking...";
+
+                const url = getGameUrl(filename, game.provider);
+
+                fetch(url)
+                    .then(res => {
+                        if(!res.ok) throw new Error("Failed to fetch");
+                        return res.text();
+                    })
+                    .then(html => {
+                        const cleanedHtml = cleanGameHtml(html);
+
+                        loader.style.display = 'none';
+                        const win = window.open("about:blank", "_blank");
+                        if(!win) {
+                            alert("Pop-up blocked. Please allow popups.");
+                            return;
+                        }
+                        win.document.open();
+                        win.document.write(cleanedHtml);
+                        win.document.close();
+                    })
+                    .catch(err => {
+                        loader.style.display = 'none';
+                        alert("Error loading game code: " + err);
+                    });
+
+            } else {
+                const cleanName = filename.trim();
+                const encoded = encodeURIComponent(cleanName);
+                const provider = game.provider ? encodeURIComponent(game.provider.trim()) : 'ugs';
+                window.open(`?g=${encoded}&p=${provider}`, '_blank');
+            }
+        }
+
+        // Update Notification Logic
+        const updateNotification = document.getElementById('update-notification');
+        const updateTextSpan = document.getElementById('update-text');
+        const closeUpdateBtn = document.getElementById('close-update-btn');
+        const updateModal = document.getElementById('update-modal');
+        const updateModalClose = document.getElementById('update-modal-close');
+        const updateModalText = document.getElementById('update-modal-text');
+
+        let fetchedUpdateDate = null;
+        let fetchedUpdateContent = "";
+
+        fetch('new_added_games.txt')
+            .then(res => {
+                if (!res.ok) throw new Error("Could not load updates file");
+                return res.text();
+            })
+            .then(text => {
+                fetchedUpdateContent = text;
+                const lines = text.split('\n');
+                if (lines.length > 0 && lines[0].startsWith('Update:')) {
+                    fetchedUpdateDate = lines[0].trim();
+                    updateTextSpan.textContent = fetchedUpdateDate;
+                    
+                    fetchedUpdateContent = lines.slice(2).join('\n').trim();
+
+                    if (localStorage.getItem('updateClosed') !== fetchedUpdateDate) {
+                        updateNotification.style.display = 'flex';
+                    }
+                }
+            })
+            .catch(err => {
+                console.error("Error loading new games: ", err);
+            });
+
+        closeUpdateBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateNotification.style.display = 'none';
+            if (fetchedUpdateDate) {
+                localStorage.setItem('updateClosed', fetchedUpdateDate);
+            }
+        });
+
+        updateNotification.addEventListener('click', () => {
+            updateModal.style.display = 'flex';
+            updateModalText.innerHTML = fetchedUpdateContent;
+        });
+
+        updateModalClose.addEventListener('click', () => {
+            updateModal.style.display = 'none';
+        });
+
+        updateModal.addEventListener('click', (e) => {
+            if (e.target === updateModal) {
+                updateModal.style.display = 'none';
+            }
+        });</script></body></html>

@@ -647,7 +647,7 @@
 
         updateNotification.addEventListener('click', () => {
             updateModal.style.display = 'flex';
-            updateModalText.textContent = fetchedUpdateContent;
+            updateModalText.innerHTML = fetchedUpdateContent;
         });
 
         updateModalClose.addEventListener('click', () => {
