@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/favicon.png">
@@ -65,6 +64,10 @@
     </div>
 
     <script>
+        const MAIN_URL = new URLSearchParams(window.location.search).has('debug')
+            ? 'http://localhost:8000/'
+            : 'https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/';
+
         const PROVIDER_URLS = {
             "math": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/",
             "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/"
@@ -109,7 +112,7 @@
         } else {
             // Home page: dynamically load games.js, then build the menu
             const script = document.createElement('script');
-            script.src = 'games.js';
+            script.src = MAIN_URL + 'games.js';
             script.onload = () => {
                 initializeMenuMode();
             };
@@ -614,7 +617,7 @@
         let fetchedUpdateDate = null;
         let fetchedUpdateContent = "";
 
-        fetch('new_added_games.txt')
+        fetch(MAIN_URL + 'new_added_games.txt')
             .then(res => {
                 if (!res.ok) throw new Error("Could not load updates file");
                 return res.text();
