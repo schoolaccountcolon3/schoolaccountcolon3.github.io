@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/favicon.png">
-    <link rel="stylesheet" href="./styles/style.css" />
     <title>Google Classroom</title>
+    
+    <!-- Define MAIN_URL and load style.css dynamically -->
+    <script>
+        const MAIN_URL = new URLSearchParams(window.location.search).has('debug')
+            ? 'http://localhost:8000/'
+            : 'https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/';
+
+        const styleLink = document.createElement('link');
+        styleLink.rel = 'stylesheet';
+        styleLink.href = MAIN_URL + 'styles/style.css';
+        document.head.appendChild(styleLink);
+    </script>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPP231DLCZ"></script>
@@ -64,10 +75,6 @@
     </div>
 
     <script>
-        const MAIN_URL = new URLSearchParams(window.location.search).has('debug')
-            ? 'http://localhost:8000/'
-            : 'https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/';
-
         const PROVIDER_URLS = {
             "math": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/",
             "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/"
