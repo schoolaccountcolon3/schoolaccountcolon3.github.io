@@ -84,7 +84,7 @@
         const tagsContainer = document.getElementById('tags-container');
         const loader = document.getElementById('loader');
         const sidebar = document.getElementById('sidebar');
-        const main = document.getElementById('main');
+        const mainEl = document.getElementById('main');
         const cloakToggle = document.getElementById('cloak-toggle');
         
         let showHidden = false;
@@ -215,7 +215,7 @@
 
         function initializeGameMode(filename, provider, needsDecode) {
             sidebar.style.display = 'none';
-            main.style.display = 'none';
+            mainEl.style.display = 'none';
             loader.style.display = 'flex';
 
             const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
