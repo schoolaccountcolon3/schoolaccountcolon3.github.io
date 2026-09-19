@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/favicon.png">
-    <link rel="stylesheet" href="./styles/style.css" />
+    <script>
+        const MAIN_URL = new URLSearchParams(window.location.search).has('debug')
+            ? './'
+            : 'https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/';
+        
+        const styleLink = document.createElement('link');
+        styleLink.rel = 'stylesheet';
+        styleLink.href = MAIN_URL + 'styles/style.css';
+        document.head.appendChild(styleLink);
+    </script>
     <title>Google Classroom</title>
     
     <!-- Google Analytics -->
@@ -64,10 +73,6 @@
     </div>
 
     <script>
-        const MAIN_URL = new URLSearchParams(window.location.search).has('debug')
-            ? 'http://localhost:8000/'
-            : 'https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/';
-
         const PROVIDER_URLS = {
             "math": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/",
             "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/"
@@ -154,6 +159,11 @@
                 if (game) {
                     provider = game.provider;
                 }
+            }
+
+            if (provider === "eag") {
+                const baseName = filename.replace(".html", "");
+                return `https://cdn.jsdelivr.net/gh/lemonsky47/homework/${baseName}/${filename}?t=${Date.now()}`;
             }
 
             // Match base URL or default to UGS if provider remains unmatched

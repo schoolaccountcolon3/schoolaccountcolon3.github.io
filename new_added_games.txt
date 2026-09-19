@@ -1,6 +1,12 @@
-Update: 2026-08-31
+Update: 2026-09-18
 
 Newly Added Games
+-----------------
+- Updated lots of eaglercraft links
+- Added new versions, such as 26.2 and 1.20.6 (somehow)
+
+
+Old Stuff
 -----------------
 - site got blocked :(
 - links: <a href="https://docs.google.com/document/d/1AEKOHb33BO1th3ZU_3w61K3J0RL_A2KEiKMzICRsnI0/edit?usp=sharing" target="_blank">docs</a>
