@@ -148,8 +148,13 @@
         }
 
         function getGameUrl(filename, provider) {
+            if (filename.startsWith("./")) {
+                const cleanPath = filename.replace(/^\.\/+/, "");
+                return `${MAIN_URL}${cleanPath}?t=${Date.now()}`;
+            }
+
             // Keep local/relative assets and absolute external URLs unchanged
-            if (filename.startsWith("http://") || filename.startsWith("https://") || filename.startsWith("./") || filename.startsWith("/")) {
+            if (filename.startsWith("http://") || filename.startsWith("https://") || filename.startsWith("/")) {
                 return filename;
             }
 
