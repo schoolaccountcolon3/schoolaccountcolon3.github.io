@@ -1,9 +1,8 @@
-Update: 2026-09-18
+Update: 2026-10-12
 
 Newly Added Games
 -----------------
-- Updated lots of eaglercraft links
-- Added new versions, such as 26.2 and 1.20.6 (somehow)
+- added balatro modded
 
 
 Old Stuff
