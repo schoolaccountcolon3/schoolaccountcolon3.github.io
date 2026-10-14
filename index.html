@@ -8,14 +8,14 @@
         const MAIN_URL = new URLSearchParams(window.location.search).has('debug')
             ? './'
             : 'https://cdn.jsdelivr.net/gh/schoolaccountcolon3/schoolaccountcolon3.github.io/';
-        
+
         const styleLink = document.createElement('link');
         styleLink.rel = 'stylesheet';
         styleLink.href = MAIN_URL + 'styles/style.css';
         document.head.appendChild(styleLink);
     </script>
     <title>Google Classroom</title>
-    
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPP231DLCZ"></script>
     <script>
@@ -54,6 +54,12 @@
                 <!-- Tags injected via JS -->
             </div>
         </div>
+
+        <!-- More Links Button -->
+        <div style="margin-bottom: 20px;">
+            <a href="https://docs.google.com/document/d/1AEKOHb33BO1th3ZU_3w61K3J0RL_A2KEiKMzICRsnI0/edit?usp=sharing" class="more-links-btn" target="_blank">More Links</a>
+        </div>
+
         <div id="content-area">
             <!-- Injected via JS -->
         </div>
@@ -86,11 +92,11 @@
         const sidebar = document.getElementById('sidebar');
         const mainEl = document.getElementById('main');
         const cloakToggle = document.getElementById('cloak-toggle');
-        
+
         let showHidden = false;
         let keyBuffer = '';
         const SECRET_CODE = 'secrethidden';
-        let activeTag = null; 
+        let activeTag = null;
 
         const urlParams = new URLSearchParams(window.location.search);
         const gameParam = urlParams.get('g');
@@ -117,7 +123,7 @@
         } else {
             // Home page: dynamically load games.js, then build the menu
             const script = document.createElement('script');
-            script.src = MAIN_URL + 'games.js';
+            script.src = MAIN_URL + 'games.js?t=' + Date.now();
             script.onload = () => {
                 initializeMenuMode();
             };
@@ -197,18 +203,61 @@
                 if (el.href) el.href = transformGithackToJsdelivr(el.href);
             });
 
+            // Remove sidebar ads
             doc.querySelectorAll('[id^="sidebarad"], [class*="sidebarad"]')
                .forEach(el => el.remove());
 
+            // Remove known SDKs
             const sdkPatterns = ['gamemonetize', 'st39/sdk', 'ga.js', 'sdk.js'];
             doc.querySelectorAll('script[src]').forEach(el => {
                 if (sdkPatterns.some(p => el.src.includes(p))) el.remove();
             });
 
+            // --- DRM & SITE-LOCK CRACKER ---
+
+            // 1. Find the dynamic payload function name from the bottom scripts
+            let payloadFuncName = null;
+            doc.querySelectorAll('script:not([src])').forEach(el => {
+                const text = el.textContent || '';
+                // Looks for: window["xa0f20fba9693cbb2c66516f1"]
+                const match = text.match(/window\["([a-zA-Z0-9]{20,})"\]/);
+                if (match) payloadFuncName = match[1];
+            });
+
+            // 2. Find the brain script, extract its cipher key, and replace it
             doc.querySelectorAll('script:not([src])').forEach(el => {
                 const text = el.textContent || '';
                 const obfuscatedMatches = (text.match(/_0x[0-9a-f]+/gi) || []).length;
-                if (obfuscatedMatches > 10) el.remove();
+
+                // If it has a ton of _0x variables, it's the brain script
+                if (obfuscatedMatches > 10) {
+                    // Extract the XOR cipher key array (e.g. [0xd8,0xd9,0xa1,0xc4...])
+                    const keyMatch = text.match(/\[(0x[0-9a-f]+(?:,0x[0-9a-f]+)+)\]/i);
+
+                    if (keyMatch && payloadFuncName) {
+                        // REWRITE the script with a clean bypass decryptor!
+                        el.textContent = `
+                            // Injected DRM Bypass by cleanGameHtml
+                            window["${payloadFuncName}"] = function(payload) {
+                                if (!payload) return true;
+                                const key = [${keyMatch[1]}];
+                                const binaryString = atob(payload);
+                                const buffer = new Uint8Array(binaryString.length);
+
+                                // Decrypt via XOR
+                                for (let i = 0; i < binaryString.length; i++) {
+                                    buffer[i] = binaryString.charCodeAt(i) ^ key[i % key.length];
+                                }
+
+                                // Write the clean game engine code directly to the page
+                                document.write(new TextDecoder().decode(buffer));
+                            };
+                        `;
+                    } else {
+                        // Failsafe: Remove it completely if we couldn't parse the keys
+                        el.remove();
+                    }
+                }
             });
 
             let doctype = "";
@@ -249,15 +298,15 @@
                     console.error(err);
                 });
         }
-        
+
         function renderTagCanvas(canvas, text, isActive) {
             const font = '400 13px "Source Sans 3", Helvetica, Arial, sans-serif';
             const ctx = canvas.getContext('2d');
             ctx.font = font;
-            
+
             const metrics = ctx.measureText(text);
             const width = Math.max(1, Math.ceil(metrics.width));
-            const height = 16; 
+            const height = 16;
 
             const dpr = window.devicePixelRatio || 1;
             canvas.style.width = width + 'px';
@@ -268,7 +317,7 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.font = font;
             ctx.textBaseline = 'top';
-            
+
             ctx.fillStyle = isActive ? '#121212' : '#aaa';
             ctx.fillText(text, 0, 1);
         }
@@ -298,13 +347,13 @@
             Array.from(allTagsSet).sort().forEach(tag => {
                 const tagBtn = document.createElement('button');
                 tagBtn.className = 'tag-btn';
-                
+
                 const canvas = document.createElement('canvas');
                 canvas.setAttribute('data-tag', tag);
                 tagBtn.appendChild(canvas);
-                
+
                 renderTagCanvas(canvas, tag, false);
-                
+
                 tagBtn.onclick = () => {
                     if (activeTag === tag) {
                         activeTag = null;
@@ -318,7 +367,7 @@
                                 if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
                             }
                         });
-                        
+
                         activeTag = tag;
                         tagBtn.classList.add('active');
                         renderTagCanvas(canvas, tag, true);
@@ -350,9 +399,9 @@
             if (el) {
                 const topbar = document.getElementById('topbar');
                 const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
-                
+
                 const targetY = el.getBoundingClientRect().top + window.scrollY - topbarHeight - 20;
-                
+
                 window.scrollTo({ top: targetY, behavior: 'smooth' });
                 el.style.opacity = '0.5';
                 setTimeout(() => el.style.opacity = '1', 300);
@@ -362,13 +411,13 @@
         function createNavBtn(category) {
             const btn = document.createElement('button');
             btn.className = 'nav-btn';
-            
+
             btn.textContent = category.charAt(0).toUpperCase();
             btn.title = category;
-            
+
             btn.onclick = () => {
                 let needsRender = false;
-                
+
                 if (activeTag) {
                     activeTag = null;
                     document.querySelectorAll('.tag-btn').forEach(b => {
@@ -393,13 +442,13 @@
             const card = document.createElement('div');
             card.className = 'game-card';
             card.onclick = () => launchGame(game);
-            
+
             const canvas = document.createElement('canvas');
             canvas.setAttribute('data-name', game.name);
-            
+
             card.appendChild(canvas);
             canvasObserver.observe(canvas);
-            
+
             return card;
         }
 
@@ -452,12 +501,12 @@
                 } else {
                     contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
                 }
-                return; 
+                return;
             }
 
             // Normal rendering (No active tag)
             let hasResults = false;
-            
+
             allCategories.forEach(category => {
                 const games = GAME_DATA[category].filter(g => {
                     const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
@@ -509,7 +558,7 @@
             const renderedCardWidth = Math.round(card.getBoundingClientRect().width) || 180;
             const contentWidth = renderedCardWidth - (padLeft + padRight);
             const cssWidth = Math.max(120, Math.floor(contentWidth));
-            
+
             const measureCtx = document.createElement('canvas').getContext('2d');
             measureCtx.font = font;
             const maxWidth = cssWidth - horizontalPadding * 2;
@@ -574,7 +623,7 @@
             const filename = game.file;
             const gamename = game.name;
             const isCloaked = cloakToggle.checked;
-            
+
             gtag('event', 'game_played', {
                 game_name: gamename
             });
@@ -632,7 +681,7 @@
         let fetchedUpdateDate = null;
         let fetchedUpdateContent = "";
 
-        fetch(MAIN_URL + 'new_added_games.txt')
+        fetch(MAIN_URL + 'new_added_games.txt?t=' + Date.now())
             .then(res => {
                 if (!res.ok) throw new Error("Could not load updates file");
                 return res.text();
@@ -643,7 +692,7 @@
                 if (lines.length > 0 && lines[0].startsWith('Update:')) {
                     fetchedUpdateDate = lines[0].trim();
                     updateTextSpan.textContent = fetchedUpdateDate;
-                    
+
                     fetchedUpdateContent = lines.slice(2).join('\n').trim();
 
                     if (localStorage.getItem('updateClosed') !== fetchedUpdateDate) {
