@@ -1,8 +1,11 @@
-Update: 2026-10-12
+Update: 2026-10-13
 
 Newly Added Games
 -----------------
 - added balatro modded
+- fixed the site not properly updating (hopefully)
+- added link to more links
+- added Team Fortress 2
 
 
 Old Stuff
