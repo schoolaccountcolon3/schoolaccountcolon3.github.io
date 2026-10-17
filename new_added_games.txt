@@ -1,4 +1,4 @@
-Update: 2026-10-13
+Update: 2026-10-16
 
 Newly Added Games
 -----------------
@@ -6,6 +6,8 @@ Newly Added Games
 - fixed the site not properly updating (hopefully)
 - added link to more links
 - added Team Fortress 2
+- added Nubbys Number Factory
+- added Sobosuba
 
 
 Old Stuff

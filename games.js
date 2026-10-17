@@ -225,7 +225,7 @@ const COMPRESSED_GAME_DATA = {
     ["Bad Piggies (LATEST)", "clbadpiggieslatest.html", [], "ugs"],
     ["Bad Piggies 2018", "clbadpiggies2018.html", ["Flash Games"], "ugs"],
     ["Bad Time Simulator", "472-fix2.html", [], "math"],
-    ["Balatro", "./ported/balatro.html", ["Port", "Games I Ported", "Gb/Gbc/Gba"], ""],
+    ["Balatro", "./ported/balatro.html", ["Port", "Games I Ported"], ""],
     ["Balatro Modded", "./ported/balatromp.html", ["Port", "Games I Ported"], ""],
     ["Baldi's Basics", "65-fix2.html", [], "math"],
     ["Baldi's Basics Classic Remastered", "466-fix2.html", ["Port"], "math"],
@@ -2005,7 +2005,7 @@ const COMPRESSED_GAME_DATA = {
     ["Not Your Pawn", "clnotyourpawn.html", [], "ugs"],
     ["Nova Client", "clnovaclient.html", ["Eaglercraft"], "ugs"],
     ["Nubby's Number Factory", "517-fix2.html", ["Port"], "math"],
-    ["Nubby’s Number Factory", "clnubbysnumberfactory.html", [], "ugs"],
+    ["Nubby’s Number Factory (Full)", "./ported/nnf.html", ["Games I Ported", "Port"], ""],
     ["Nuts and Bolts Screwing Puzzle", "clNutsandBoltsScrewingPuzzle.html", [], "ugs"]
   ],
   "O": [
@@ -2816,6 +2816,7 @@ const COMPRESSED_GAME_DATA = {
     ["Sonic.EXE Original", "clsoniceexeog.html", ["Sonic"], "ugs"],
     ["Sonny 2", "clsonny2.html", ["Flash Games"], "ugs"],
     ["Sort the Court", "346-fix.html", [], "math"],
+    ["Sobosuba", "./ported/sobosuba.html", ["Games I Ported", "Port"], ""],
     ["Soul Jumper", "clsouljumper.html", [], "ugs"],
     ["Soundboard", "179-a3.html", ["Apps/Misc:"], "math"],
     ["South Park", "clsouthparkn64.html", ["N64"], "ugs"],
