@@ -9,7 +9,14 @@
   <title>Balatro — Idle</title>
 
   <!-- Load custom style sheet -->
-  <link rel="stylesheet" type="text/css" href="theme/love.css" />
+  <script type="text/javascript">
+    // Cache busting: the scripts, stylesheet, love.wasm and the mod list are requested with ?v=ASSET_VERSION, so the
+    // browser cache is reused until this number changes. Bump it on every deploy so players get the new files.
+    // (game.data chunks are versioned by package UUID instead, and cached in IndexedDB.)
+    var ASSET_VERSION = '2';
+    function bust(url) { return url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + ASSET_VERSION; }
+    document.write('<link rel="stylesheet" type="text/css" href="' + bust('theme/love.css') + '" />');
+  </script>
   <link rel="icon" type="image/png" href="../theme/icon.png" />
 
   <style>
@@ -287,6 +294,8 @@
           if (next < now) next = now + interval;
         };
       })(),
+      // love.js resolves love.wasm through this
+      locateFile: function (path, prefix) { return bust(prefix + path); },
       totalDependencies: 0,
       remainingDependencies: 0,
       monitorRunDependencies: function(left) {
@@ -311,7 +320,7 @@
     }
 
    // --- MOD SELECTOR LOGIC ---
-    fetch('data/available_mods.json')
+    fetch(bust('data/available_mods.json'))
       .then(res => {
           if (!res.ok) throw new Error("HTTP error " + res.status);
           return res.json();
@@ -525,7 +534,7 @@
     setInterval(() => queueSync(), 30000); // 30s background save
   </script>
 
-  <script src="./wisp-client.js"></script>
+  <script>document.write('<script src="' + bust('./wisp-client.js') + '"><\/script>');</script>
   <script>
     window._isRestarting = false;
     function triggerSyncAndReload(reason) {
@@ -609,7 +618,9 @@
       });
     })();
   </script>
-  <script type="text/javascript" src="game.js"></script>
-  <script async type="text/javascript" src="love.js" id="data"></script>
+  <script>
+    document.write('<script type="text/javascript" src="' + bust('game.js') + '"><\/script>');
+    document.write('<script async type="text/javascript" src="' + bust('love.js') + '" id="data"><\/script>');
+  </script>
 </body>
 </html>
