@@ -315,7 +315,15 @@
     c.drawn = true;
   }
 
-  const io = new IntersectionObserver((entries) => {
+  // Observe relative to this document's own viewport. Without an explicit root, a page
+  // embedded in another frame (the flattened SVG build) also gets clipped by the outer
+  // frame, so cards near the bottom never count as visible and stay blank.
+  const observer = (cb, opts) => {
+    try { return new IntersectionObserver(cb, { root: document, ...opts }); }
+    catch { return new IntersectionObserver(cb, opts); }
+  };
+
+  const io = observer((entries) => {
     for (const e of entries) {
       if (e.isIntersecting && !e.target.drawn) { drawCanvas(e.target); io.unobserve(e.target); }
     }
@@ -436,7 +444,7 @@
   }
 
   /* ---------- Rail + scrollspy ---------- */
-  const spy = new IntersectionObserver((entries) => {
+  const spy = observer((entries) => {
     for (const e of entries) e.target.inView = e.isIntersecting;
     const first = [...content.querySelectorAll('.section[id]')].find(s => s.inView);
     rail.querySelectorAll('.rail-btn').forEach(b => b.classList.toggle('current', !!first && b.dataset.cat === first.dataset.cat));
