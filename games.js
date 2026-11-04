@@ -130,7 +130,7 @@ const COMPRESSED_GAME_DATA = {
     ["Angry Birds", "63-fix2.html", [], "math"],
     ["Angry Birds 2", "clangrybirds2.html", [], "ugs"],
     ["Angry Birds Chrome", "316-fix.html", [], "math"],
-    ["Angry Birds Epic", "clangrybirdsepic.html", [], "ugs"],
+    ["Angry Birds Epic", "./ported/clangrybirdsepic.html", [], "ugs"],
     ["Angry Birds Online", "clangrybirdsonline.html", [], "ugs"],
     ["Angry Birds Showdown", "147-fix2.html", [], "math"],
     ["Angry Birds Slingshot Frenzy", "clangrybirdsslingshotfrenzy.html", [], "ugs"],
