@@ -15,6 +15,9 @@
         document.head.appendChild(styleLink);
     </script>
     <title>Google Classroom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CPP231DLCZ"></script>
@@ -26,122 +29,50 @@
     </script>
 </head>
 <body>
+<body>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <div id="loader-text">Loading...</div>
+<div id="loader"><div class="spinner"></div><div id="loader-text">Loading…</div></div>
+
+<nav id="rail" aria-label="Jump to letter"></nav>
+
+<header id="header">
+  <div class="header-row">
+    <div class="search">
+      <input id="search" type="text" placeholder="Search" autocomplete="off" spellcheck="false">
+      <kbd id="search-kbd">/</kbd>
+      <span class="count" id="search-count" hidden></span>
     </div>
+    <div class="header-spacer"></div>
+    <label class="switch" title="Opens the game in an about:blank tab">
+      <input type="checkbox" id="cloak">
+      <span class="track"></span>
+      about:blank
+    </label>
+    <button class="text-btn" id="clear-recent" hidden>Clear recent</button>
+    <button class="text-btn" id="whats-new" hidden>What's new<span class="dot" hidden></span></button>
+    <a class="text-btn" href="https://docs.google.com/document/d/1AEKOHb33BO1th3ZU_3w61K3J0RL_A2KEiKMzICRsnI0/edit?usp=sharing" target="_blank" rel="noopener">More links</a>
+  </div>
+  <div id="tags" role="toolbar" aria-label="Filter by platform"></div>
+</header>
 
-    <div id="styleSwitcher"></div>
+<main id="main">
+  <div id="content"></div>
+</main>
 
-    <nav id="sidebar">
-        <div class="sidebar-header">Apps</div>
-        <div class="nav-scroll" id="nav-container">
-            <!-- Injected via JS -->
-        </div>
-    </nav>
+<dialog id="news">
+  <div class="dialog-head"><span id="news-title">What's new</span><button class="text-btn" id="news-close" aria-label="Close">Close</button></div>
+  <div class="dialog-body" id="news-body" tabindex="-1" autofocus></div>
+</dialog>
 
-    <main id="main">
-        <div id="topbar">
-            <div class="topbar-controls">
-                <input type="text" id="search-input" placeholder="Search games...">
-                <label class="cloak-label">
-                    <input type="checkbox" id="cloak-toggle">
-                    Open in about:blank
-                </label>
-            </div>
-            <div id="tags-container">
-                <!-- Tags injected via JS -->
-            </div>
-        </div>
 
-        <!-- More Links Button -->
-        <div style="margin-bottom: 20px;">
-            <a href="https://docs.google.com/document/d/1AEKOHb33BO1th3ZU_3w61K3J0RL_A2KEiKMzICRsnI0/edit?usp=sharing" class="more-links-btn" target="_blank">More Links</a>
-        </div>
 
-        <div id="content-area">
-            <!-- Injected via JS -->
-        </div>
-    </main>
-
-    <!-- Update Notification & Modal -->
-    <div id="update-notification" style="display: none;">
-        <span id="update-text">Update: April 18th</span>
-        <button id="close-update-btn" title="Dismiss">&times;</button>
-    </div>
-
-    <div id="update-modal">
-        <div id="update-modal-content">
-            <button id="update-modal-close" title="Close">&times;</button>
-            <div id="update-modal-text">Loading...</div>
-        </div>
-    </div>
-
-    <script>
+<script>
         const PROVIDER_URLS = {
             "math": "https://cdn.jsdelivr.net/gh/lemonsky47/storage@storage/",
-            "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/"
+            "ugs": "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile/UGS-Files/",
+            "ugs2": "https://cdn.jsdelivr.net/gh/DogeSploit/UGS-Main@main/"
         };
-
-        const navContainer = document.getElementById('nav-container');
-        const contentArea = document.getElementById('content-area');
-        const searchInput = document.getElementById('search-input');
-        const tagsContainer = document.getElementById('tags-container');
         const loader = document.getElementById('loader');
-        const sidebar = document.getElementById('sidebar');
-        const mainEl = document.getElementById('main');
-        const cloakToggle = document.getElementById('cloak-toggle');
-
-        let showHidden = false;
-        let keyBuffer = '';
-        const SECRET_CODE = 'secrethidden';
-        let activeTag = null;
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameParam = urlParams.get('g');
-        const providerParam = urlParams.get('p');
-
-        // Lazy load canvases using IntersectionObserver
-        const canvasObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const canvas = entry.target;
-                    const gameName = canvas.getAttribute('data-name');
-                    if (gameName && !canvas.rendered) {
-                        renderCanvasText(canvas, gameName);
-                        canvas.rendered = true;
-                    }
-                    observer.unobserve(canvas);
-                }
-            });
-        }, { rootMargin: '150px' });
-
-        // Conditional loading flow: Bypass downloading games.js if opening a game
-        if (gameParam) {
-            initializeGameMode(gameParam, providerParam, true);
-        } else {
-            // Home page: dynamically load games.js, then build the menu
-            const script = document.createElement('script');
-            script.src = MAIN_URL + 'games.js?t=' + Date.now();
-            script.onload = () => {
-                initializeMenuMode();
-            };
-            script.onerror = () => {
-                loader.style.display = 'none';
-                contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js failed to load.</h2>';
-            };
-            document.body.appendChild(script);
-        }
-
-        document.addEventListener('keyup', (event) => {
-            if (event.key.length !== 1) return;
-            keyBuffer = (keyBuffer + event.key.toLowerCase()).slice(-SECRET_CODE.length);
-            if (!showHidden && keyBuffer === SECRET_CODE) {
-                showHidden = true;
-                renderGames(searchInput.value);
-            }
-        });
 
         // Searches the list if available (fallback for direct URL hits without &p parameter)
         function findGameByFile(filename) {
@@ -179,7 +110,11 @@
 
             // Match base URL or default to UGS if provider remains unmatched
             const baseUrl = PROVIDER_URLS[provider] || PROVIDER_URLS["ugs"];
-            return `${baseUrl}${filename}?t=${Date.now()}`;
+            // ugs2 files live in subfolders that can contain spaces (e.g. "emulated/Genesis Plus/")
+            const path = provider === "ugs2"
+                ? filename.split("/").map(encodeURIComponent).join("/")
+                : filename;
+            return `${baseUrl}${path}?t=${Date.now()}`;
         }
 
         function cleanGameHtml(htmlString) {
@@ -268,8 +203,7 @@
         }
 
         function initializeGameMode(filename, provider, needsDecode) {
-            sidebar.style.display = 'none';
-            mainEl.style.display = 'none';
+            ['rail', 'header', 'main'].forEach(id => document.getElementById(id).style.display = 'none');
             loader.style.display = 'flex';
 
             const realFilename = needsDecode ? decodeURIComponent(filename) : filename;
@@ -299,433 +233,441 @@
                 });
         }
 
-        function renderTagCanvas(canvas, text, isActive) {
-            const font = '400 13px "Source Sans 3", Helvetica, Arial, sans-serif';
-            const ctx = canvas.getContext('2d');
-            ctx.font = font;
-
-            const metrics = ctx.measureText(text);
-            const width = Math.max(1, Math.ceil(metrics.width));
-            const height = 16;
-
-            const dpr = window.devicePixelRatio || 1;
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            canvas.width = Math.round(width * dpr);
-            canvas.height = Math.round(height * dpr);
-
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            ctx.font = font;
-            ctx.textBaseline = 'top';
-
-            ctx.fillStyle = isActive ? '#121212' : '#aaa';
-            ctx.fillText(text, 0, 1);
-        }
-
-        function initializeMenuMode() {
-            loader.style.display = 'none';
-
-            if (typeof GAME_DATA === 'undefined') {
-                contentArea.innerHTML = '<h2 style="padding:20px; color:#ef4444;">Error: games.js not found. Run convert.py first!</h2>';
-                return;
-            }
-
-            const allTagsSet = new Set();
-            Object.values(GAME_DATA).forEach(games => {
-                games.forEach(g => {
-                    if (g.tags) {
-                        g.tags.forEach(t => {
-                            if (t.toLowerCase() !== 'hidden') {
-                                allTagsSet.add(t);
-                            }
-                        });
-                    }
-                });
-            });
-
-            tagsContainer.innerHTML = '';
-            Array.from(allTagsSet).sort().forEach(tag => {
-                const tagBtn = document.createElement('button');
-                tagBtn.className = 'tag-btn';
-
-                const canvas = document.createElement('canvas');
-                canvas.setAttribute('data-tag', tag);
-                tagBtn.appendChild(canvas);
-
-                renderTagCanvas(canvas, tag, false);
-
-                tagBtn.onclick = () => {
-                    if (activeTag === tag) {
-                        activeTag = null;
-                        tagBtn.classList.remove('active');
-                        renderTagCanvas(canvas, tag, false);
-                    } else {
-                        document.querySelectorAll('.tag-btn').forEach(b => {
-                            if (b.classList.contains('active')) {
-                                b.classList.remove('active');
-                                const c = b.querySelector('canvas');
-                                if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
-                            }
-                        });
-
-                        activeTag = tag;
-                        tagBtn.classList.add('active');
-                        renderTagCanvas(canvas, tag, true);
-                    }
-                    renderGames(searchInput.value);
-                };
-                tagsContainer.appendChild(tagBtn);
-            });
-
-            const keys = Object.keys(GAME_DATA);
-            const standardCats = keys.filter(k => k.length === 1).sort();
-            const specialCats = keys.filter(k => k.length > 1).sort();
-
-            if (standardCats.length > 0) standardCats.forEach(cat => createNavBtn(cat));
-            if (specialCats.length > 0) specialCats.forEach(cat => createNavBtn(cat));
-
-            const runInitialRender = () => renderGames();
-            if (document.fonts && document.fonts.ready) {
-                document.fonts.ready.then(runInitialRender);
-            } else {
-                runInitialRender();
-            }
-
-            searchInput.addEventListener('input', (e) => renderGames(e.target.value));
-        }
-
-        function scrollToCategory(category) {
-            const el = document.getElementById(`cat-${category}`);
-            if (el) {
-                const topbar = document.getElementById('topbar');
-                const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
-
-                const targetY = el.getBoundingClientRect().top + window.scrollY - topbarHeight - 20;
-
-                window.scrollTo({ top: targetY, behavior: 'smooth' });
-                el.style.opacity = '0.5';
-                setTimeout(() => el.style.opacity = '1', 300);
-            }
-        }
-
-        function createNavBtn(category) {
-            const btn = document.createElement('button');
-            btn.className = 'nav-btn';
-
-            btn.textContent = category.charAt(0).toUpperCase();
-            btn.title = category;
-
-            btn.onclick = () => {
-                let needsRender = false;
-
-                if (activeTag) {
-                    activeTag = null;
-                    document.querySelectorAll('.tag-btn').forEach(b => {
-                        b.classList.remove('active');
-                        const c = b.querySelector('canvas');
-                        if (c) renderTagCanvas(c, c.getAttribute('data-tag'), false);
-                    });
-                    needsRender = true;
-                }
-
-                if (needsRender) {
-                    renderGames(searchInput.value);
-                    setTimeout(() => scrollToCategory(category), 50);
-                } else {
-                    scrollToCategory(category);
-                }
-            };
-            navContainer.appendChild(btn);
-        }
-
-        function createGameCard(game) {
-            const card = document.createElement('div');
-            card.className = 'game-card';
-            card.onclick = () => launchGame(game);
-
-            const canvas = document.createElement('canvas');
-            canvas.setAttribute('data-name', game.name);
-
-            card.appendChild(canvas);
-            canvasObserver.observe(canvas);
-
-            return card;
-        }
-
-        function renderGames(filterText = '') {
-            contentArea.innerHTML = '';
-            const lowerFilter = filterText.toLowerCase();
-
-            const allCategories = Object.keys(GAME_DATA).sort((a, b) => {
-                const isASingle = a.length === 1;
-                const isBSingle = b.length === 1;
-                if (isASingle && !isBSingle) return -1;
-                if (!isASingle && isBSingle) return 1;
-                return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
-            });
-
-            // If a tag is active, consolidate all matching games into ONE category block
-            if (activeTag) {
-                let matchingGames = [];
-
-                allCategories.forEach(category => {
-                    const games = GAME_DATA[category].filter(g => {
-                        const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
-                        if (isSecretGame && !showHidden) return false;
-                        if (!g.tags || !g.tags.includes(activeTag)) return false;
-                        return g.name.toLowerCase().includes(lowerFilter);
-                    });
-                    matchingGames.push(...games);
-                });
-
-                if (matchingGames.length > 0) {
-                    matchingGames.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true, sensitivity: 'base'}));
-
-                    const section = document.createElement('div');
-                    section.className = 'category-section';
-
-                    const title = document.createElement('div');
-                    title.className = 'category-title';
-                    title.textContent = `Tag: ${activeTag}`;
-                    section.appendChild(title);
-
-                    const grid = document.createElement('div');
-                    grid.className = 'game-grid';
-
-                    matchingGames.forEach(game => {
-                        grid.appendChild(createGameCard(game));
-                    });
-
-                    section.appendChild(grid);
-                    contentArea.appendChild(section);
-                } else {
-                    contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
-                }
-                return;
-            }
-
-            // Normal rendering (No active tag)
-            let hasResults = false;
-
-            allCategories.forEach(category => {
-                const games = GAME_DATA[category].filter(g => {
-                    const isSecretGame = g.hidden === "true" || (g.tags && g.tags.some(t => t.toLowerCase() === 'hidden'));
-                    if (isSecretGame && !showHidden) return false;
-                    return g.name.toLowerCase().includes(lowerFilter);
-                });
-
-                if (games.length > 0) {
-                    hasResults = true;
-
-                    const section = document.createElement('div');
-                    section.className = 'category-section';
-                    section.id = `cat-${category}`;
-
-                    const title = document.createElement('div');
-                    title.className = 'category-title';
-                    title.textContent = category;
-                    section.appendChild(title);
-
-                    const grid = document.createElement('div');
-                    grid.className = 'game-grid';
-
-                    games.forEach(game => {
-                        grid.appendChild(createGameCard(game));
-                    });
-
-                    section.appendChild(grid);
-                    contentArea.appendChild(section);
-                }
-            });
-
-            if (!hasResults) {
-                contentArea.innerHTML = `<div style="padding:40px; text-align:center; color:#555;">No games found matching your filters.</div>`;
-            }
-        }
-
-        function renderCanvasText(canvas, name) {
-            const font = '400 16px "Source Sans 3", Helvetica, Arial, sans-serif';
-            const lineHeight = 24;
-            const horizontalPadding = 0;
-            const topPadding = 4;
-            const bottomPadding = 0;
-
-            const card = canvas.parentElement;
-            const dpr = window.devicePixelRatio || 1;
-            const cardStyles = window.getComputedStyle(card);
-            const padLeft = parseFloat(cardStyles.paddingLeft) || 0;
-            const padRight = parseFloat(cardStyles.paddingRight) || 0;
-            const renderedCardWidth = Math.round(card.getBoundingClientRect().width) || 180;
-            const contentWidth = renderedCardWidth - (padLeft + padRight);
-            const cssWidth = Math.max(120, Math.floor(contentWidth));
-
-            const measureCtx = document.createElement('canvas').getContext('2d');
-            measureCtx.font = font;
-            const maxWidth = cssWidth - horizontalPadding * 2;
-            const words = name.split(/\s+/).filter(Boolean);
-            const lines = [];
-            let currentLine = '';
-
-            const pushBrokenWord = (word) => {
-                let chunk = '';
-                for (const ch of word) {
-                    const candidate = chunk + ch;
-                    if (measureCtx.measureText(candidate).width <= maxWidth) {
-                        chunk = candidate;
-                    } else {
-                        if (chunk) lines.push(chunk);
-                        chunk = ch;
-                    }
-                }
-                if (chunk) lines.push(chunk);
-            };
-
-            words.forEach((word) => {
-                const candidate = currentLine ? `${currentLine} ${word}` : word;
-                if (measureCtx.measureText(candidate).width <= maxWidth) {
-                    currentLine = candidate;
-                    return;
-                }
-                if (currentLine) lines.push(currentLine);
-
-                if (measureCtx.measureText(word).width <= maxWidth) {
-                    currentLine = word;
-                } else {
-                    pushBrokenWord(word);
-                    currentLine = '';
-                }
-            });
-
-            if (currentLine) lines.push(currentLine);
-            if (lines.length === 0) lines.push(name);
-
-            const cssHeight = Math.max(24, lines.length * lineHeight + topPadding + bottomPadding);
-            canvas.style.width = `${cssWidth}px`;
-            canvas.style.height = `${cssHeight}px`;
-            canvas.width = Math.round(cssWidth * dpr);
-            canvas.height = Math.round(cssHeight * dpr);
-
-            const ctx = canvas.getContext('2d');
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            ctx.font = font;
-            ctx.fillStyle = '#ffffff';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-
-            let y = topPadding;
-            lines.forEach((line) => {
-                ctx.fillText(line, horizontalPadding, y);
-                y += lineHeight;
-            });
-        }
-
-        function launchGame(game) {
-            const filename = game.file;
-            const gamename = game.name;
-            const isCloaked = cloakToggle.checked;
-
-            gtag('event', 'game_played', {
-                game_name: gamename
-            });
-
-            if (!isCloaked && game.openog === "true") {
-                window.open(getGameUrl(filename, game.provider), '_blank');
-                return;
-            }
-
-            if (isCloaked) {
-                loader.style.display = 'flex';
-                document.getElementById('loader-text').textContent = "Cloaking...";
-
-                const url = getGameUrl(filename, game.provider);
-
-                fetch(url)
-                    .then(res => {
-                        if(!res.ok) throw new Error("Failed to fetch");
-                        return res.text();
-                    })
-                    .then(html => {
-                        const cleanedHtml = cleanGameHtml(html);
-
-                        loader.style.display = 'none';
-                        const win = window.open("about:blank", "_blank");
-                        if(!win) {
-                            alert("Pop-up blocked. Please allow popups.");
-                            return;
-                        }
-                        win.document.open();
-                        win.document.write(cleanedHtml);
-                        win.document.close();
-                    })
-                    .catch(err => {
-                        loader.style.display = 'none';
-                        alert("Error loading game code: " + err);
-                    });
-
-            } else {
-                const cleanName = filename.trim();
-                const encoded = encodeURIComponent(cleanName);
-                const provider = game.provider ? encodeURIComponent(game.provider.trim()) : 'ugs';
-                window.open(`?g=${encoded}&p=${provider}`, '_blank');
-            }
-        }
-
-        // Update Notification Logic
-        const updateNotification = document.getElementById('update-notification');
-        const updateTextSpan = document.getElementById('update-text');
-        const closeUpdateBtn = document.getElementById('close-update-btn');
-        const updateModal = document.getElementById('update-modal');
-        const updateModalClose = document.getElementById('update-modal-close');
-        const updateModalText = document.getElementById('update-modal-text');
-
-        let fetchedUpdateDate = null;
-        let fetchedUpdateContent = "";
-
-        fetch(MAIN_URL + 'new_added_games.txt?t=' + Date.now())
-            .then(res => {
-                if (!res.ok) throw new Error("Could not load updates file");
-                return res.text();
-            })
-            .then(text => {
-                fetchedUpdateContent = text;
-                const lines = text.split('\n');
-                if (lines.length > 0 && lines[0].startsWith('Update:')) {
-                    fetchedUpdateDate = lines[0].trim();
-                    updateTextSpan.textContent = fetchedUpdateDate;
-
-                    fetchedUpdateContent = lines.slice(2).join('\n').trim();
-
-                    if (localStorage.getItem('updateClosed') !== fetchedUpdateDate) {
-                        updateNotification.style.display = 'flex';
-                    }
-                }
-            })
-            .catch(err => {
-                console.error("Error loading new games: ", err);
-            });
-
-        closeUpdateBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            updateNotification.style.display = 'none';
-            if (fetchedUpdateDate) {
-                localStorage.setItem('updateClosed', fetchedUpdateDate);
-            }
+</script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const content = $('content'), rail = $('rail'), tagsEl = $('tags');
+  const search = $('search'), searchCount = $('search-count'), searchKbd = $('search-kbd');
+  const header = $('header');
+
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+
+  let activeTag = null;
+  let showHidden = false;
+  let allGames = [];
+  const canvases = new Set();
+
+  /* ---------- Canvas text ---------- */
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+    || getComputedStyle(document.body).getPropertyValue(name).trim();
+
+  function fitLine(ctx, text, max) {
+    if (ctx.measureText(text).width <= max) return text;
+    let lo = 0, hi = text.length;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (ctx.measureText(text.slice(0, mid) + '…').width <= max) lo = mid; else hi = mid - 1;
+    }
+    return text.slice(0, lo).trimEnd() + '…';
+  }
+
+  // Draws up to `maxLines` wrapped lines, ellipsizing the last one.
+  function drawText(canvas, text, { size, weight = 400, color, lineH, maxLines = 1, width }) {
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(20, Math.floor(width ?? canvas.parentElement.clientWidth));
+    const ctx = canvas.getContext('2d');
+    const font = `${weight} ${size}px ${css('--font')}`;
+    ctx.font = font;
+
+    const lines = [];
+    let line = '';
+    const words = text.split(/\s+/).filter(Boolean);
+    for (let i = 0; i < words.length; i++) {
+      const cand = line ? line + ' ' + words[i] : words[i];
+      if (ctx.measureText(cand).width <= w || !line) { line = cand; continue; }
+      lines.push(line);
+      line = words[i];
+      if (lines.length === maxLines - 1) { line = words.slice(i).join(' '); break; }
+    }
+    lines.push(line);
+    const out = lines.slice(0, maxLines).map((l, i, a) => i === a.length - 1 ? fitLine(ctx, l, w) : l);
+
+    const h = out.length * lineH;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = font;
+    ctx.fillStyle = color;
+    ctx.textBaseline = 'middle';
+    out.forEach((l, i) => ctx.fillText(l, 0, i * lineH + lineH / 2 + 0.5));
+  }
+
+  function drawCanvas(c) {
+    const kind = c.dataset.kind;
+    if (kind === 'name') {
+      drawText(c, c.dataset.text, { size: 15, weight: 500, color: css('--fg'), lineH: 20, maxLines: 2 });
+    } else if (kind === 'tag') {
+      const active = c.closest('.tag').classList.contains('active');
+      const ctx = c.getContext('2d');
+      ctx.font = `500 13px ${css('--font')}`;
+      drawText(c, c.dataset.text, { size: 13, weight: 500, color: css(active ? '--fg' : '--muted'), lineH: 16, width: Math.ceil(ctx.measureText(c.dataset.text).width) + 1 });
+    } else if (kind === 'count') {
+      const ctx = c.getContext('2d');
+      ctx.font = `400 12px ${css('--font')}`;
+      drawText(c, c.dataset.text, { size: 12, color: css('--faint'), lineH: 16, width: Math.ceil(ctx.measureText(c.dataset.text).width) + 1 });
+    }
+    c.drawn = true;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting && !e.target.drawn) { drawCanvas(e.target); io.unobserve(e.target); }
+    }
+  }, { rootMargin: '300px' });
+
+  function makeCanvas(kind, text, lazy = true) {
+    const c = document.createElement('canvas');
+    c.dataset.kind = kind;
+    c.dataset.text = text;
+    canvases.add(c);
+    if (lazy) io.observe(c);
+    return c;
+  }
+
+  function redrawAll() {
+    for (const c of canvases) {
+      if (!c.isConnected) { canvases.delete(c); continue; }
+      c.drawn = false;
+      io.observe(c);
+    }
+  }
+
+  /* ---------- Data ---------- */
+  const isHidden = (g) => g.hidden === 'true' || g.tags.some(t => t.toLowerCase() === 'hidden');
+  const byName = (a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+
+  function categoryOrder(keys) {
+    return keys.sort((a, b) => (a.length === 1) !== (b.length === 1)
+      ? (a.length === 1 ? -1 : 1)
+      : a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+  }
+
+  /* ---------- Rendering ---------- */
+  function gameButton(g) {
+    const b = document.createElement('button');
+    b.className = 'game';
+    b.type = 'button';
+    const name = document.createElement('span');
+    name.className = 'name';
+    name.appendChild(makeCanvas('name', g.name));
+    b.appendChild(name);
+    b.addEventListener('click', () => launch(g));
+    return b;
+  }
+
+  function section(id, title, games, extra) {
+    const s = document.createElement('section');
+    s.className = 'section';
+    if (id) s.id = 'cat-' + id;
+    s.dataset.cat = id || '';
+    const head = document.createElement('div');
+    head.className = 'section-head';
+    const h = document.createElement('h2');
+    h.textContent = title;
+    const n = document.createElement('span');
+    n.className = 'n';
+    n.textContent = games.length;
+    head.append(h, n);
+    if (extra) head.appendChild(extra);
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    const frag = document.createDocumentFragment();
+    games.forEach(g => frag.appendChild(gameButton(g)));
+    grid.appendChild(frag);
+    s.append(head, grid);
+    return s;
+  }
+
+  function render() {
+    for (const c of canvases) io.unobserve(c);
+    canvases.clear();
+    content.textContent = '';
+    spy.disconnect();
+
+    const q = search.value.trim().toLowerCase();
+    const visible = allGames.filter(g => (showHidden || !isHidden(g))
+      && (!activeTag || g.tags.includes(activeTag))
+      && (!q || g.name.toLowerCase().includes(q)));
+
+    searchKbd.hidden = !!q || document.activeElement === search;
+    searchCount.hidden = !q && !activeTag;
+    searchCount.textContent = visible.length.toLocaleString();
+
+    const present = new Set();
+
+    if (!q && !activeTag) {
+      const recent = store.get('recentGames', [])
+        .map(r => allGames.find(g => g.name === r))
+        .filter(Boolean);
+      if (recent.length) content.appendChild(section(null, 'Recently played', recent));
+    }
+    $('clear-recent').hidden = !store.get('recentGames', []).length;
+
+    if (activeTag || q) {
+      // Filtered results read better as one flat, sorted list
+      if (visible.length) {
+        content.appendChild(section(null, activeTag ? activeTag : 'Results', visible.slice().sort(byName)));
+      }
+    } else {
+      for (const cat of categoryOrder([...new Set(visible.map(g => g.cat))])) {
+        present.add(cat);
+        content.appendChild(section(cat, cat, visible.filter(g => g.cat === cat)));
+      }
+    }
+
+    if (!visible.length) {
+      const e = document.createElement('div');
+      e.className = 'empty';
+      e.textContent = 'Nothing matches that.';
+      content.appendChild(e);
+    }
+
+    for (const b of rail.querySelectorAll('.rail-btn')) {
+      b.disabled = !!(q || activeTag) || !present.has(b.dataset.cat);
+      b.classList.remove('current');
+    }
+    content.querySelectorAll('.section[id]').forEach(s => spy.observe(s));
+  }
+
+  /* ---------- Rail + scrollspy ---------- */
+  const spy = new IntersectionObserver((entries) => {
+    for (const e of entries) e.target.inView = e.isIntersecting;
+    const first = [...content.querySelectorAll('.section[id]')].find(s => s.inView);
+    rail.querySelectorAll('.rail-btn').forEach(b => b.classList.toggle('current', !!first && b.dataset.cat === first.dataset.cat));
+  }, { rootMargin: '-120px 0px -55% 0px' });
+
+  function buildRail(cats) {
+    rail.textContent = '';
+    const letters = cats.filter(c => c.length === 1);
+    const other = cats.filter(c => c.length > 1);
+    const add = (c) => {
+      const b = document.createElement('button');
+      b.className = 'rail-btn';
+      b.dataset.cat = c;
+      b.title = c;
+      b.textContent = c.charAt(0).toUpperCase();
+      b.onclick = () => $('cat-' + c)?.scrollIntoView({ block: 'start' });
+      rail.appendChild(b);
+    };
+    letters.forEach(add);
+    if (other.length) {
+      const sep = document.createElement('div');
+      sep.className = 'rail-sep';
+      rail.appendChild(sep);
+      other.forEach(add);
+    }
+  }
+
+  /* ---------- Tags ---------- */
+  function buildTags() {
+    const counts = new Map();
+    allGames.forEach(g => g.tags.forEach(t => {
+      if (t.toLowerCase() !== 'hidden') counts.set(t, (counts.get(t) || 0) + 1);
+    }));
+    tagsEl.textContent = '';
+    [...counts].sort((a, b) => b[1] - a[1]).forEach(([t, n]) => {
+      const b = document.createElement('button');
+      b.className = 'tag';
+      b.type = 'button';
+      b.setAttribute('aria-pressed', 'false');
+      b.append(makeCanvas('tag', t, false), makeCanvas('count', String(n), false));
+      b.onclick = () => {
+        activeTag = activeTag === t ? null : t;
+        tagsEl.querySelectorAll('.tag').forEach(x => {
+          const on = x === b && activeTag === t;
+          x.classList.toggle('active', on);
+          x.setAttribute('aria-pressed', on);
+          x.querySelectorAll('canvas').forEach(drawCanvas);
         });
+        render();
+        window.scrollTo(0, 0);
+      };
+      tagsEl.appendChild(b);
+    });
+    tagsEl.querySelectorAll('canvas').forEach(drawCanvas);
+  }
 
-        updateNotification.addEventListener('click', () => {
-            updateModal.style.display = 'flex';
-            updateModalText.innerHTML = fetchedUpdateContent;
-        });
+  /* ---------- Launch ---------- */
+  function launch(game) {
+    const recent = store.get('recentGames', []).filter(n => n !== game.name);
+    recent.unshift(game.name);
+    store.set('recentGames', recent.slice(0, 8));
+    setTimeout(render, 0);
 
-        updateModalClose.addEventListener('click', () => {
-            updateModal.style.display = 'none';
-        });
+    const filename = game.file;
+    const isCloaked = $('cloak').checked;
 
-        updateModal.addEventListener('click', (e) => {
-            if (e.target === updateModal) {
-                updateModal.style.display = 'none';
-            }
+    gtag('event', 'game_played', { game_name: game.name });
+
+    if (!isCloaked && game.openog === "true") {
+      window.open(getGameUrl(filename, game.provider), '_blank');
+      return;
+    }
+
+    if (isCloaked) {
+      loader.style.display = 'flex';
+      $('loader-text').textContent = "Cloaking...";
+      fetch(getGameUrl(filename, game.provider))
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to fetch");
+          return res.text();
+        })
+        .then(html => {
+          const cleanedHtml = cleanGameHtml(html);
+          loader.style.display = 'none';
+          const win = window.open("about:blank", "_blank");
+          if (!win) {
+            alert("Pop-up blocked. Please allow popups.");
+            return;
+          }
+          win.document.open();
+          win.document.write(cleanedHtml);
+          win.document.close();
+        })
+        .catch(err => {
+          loader.style.display = 'none';
+          alert("Error loading game code: " + err);
         });
-    </script>
+    } else {
+      const provider = game.provider ? encodeURIComponent(game.provider.trim()) : 'ugs';
+      window.open(`?g=${encodeURIComponent(filename.trim())}&p=${provider}`, '_blank');
+    }
+  }
+
+  /* ---------- What's new ---------- */
+  // The file is plain text with optional <a href> tags and bare URLs. Only links
+  // become elements; everything else is inserted as text, so the file can't inject markup.
+  function renderNews(el, text) {
+    el.textContent = '';
+    const link = (href, label) => {
+      const a = document.createElement('a');
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = label;
+      return a;
+    };
+    // Fill `into` with one line of text: <a href> tags and bare URLs become links, the rest is text.
+    const inline = (into, line) => {
+      const tpl = document.createElement('template');
+      tpl.innerHTML = line;
+      const addText = (t) => {
+        let last = 0;
+        for (const m of t.matchAll(/https?:\/\/[^\s<>"]+/g)) {
+          into.append(t.slice(last, m.index), link(m[0], m[0]));
+          last = m.index + m[0].length;
+        }
+        into.append(t.slice(last));
+      };
+      const walk = (node) => {
+        for (const n of node.childNodes) {
+          if (n.nodeType === Node.TEXT_NODE) addText(n.textContent);
+          else if (n.nodeName === 'A' && /^https?:\/\//i.test(n.getAttribute('href') || '')) into.append(link(n.getAttribute('href'), n.textContent));
+          else walk(n);
+        }
+      };
+      walk(tpl.content);
+    };
+
+    const lines = text.split('\n').map(l => l.trimEnd());
+    let list = null;
+    lines.forEach((line, i) => {
+      if (/^-{3,}$/.test(line.trim())) return;                 // underline for a heading
+      if (!line.trim()) { list = null; return; }
+      if (/^-{3,}$/.test((lines[i + 1] || '').trim())) {       // heading
+        const h = document.createElement('h3');
+        h.textContent = line.trim();
+        el.appendChild(h);
+        list = null;
+      } else if (/^\s*[-*]\s+/.test(line)) {                  // bullet
+        if (!list) { list = document.createElement('ul'); el.appendChild(list); }
+        const li = document.createElement('li');
+        inline(li, line.replace(/^\s*[-*]\s+/, ''));
+        list.appendChild(li);
+      } else {
+        const p = document.createElement('p');
+        inline(p, line);
+        el.appendChild(p);
+        list = null;
+      }
+    });
+  }
+
+  fetch(MAIN_URL + 'new_added_games.txt?t=' + Date.now())
+    .then(r => r.ok ? r.text() : Promise.reject())
+    .then(text => {
+      const lines = text.split('\n');
+      if (!lines[0].startsWith('Update:')) return;
+      const date = lines[0].replace('Update:', '').trim();
+      const btn = $('whats-new');
+      btn.hidden = false;
+      btn.querySelector('.dot').hidden = store.get('updateSeen', null) === date;
+      $('news-title').textContent = "What's new · " + date;
+      renderNews($('news-body'), lines.slice(2).join('\n').trim());
+      btn.onclick = () => {
+        $('news').showModal();
+        store.set('updateSeen', date);
+        btn.querySelector('.dot').hidden = true;
+      };
+    })
+    .catch(() => {});
+  $('news-close').onclick = () => $('news').close();
+  $('news').addEventListener('click', (e) => { if (e.target === $('news')) $('news').close(); });
+
+  $('clear-recent').onclick = () => { store.set('recentGames', []); render(); };
+
+  /* ---------- Input ---------- */
+  let t;
+  search.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { render(); window.scrollTo(0, 0); }, 90); });
+  search.addEventListener('focus', () => { searchKbd.hidden = true; });
+  search.addEventListener('blur', () => { searchKbd.hidden = !!search.value; });
+
+  let keyBuffer = '';
+  document.addEventListener('keydown', (e) => {
+    const typing = document.activeElement === search;
+    if (e.key === '/' && !typing) { e.preventDefault(); search.focus(); search.select(); return; }
+    if (e.key === 'Escape' && typing) { search.value = ''; search.blur(); render(); return; }
+    if (!typing && e.key.length === 1) {
+      keyBuffer = (keyBuffer + e.key.toLowerCase()).slice(-12);
+      if (!showHidden && keyBuffer === 'secrethidden') { showHidden = true; render(); }
+    }
+  });
+
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--header-h', header.getBoundingClientRect().height + 'px');
+  }).observe(header);
+
+  let rw;
+  window.addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(redrawAll, 150); });
+
+
+  /* ---------- Boot ---------- */
+  // Opening a game (?g=): skip the menu and games.js entirely
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('g')) {
+    initializeGameMode(urlParams.get('g'), urlParams.get('p'), true);
+    return;
+  }
+  $('loader').classList.add('on');
+  const s = document.createElement('script');
+  s.src = MAIN_URL + 'games.js?t=' + Date.now();
+  s.onload = async () => {
+    try { await document.fonts.ready; } catch {}
+    allGames = Object.entries(GAME_DATA).flatMap(([cat, games]) => games.map(g => ({ ...g, cat })));
+    buildRail(categoryOrder(Object.keys(GAME_DATA)));
+    buildTags();
+    render();
+    $('loader').classList.remove('on');
+  };
+  s.onerror = () => { $('loader').textContent = "Couldn't load games.js"; };
+  document.body.appendChild(s);
+})();
+</script>
 </body>
 </html>

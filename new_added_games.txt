@@ -1,13 +1,9 @@
-Update: 2026-10-16
+Update: 2026-11-3
 
 Newly Added Games
 -----------------
-- added balatro modded
-- fixed the site not properly updating (hopefully)
-- added link to more links
-- added Team Fortress 2
-- added Nubbys Number Factory
-- added Sobosuba
+- Redid the site
+- Fixed a bunch of games (hopefully)
 
 
 Old Stuff
